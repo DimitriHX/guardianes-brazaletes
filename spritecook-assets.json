@@ -1,0 +1,29 @@
+{
+  "project": "El brazalete del guardián",
+  "spritecook_project_id": "5f0fc875-4f84-428f-9800-b65caa054b8f",
+  "assets": [
+    {
+      "asset_id": "d9a318f7-a354-43dc-a1b9-4a907c1c9b76",
+      "sha12": "717e04080afc",
+      "label": "Emma base (platformer, mirando a la derecha)",
+      "file": "assets/spritecook/emma/emma_base.png"
+    },
+    {
+      "asset_id": "6b707c4e-2ad2-40d6-9205-3d53a1d7918b",
+      "sha12": "32deed556e50",
+      "label": "Emma hoja de poses 4x4 (RAW 1024)",
+      "file": "assets/spritecook/emma/emma_sheet_source.jpg",
+      "derived": {
+        "file": "assets/spritecook/emma/emma_sheet.png",
+        "sha12": "f1fac484e3ad",
+        "process": "fondo blanco quitado por relleno desde bordes, Lanczos x1/4, alfa binaria; celdas 64x64"
+      }
+    },
+    {
+      "asset_id": "4ef0c567-ccf5-460a-bfcd-395381abfb32",
+      "sha12": "af5321d4b581",
+      "label": "Orbe mágico de la pulsera 32x32",
+      "file": "assets/spritecook/fx/bracelet_orb.png"
+    }
+  ]
+}

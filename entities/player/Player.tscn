@@ -44,7 +44,7 @@ color = Color(1, 1, 1, 1)
 
 [node name="Animator" type="AnimatedSprite2D" parent="Visual" node_paths=PackedStringArray("placeholders")]
 position = Vector2(0, 20)
-scale = Vector2(1.25, 1.25)
+scale = Vector2(0.625, 0.625)
 script = ExtResource("12_animator")
 animation_set = ExtResource("13_anims")
 anchor_bottom = true

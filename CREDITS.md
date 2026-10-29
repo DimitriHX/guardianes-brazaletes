@@ -26,3 +26,9 @@ con el mismo nombre de carpeta.
 - **MediavelFree** — `assets/MediavelFree.png/`. Tablones, barra y botones de la UI.
 - **SunGraphica FREE icons** — `assets/FREE/` (GameDevMarket). Aún sin usar.
 - `assets/Food.png` y `SBS - Seamless Sky Backgrounds` (.rar, Godot no lo lee). Aún sin usar.
+
+## Arte generado con SpriteCook (propiedad del proyecto, incluido en el repo)
+Generado a petición del equipo con SpriteCook (cuenta del proyecto). IDs y hashes en
+`spritecook-assets.json`. Referencias usadas: solo arte propio del proyecto.
+- `assets/spritecook/emma/` — Emma: diseño base y hoja de 16 poses (procesada a 64x64 por celda).
+- `assets/spritecook/fx/bracelet_orb.png` — orbe mágico de la pulsera.

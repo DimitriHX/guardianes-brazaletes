@@ -13,4 +13,7 @@ func physics_update(delta: float) -> void:
 	elif player.wants_shoot():
 		transition_requested.emit(ATTACK)
 	elif player.is_on_floor():
+		# Breve agachado al aterrizar (one-shot de prioridad mínima: no tapa
+		# ataque ni daño; la locomoción continúa al terminar).
+		player.play_animation(&"land")
 		transition_requested.emit(_locomotion_state())

@@ -161,10 +161,10 @@ func _run() -> void:
 	await _frames(70)
 	p.call("take_damage", 99)
 	_check(bool(p.call("is_dead")) and died_count == 0, "player_died espera a la animación de muerte")
-	await _frames(3)
+	await create_timer(0.8).timeout  # dura la animación de muerte
 	_check(died_count == 1, "muerte emite Events.player_died al terminar la animación")
 	p.call("kill")
-	await _frames(3)
+	await create_timer(0.8).timeout
 	_check(died_count == 1, "player_died no se repite")
 	var pos_dead: Vector2 = p.position
 	Input.action_press("move_right")

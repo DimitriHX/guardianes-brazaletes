@@ -111,12 +111,12 @@ func _run() -> void:
 	_check(bool(p_anim.get("has_frames")) and not (p.get_node("Visual/Body") as CanvasItem).visible, "Player con sprite: placeholders ocultos")
 	p.call("take_damage", 1)
 	_check(p.call("get_displayed_animation") == &"hurt", "al recibir daño muestra 'hurt'")
-	await _frames(3)
-	_check(p.call("get_displayed_animation") == &"idle", "hurt sin frames en el set termina solo y vuelve a idle")
+	await create_timer(0.4).timeout  # dura la animación de daño
+	_check(p.call("get_displayed_animation") == &"idle", "hurt termina y vuelve a idle")
 	await _frames(70)
 	p.call("take_damage", 99)
 	_check(p.call("get_displayed_animation") == &"death" and died_count == 0, "muerte: anim death antes de notificar")
-	await _frames(3)
+	await create_timer(0.8).timeout  # dura la animación de muerte
 	_check(died_count == 1, "player_died tras la animación de muerte")
 
 	print("RESULT: %d fallos" % _failures)
