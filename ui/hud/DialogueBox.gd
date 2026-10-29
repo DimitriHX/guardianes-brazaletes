@@ -64,6 +64,7 @@ func _next_line() -> void:
 	_text.text = String(line["text"])
 	_text.visible_characters = 0
 	_line_time = 0.0
+	Events.sfx_requested.emit(&"ui_select")
 	var length: int = _text.text.length()
 	_line_duration = float(length) / chars_per_second + read_time_base + float(length) * read_time_per_char
 	_active = true

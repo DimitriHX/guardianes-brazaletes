@@ -27,3 +27,9 @@ assets/*.rar
 
 # Proyecto de referencia del equipo (consulta). Contiene paquetes de terceros.
 referencia/
+
+# Audio y fuentes de terceros / licencia no indicada (ver CREDITS.md)
+audio/music/
+audio/sfx/
+assets/fonts/alagard.ttf
+assets/fonts/alagard.ttf.import

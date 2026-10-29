@@ -159,6 +159,7 @@ func start_jump() -> void:
 	velocity.y = jump_velocity
 	_jump_buffer_left = 0.0
 	_coyote_left = 0.0
+	Events.player_jumped.emit()
 
 
 func wants_shoot() -> bool:

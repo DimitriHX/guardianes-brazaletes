@@ -68,6 +68,7 @@ func _set_open(value: bool, notify: bool) -> void:
 	if notify:
 		if value:
 			opened.emit()
+			Events.sfx_requested.emit(&"door_open")
 		else:
 			closed.emit()
 

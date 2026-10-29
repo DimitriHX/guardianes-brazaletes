@@ -15,10 +15,16 @@ run/main_scene="res://levels/sueno_1/Bosque.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/default_bus_layout="res://audio/default_bus_layout.tres"
+
 [autoload]
 
 Events="*res://autoloads/Events.gd"
 SceneTransition="*res://autoloads/SceneTransition.gd"
+GameSettings="*res://autoloads/GameSettings.gd"
+AudioManager="*res://autoloads/AudioManager.gd"
 
 [display]
 

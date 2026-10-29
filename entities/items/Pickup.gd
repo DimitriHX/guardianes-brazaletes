@@ -76,6 +76,7 @@ func _try_apply(player: Node2D) -> bool:
 func _collect() -> void:
 	_collected = true
 	remove_from_group("collectibles")
+	Events.pickup_collected.emit(&"collectible" if type == PickupType.COLLECTIBLE else &"health")
 	Effect.spawn(collect_effect, self, _sprite.global_position)
 	# TODO(assets): sonido de recogida.
 	queue_free()

@@ -32,3 +32,11 @@ Generado a petición del equipo con SpriteCook (cuenta del proyecto). IDs y hash
 `spritecook-assets.json`. Referencias usadas: solo arte propio del proyecto.
 - `assets/spritecook/emma/` — Emma: diseño base y hoja de 16 poses (procesada a 64x64 por celda).
 - `assets/spritecook/fx/bracelet_orb.png` — orbe mágico de la pulsera.
+
+## Audio y fuentes del proyecto de referencia (no incluidos en el repositorio)
+Copiados de `referencia/` (proyecto del equipo); en `.gitignore` por licencia no indicada o
+sin permiso de redistribución. Colocarlos en las mismas rutas para tener sonido:
+- `audio/music/` — menu.mp3, levels.mp3, victory.mp3, game_over.ogg (carpeta AUDIO de la referencia).
+- `audio/sfx/` — jump.wav y ui_select.wav (referencia) + efectos de **Everplast Asset Pack** (wraithwinterly, comprado).
+- `assets/fonts/alagard.ttf` — fuente Alagard (Hewett Tsoi).
+- `assets/ui/menu_background.jpg` — fondo del menú creado por el equipo (sí incluido).

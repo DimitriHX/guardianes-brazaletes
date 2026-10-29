@@ -66,5 +66,6 @@ func _begin_windup() -> void:
 
 func _begin_dash() -> void:
 	_dash_left = charge_duration
+	Events.sfx_requested.emit(&"boss_charge")
 	boss.stats.damage_multiplier = _base_damage_multiplier * charge_damage_multiplier
 	boss.play_animation(&"run")

@@ -12,6 +12,8 @@ extends Node
 signal player_health_changed(current: int, maximum: int)
 @warning_ignore("unused_signal")
 signal player_died
+@warning_ignore("unused_signal")
+signal player_jumped
 ## El jugador disparó; `cooldown` = segundos hasta poder volver a disparar.
 @warning_ignore("unused_signal")
 signal player_shot(cooldown: float)
@@ -59,6 +61,15 @@ signal level_change_requested(scene_path: String)
 ## Un nivel acaba de empezar (el HUD muestra su nombre).
 @warning_ignore("unused_signal")
 signal level_started(level_name: String)
+
+## Se recogió un pickup ("collectible", "health"...).
+@warning_ignore("unused_signal")
+signal pickup_collected(kind: StringName)
+
+# --- Audio ---
+## Pide un efecto de sonido por nombre (ver AudioManager.SFX).
+@warning_ignore("unused_signal")
+signal sfx_requested(sfx_name: StringName)
 
 # --- UI ---
 ## Muestra líneas de diálogo en la caja inferior (no pausa el juego).
