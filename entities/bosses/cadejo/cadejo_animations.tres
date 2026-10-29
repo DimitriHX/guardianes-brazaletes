@@ -2,61 +2,82 @@
 
 [ext_resource type="Script" path="res://components/animation/AnimationSet.gd" id="1_set"]
 [ext_resource type="Script" path="res://components/animation/AnimationEntry.gd" id="2_entry"]
+[ext_resource type="Texture2D" path="res://assets/sprites/cadejo/cadejo_sheet.jpeg" id="3_sheet"]
 
 [sub_resource type="Resource" id="Entry_idle"]
 script = ExtResource("2_entry")
 animation = &"idle"
-piskel_path = "res://assets/cadejo/Espera-20261027-185045.piskel"
 loop = true
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(378, 48, 91, 130), Rect2i(469, 48, 91, 130), Rect2i(560, 48, 91, 130), Rect2i(651, 48, 91, 130)])
+remove_background = true
 
 [sub_resource type="Resource" id="Entry_walk"]
 script = ExtResource("2_entry")
 animation = &"walk"
-piskel_path = "res://assets/cadejo/Caminar-20261027-190143.piskel"
 loop = true
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(757, 48, 120, 130), Rect2i(877, 48, 120, 130), Rect2i(997, 48, 120, 130)])
+remove_background = true
 
 [sub_resource type="Resource" id="Entry_run"]
 script = ExtResource("2_entry")
 animation = &"run"
-piskel_path = "res://assets/cadejo/Correr-20261027-190203.piskel"
 loop = true
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(1129, 48, 131, 130), Rect2i(1260, 48, 131, 130), Rect2i(1391, 48, 131, 130)])
+remove_background = true
 
 [sub_resource type="Resource" id="Entry_jump"]
 script = ExtResource("2_entry")
 animation = &"jump"
-piskel_path = "res://assets/cadejo/Saltar-20261027-194041.piskel"
 loop = true
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(376, 224, 105, 134), Rect2i(481, 224, 105, 134), Rect2i(586, 224, 105, 134)])
+remove_background = true
 
 [sub_resource type="Resource" id="Entry_fall"]
 script = ExtResource("2_entry")
 animation = &"fall"
-piskel_path = "res://assets/cadejo/Caer-20261027-195504.piskel"
 loop = true
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(708, 230, 109, 128), Rect2i(817, 230, 109, 128), Rect2i(926, 230, 109, 128), Rect2i(1035, 230, 109, 128)])
+remove_background = true
 
 [sub_resource type="Resource" id="Entry_attack"]
 script = ExtResource("2_entry")
 animation = &"attack"
-piskel_path = "res://assets/cadejo/Ataque-20261027-201117.piskel"
 loop = false
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(645, 402, 140, 110), Rect2i(792, 402, 220, 110)])
+remove_background = true
 
 [sub_resource type="Resource" id="Entry_special"]
 script = ExtResource("2_entry")
 animation = &"special"
-piskel_path = "res://assets/cadejo/AtaqueEspe-20261027-203015.piskel"
 loop = false
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(372, 552, 150, 126), Rect2i(522, 552, 150, 126)])
+remove_background = true
 
 [sub_resource type="Resource" id="Entry_hurt"]
 script = ExtResource("2_entry")
 animation = &"hurt"
-piskel_path = "res://assets/cadejo/RecibirDañ-20261027-203626.piskel"
 loop = false
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(18, 716, 114, 102), Rect2i(132, 716, 114, 102), Rect2i(258, 716, 111, 102), Rect2i(377, 716, 117, 102), Rect2i(505, 716, 136, 102)])
+remove_background = true
 
 [sub_resource type="Resource" id="Entry_death"]
 script = ExtResource("2_entry")
 animation = &"death"
-piskel_path = "res://assets/cadejo/Muerte-20261027-210358.piskel"
 loop = false
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(673, 716, 177, 102), Rect2i(850, 716, 160, 102), Rect2i(1010, 716, 235, 102), Rect2i(1250, 716, 132, 102), Rect2i(1386, 716, 138, 102)])
+remove_background = true
 
 [resource]
 script = ExtResource("1_set")
+default_fps = 8.0
+align_sheet_frames = true
 entries = Array[ExtResource("2_entry")]([SubResource("Entry_idle"), SubResource("Entry_walk"), SubResource("Entry_run"), SubResource("Entry_jump"), SubResource("Entry_fall"), SubResource("Entry_attack"), SubResource("Entry_special"), SubResource("Entry_hurt"), SubResource("Entry_death")])

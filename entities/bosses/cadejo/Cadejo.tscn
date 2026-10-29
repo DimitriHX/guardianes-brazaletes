@@ -38,8 +38,8 @@ mouse_filter = 2
 color = Color(0.2, 0.15, 0.3, 1)
 
 [node name="Animator" type="AnimatedSprite2D" parent="Visual" node_paths=PackedStringArray("placeholders")]
-position = Vector2(0, -8)
-scale = Vector2(2.5, 2.5)
+position = Vector2(0, 32)
+scale = Vector2(0.6, 0.6)
 script = ExtResource("5_animator")
 animation_set = ExtResource("6_anims")
 one_shot_priorities = Dictionary[StringName, int]({
@@ -48,6 +48,7 @@ one_shot_priorities = Dictionary[StringName, int]({
 &"hurt": 1,
 &"special": 2
 })
+anchor_bottom = true
 placeholders = [NodePath("../Placeholder")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

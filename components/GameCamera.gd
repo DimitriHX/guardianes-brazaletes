@@ -9,7 +9,8 @@ extends Camera2D
 ## - Look-ahead: se adelanta hacia donde mira el objetivo (propiedad `facing`).
 ##   Se aplica sobre `position` (no `offset`), porque en Godot 4 los límites no
 ##   recortan `offset`. `offset` queda libre para efectos como el shake.
-## - Límites automáticos: toma el rectángulo del primer nodo Control del grupo
+## - Límites automáticos y FIRMES (no usar limit_smoothed: deja asomar el vacío
+##   mientras suaviza). Toma el rectángulo del primer nodo Control del grupo
 ##   `bounds_group` (un ReferenceRect "CameraBounds" en el nivel).
 
 ## Nodo a seguir. Vacío = el padre (lo normal: la cámara cuelga del Player).
@@ -83,7 +84,9 @@ func _update_zoom() -> void:
 		return
 	zoom = Vector2(z, z)
 	# Recolocar al instante: si no, el suavizado enseña el vacío unos frames.
-	reset_smoothing()
+	# Diferido: durante size_changed la cámara aún no conoce el viewport nuevo.
+	force_update_scroll()
+	reset_smoothing.call_deferred()
 
 
 func _snap_to_target() -> void:

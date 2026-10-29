@@ -40,13 +40,30 @@ func _run() -> void:
 	_check(loader.call("load_piskel", hurt_path) != null, "rutas con 'ñ' funcionan (%s)" % hurt_path.get_file())
 	_check(loader.call("load_piskel", "res://no/existe.piskel") == null, "ruta inexistente devuelve null")
 
-	# --- AnimationSet ---
+	# --- AnimationSet desde hoja de sprites (JPEG con fondo opaco) ---
 	var cadejo_set: Resource = load("res://entities/bosses/cadejo/cadejo_animations.tres")
 	var sf: SpriteFrames = cadejo_set.call("build_sprite_frames")
-	_check(sf.get_animation_names().size() == 9, "set del Cadejo: 9 animaciones (%s)" % str(sf.get_animation_names()))
+	_check(sf.get_animation_names().size() == 9, "set del Cadejo (cadejo_sheet.jpeg): 9 animaciones (%s)" % str(sf.get_animation_names()))
 	_check(sf.get_animation_loop(&"run") and not sf.get_animation_loop(&"attack") and not sf.get_animation_loop(&"death"), "loops: run en bucle; attack y death de un solo uso")
+	_check(sf.get_frame_count(&"idle") == 4 and sf.get_frame_count(&"hurt") == 5, "nº de frames por animación (idle 4, hurt 5)")
+	var idle_img: Image = sf.get_frame_texture(&"idle", 0).get_image()
+	var opaque: int = 0
+	for y: int in idle_img.get_height():
+		for x: int in idle_img.get_width():
+			if idle_img.get_pixel(x, y).a > 0.5:
+				opaque += 1
+	var ratio: float = float(opaque) / float(idle_img.get_width() * idle_img.get_height())
+	_check(idle_img.get_pixel(0, 0).a < 0.05 and ratio > 0.08 and ratio < 0.6, "fondo del JPEG eliminado y el perro conservado (%.0f%% opaco)" % (ratio * 100.0))
+	var same_size: bool = true
+	for a: StringName in sf.get_animation_names():
+		for f: int in sf.get_frame_count(a):
+			if Vector2i(sf.get_frame_texture(a, f).get_size()) != idle_img.get_size():
+				same_size = false
+	_check(same_size, "todos los frames alineados en el mismo lienzo %s" % str(idle_img.get_size()))
+	_check(cadejo_set.call("build_sprite_frames") == sf, "el procesado de la hoja se cachea")
 	var player_set: Resource = load("res://entities/player/player_animations.tres")
-	_check((player_set.call("build_sprite_frames") as SpriteFrames).get_animation_names().is_empty(), "plantilla del jugador sin arte: 0 animaciones")
+	var psf: SpriteFrames = player_set.call("build_sprite_frames")
+	_check(psf.get_frame_count(&"walk") == 6, "jugador (Personaje.png): walk con 6 frames")
 
 	# --- CharacterAnimator con arte (Cadejo) ---
 	var anim: AnimatedSprite2D = (load("res://components/animation/CharacterAnimator.gd") as GDScript).new()
@@ -72,7 +89,8 @@ func _run() -> void:
 	anim.call("play_state", &"death")
 	anim.call("play_state", &"attack")
 	anim.call("play_state", &"run")
-	await _seconds(0.6)
+	var death_time: float = float(sf.get_frame_count(&"death")) / sf.get_animation_speed(&"death")
+	await _seconds(death_time + 0.2)
 	_check(anim.get("current_animation") == &"death" and finished.has("death"), "death gana, termina y queda fija")
 	anim.queue_free()
 
@@ -90,11 +108,11 @@ func _run() -> void:
 	root.add_child(p)
 	await _frames(40)
 	var p_anim: AnimatedSprite2D = p.get_node("Visual/Animator") as AnimatedSprite2D
-	_check(not bool(p_anim.get("has_frames")) and (p.get_node("Visual/Body") as CanvasItem).visible, "Player sin arte: se ven los placeholders")
+	_check(bool(p_anim.get("has_frames")) and not (p.get_node("Visual/Body") as CanvasItem).visible, "Player con sprite: placeholders ocultos")
 	p.call("take_damage", 1)
 	_check(p.call("get_displayed_animation") == &"hurt", "al recibir daño muestra 'hurt'")
 	await _frames(3)
-	_check(p.call("get_displayed_animation") == &"idle", "sin arte, hurt termina solo y vuelve a idle")
+	_check(p.call("get_displayed_animation") == &"idle", "hurt sin frames en el set termina solo y vuelve a idle")
 	await _frames(70)
 	p.call("take_damage", 99)
 	_check(p.call("get_displayed_animation") == &"death" and died_count == 0, "muerte: anim death antes de notificar")

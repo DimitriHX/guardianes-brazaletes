@@ -127,7 +127,23 @@ func _run() -> void:
 	_check(bool(gate.get("is_open")), "la reja se vuelve a abrir")
 	_check(paused and (hud.get_node("MessageLabel") as Label).visible, "victoria: pausa y mensaje")
 
+	# Regresión: tras reiniciar el nivel no quedan conexiones de Events a nodos liberados
+	# (antes: "Attempt to call function 'null::close (Callable)'" al empezar el combate).
 	paused = false
+	reload_current_scene()
+	await _frames(5)
+	var stale: Array[String] = []
+	for sig: String in ["boss_fight_started", "boss_defeated", "level_completed", "player_died", "hud_message"]:
+		for conn: Dictionary in events.get_signal_connection_list(sig):
+			var target: Object = (conn["callable"] as Callable).get_object()
+			if target == null or not is_instance_valid(target):
+				stale.append(sig)
+	_check(stale.is_empty(), "tras reiniciar no hay conexiones a nodos liberados (%s)" % str(stale))
+	var p2: CharacterBody2D = _player()
+	p2.position = Vector2(640, 560)
+	await _frames(10)
+	_check(not bool((current_scene.get_node("ArenaGate") as Area2D).get("is_open")), "tras reiniciar, la reja vuelve a cerrarse al empezar el combate")
+
 	print("RESULT: %d fallos" % _failures)
 	quit(1 if _failures > 0 else 0)
 

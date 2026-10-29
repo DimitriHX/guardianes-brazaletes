@@ -234,7 +234,6 @@ open_on = 1
 position = Vector2(100, 560)
 
 [node name="GameCamera" type="Camera2D" parent="Player"]
-limit_smoothed = true
 position_smoothing_enabled = true
 position_smoothing_speed = 6.0
 drag_vertical_enabled = true

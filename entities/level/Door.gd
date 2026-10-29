@@ -72,11 +72,31 @@ func _set_open(value: bool, notify: bool) -> void:
 			closed.emit()
 
 
+## Conecta siempre a MÉTODOS de este nodo (no lambdas): Godot los desconecta
+## solo al liberar la puerta. Una lambda conectada a un autoload sobrevive al
+## reinicio del nivel y acaba llamando a open/close sobre una puerta liberada.
 func _connect_trigger(trigger: Trigger, callback: Callable) -> void:
+	var opens: bool = callback == open
 	match trigger:
 		Trigger.LEVEL_COMPLETED:
-			Events.level_completed.connect(callback)
+			Events.level_completed.connect(open if opens else close)
 		Trigger.BOSS_FIGHT_STARTED:
-			Events.boss_fight_started.connect(func(_b: Node, _n: String, _c: int, _m: int) -> void: callback.call())
+			Events.boss_fight_started.connect(_on_boss_fight_started_open if opens else _on_boss_fight_started_close)
 		Trigger.BOSS_DEFEATED:
-			Events.boss_defeated.connect(func(_b: Node) -> void: callback.call())
+			Events.boss_defeated.connect(_on_boss_defeated_open if opens else _on_boss_defeated_close)
+
+
+func _on_boss_fight_started_open(_boss: Node, _name: String, _current: int, _maximum: int) -> void:
+	open()
+
+
+func _on_boss_fight_started_close(_boss: Node, _name: String, _current: int, _maximum: int) -> void:
+	close()
+
+
+func _on_boss_defeated_open(_boss: Node) -> void:
+	open()
+
+
+func _on_boss_defeated_close(_boss: Node) -> void:
+	close()

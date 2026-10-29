@@ -25,6 +25,9 @@ signal frame_reached(anim: StringName, frame_index: int)
 @export var placeholders: Array[CanvasItem] = []
 ## Duración simulada de una animación de un solo uso sin arte (0 = un frame).
 @export var fallback_one_shot_time: float = 0.0
+## Colocar el origen del sprite en el centro de su borde inferior (los pies):
+## así basta con poner el nodo en la base de la colisión.
+@export var anchor_bottom: bool = false
 
 ## Última animación pedida por los estados (la de "fondo").
 var requested_animation: StringName = &""
@@ -41,6 +44,9 @@ func _ready() -> void:
 		sprite_frames = animation_set.build_sprite_frames()
 	has_frames = sprite_frames != null and not sprite_frames.get_animation_names().is_empty()
 	visible = has_frames
+	if has_frames and anchor_bottom:
+		var first: StringName = sprite_frames.get_animation_names()[0]
+		offset.y = -float(sprite_frames.get_frame_texture(first, 0).get_height()) / 2.0
 	for placeholder: CanvasItem in placeholders:
 		if placeholder != null:
 			placeholder.visible = not has_frames

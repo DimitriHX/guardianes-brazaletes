@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2uq3otb4fdje"
-path="res://.godot/imported/d8a3dd86-0a30-468f-ab28-734162c3db4f (14).png-2357a403846a6d82f5e36952d4a9e5b2.ctex"
+uid="uid://qbbpucpl2gnh"
+path="res://.godot/imported/personaje_sheet.png-66602f47a344a8ca76f0584c7d976048.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Cadejo/d8a3dd86-0a30-468f-ab28-734162c3db4f (14).png"
-dest_files=["res://.godot/imported/d8a3dd86-0a30-468f-ab28-734162c3db4f (14).png-2357a403846a6d82f5e36952d4a9e5b2.ctex"]
+source_file="res://assets/sprites/personaje/personaje_sheet.png"
+dest_files=["res://.godot/imported/personaje_sheet.png-66602f47a344a8ca76f0584c7d976048.ctex"]
 
 [params]
 

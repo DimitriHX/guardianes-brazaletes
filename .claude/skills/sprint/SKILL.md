@@ -30,6 +30,11 @@ con estado `[ ]` en `sprints.md`.
    - Animación: `CharacterAnimator` (AnimatedSprite2D) + un `AnimationSet` .tres que
      apunta a los .piskel de `assets/`. Los estados llaman a play_animation(); no
      reproducir animaciones a mano.
+   - Conexiones a señales de `Events` (autoload): SIEMPRE a métodos del nodo, nunca
+     lambdas (`func(...)`). Las lambdas sobreviven al reinicio del nivel y llaman a
+     nodos liberados ("Attempt to call function 'null::...'").
+   - Hojas de sprites (PNG/JPEG): `AnimationEntry.sheet` + `regions`; para JPEG con
+     fondo opaco `remove_background` y `AnimationSet.align_sheet_frames`.
    - Plataformas que deban atravesar jefes/enemigos altos: `one_way_collision = true`.
    - `Area2D` que deban detectar cuerpos: NO poner `monitorable = false`.
      En Godot 4.7 eso impide detectar StaticBody2D (verificado en el Sprint 03).

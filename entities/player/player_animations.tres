@@ -2,50 +2,38 @@
 
 [ext_resource type="Script" path="res://components/animation/AnimationSet.gd" id="1_set"]
 [ext_resource type="Script" path="res://components/animation/AnimationEntry.gd" id="2_entry"]
+[ext_resource type="Texture2D" path="res://assets/sprites/personaje/personaje_sheet.png" id="3_sheet"]
 
 [sub_resource type="Resource" id="Entry_idle"]
 script = ExtResource("2_entry")
 animation = &"idle"
-piskel_path = ""
 loop = true
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(0, 0, 48, 48)])
 
 [sub_resource type="Resource" id="Entry_walk"]
 script = ExtResource("2_entry")
 animation = &"walk"
-piskel_path = ""
 loop = true
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(0, 0, 48, 48), Rect2i(48, 0, 48, 48), Rect2i(96, 0, 48, 48), Rect2i(144, 0, 48, 48), Rect2i(192, 0, 48, 48), Rect2i(240, 0, 48, 48)])
 
 [sub_resource type="Resource" id="Entry_jump"]
 script = ExtResource("2_entry")
 animation = &"jump"
-piskel_path = ""
 loop = true
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(48, 0, 48, 48)])
 
 [sub_resource type="Resource" id="Entry_fall"]
 script = ExtResource("2_entry")
 animation = &"fall"
-piskel_path = ""
 loop = true
-
-[sub_resource type="Resource" id="Entry_attack"]
-script = ExtResource("2_entry")
-animation = &"attack"
-piskel_path = ""
-loop = false
-
-[sub_resource type="Resource" id="Entry_hurt"]
-script = ExtResource("2_entry")
-animation = &"hurt"
-piskel_path = ""
-loop = false
-
-[sub_resource type="Resource" id="Entry_death"]
-script = ExtResource("2_entry")
-animation = &"death"
-piskel_path = ""
-loop = false
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(192, 0, 48, 48)])
 
 [resource]
 script = ExtResource("1_set")
-entries = Array[ExtResource("2_entry")]([SubResource("Entry_idle"), SubResource("Entry_walk"), SubResource("Entry_jump"), SubResource("Entry_fall"), SubResource("Entry_attack"), SubResource("Entry_hurt"), SubResource("Entry_death")])
-metadata/_todo_assets = "Asignar piskel_path de cada animación del protagonista (Espera, Caminar, Saltar, Caer, Ataque, RecibirDaño, Muerte)"
+default_fps = 10.0
+align_sheet_frames = true
+entries = Array[ExtResource("2_entry")]([SubResource("Entry_idle"), SubResource("Entry_walk"), SubResource("Entry_jump"), SubResource("Entry_fall")])
