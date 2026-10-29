@@ -132,7 +132,10 @@ func _run() -> void:
 	# Regresión: tras reiniciar el nivel no quedan conexiones de Events a nodos liberados
 	# (antes: "Attempt to call function 'null::close (Callable)'" al empezar el combate).
 	paused = false
+	var old_scene: Node = current_scene
 	reload_current_scene()
+	while current_scene == null or current_scene == old_scene:
+		await process_frame
 	await _frames(5)
 	var stale: Array[String] = []
 	for sig: String in ["boss_fight_started", "boss_defeated", "level_completed", "player_died", "hud_message"]:
