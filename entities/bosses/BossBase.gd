@@ -7,6 +7,8 @@ extends CharacterBody2D
 ## - Fases: al cruzar cada umbral de vida (phase_thresholds) sube `phase`,
 ##   cambia el multiplicador de velocidad y se avisa por señal y por Events.
 ## - Combate por componentes: Stats + Hurtbox (recibe) + Hitbox (contacto).
+## - Al ser derrotado se PURIFICA: su silueta brilla y se desvanece; la pulsera
+##   comenta la fase y la derrota mediante Events.dialogue_requested.
 
 signal phase_changed(phase: int)
 
@@ -22,8 +24,15 @@ signal phase_changed(phase: int)
 @export var phase_thresholds: Array[float] = [0.5]
 ## Multiplicador de velocidad por fase (índice 0 = fase 1).
 @export var phase_speed_multipliers: Array[float] = [1.0, 1.4]
-## Mensaje del HUD al empezar cada fase (índice 0 = fase 2). Vacío = ninguno.
+## Frase de la pulsera al empezar cada fase (índice 0 = fase 2). Vacío = ninguna.
 @export var phase_messages: Array[String] = []
+@export_group("Historia")
+## Quién habla en los diálogos del jefe.
+@export var dialogue_speaker: String = "Pulsera"
+## Diálogo tras la purificación.
+@export_multiline var defeat_lines: PackedStringArray = PackedStringArray()
+@export var purify_color: Color = Color(1.8, 1.8, 2.2, 1.0)
+@export var purify_time: float = 1.2
 
 var target: Node2D
 var phase: int = 1
@@ -153,7 +162,7 @@ func _on_health_changed(current: int, maximum: int) -> void:
 		Events.boss_phase_changed.emit(self, phase)
 		var message_index: int = phase - 2
 		if message_index < phase_messages.size() and not phase_messages[message_index].is_empty():
-			Events.hud_message.emit(phase_messages[message_index], 2.0)
+			Events.dialogue_requested.emit(dialogue_speaker, PackedStringArray([phase_messages[message_index]]))
 
 
 func _on_damaged(_amount: int) -> void:
@@ -164,8 +173,20 @@ func _on_damaged(_amount: int) -> void:
 func _on_died() -> void:
 	hitbox.active = false
 	_state_machine.transition_to(&"Dead")
+	_purify()
+
+
+## Purificación: brillo blanco y desvanecido. TODO(assets): partículas de luz.
+func _purify() -> void:
+	var tween: Tween = create_tween()
+	# Debe terminar aunque la victoria pause el juego a mitad del efecto.
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.tween_property(_visual, "modulate", purify_color, purify_time * 0.35)
+	tween.tween_property(_visual, "modulate:a", 0.0, purify_time * 0.65)
 
 
 func _on_animation_one_shot_finished(anim: StringName) -> void:
 	if anim == &"death":
 		Events.boss_defeated.emit(self)
+		if not defeat_lines.is_empty():
+			Events.dialogue_requested.emit(dialogue_speaker, defeat_lines)

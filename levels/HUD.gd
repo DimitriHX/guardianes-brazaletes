@@ -86,7 +86,7 @@ func _on_collectibles_changed(collected: int, required: int) -> void:
 
 
 func _on_player_died() -> void:
-	show_message("Has caído...", 0.0)
+	show_message("Emma se desvanece...", 0.0)
 
 
 func _on_boss_fight_started(_boss: Node, display_name: String, current: int, maximum: int) -> void:

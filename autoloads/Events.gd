@@ -61,6 +61,12 @@ signal level_change_requested(scene_path: String)
 signal level_started(level_name: String)
 
 # --- UI ---
+## Muestra líneas de diálogo en la caja inferior (no pausa el juego).
+@warning_ignore("unused_signal")
+signal dialogue_requested(speaker: String, lines: PackedStringArray)
+## La caja de diálogo terminó todas las líneas pendientes.
+@warning_ignore("unused_signal")
+signal dialogue_finished
 ## Mensaje centrado en el HUD. duration <= 0 = permanente.
 @warning_ignore("unused_signal")
 signal hud_message(text: String, duration: float)

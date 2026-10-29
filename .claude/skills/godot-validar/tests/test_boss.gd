@@ -74,7 +74,7 @@ func _run() -> void:
 	await _frames(150)
 	Input.action_release("move_right")
 	await _frames(2)
-	_check(log_events.has("start:El Cadejo:24/24"), "boss_fight_started con nombre y vida (%s)" % str(log_events))
+	_check(log_events.has("start:El Cadejo negro:24/24"), "boss_fight_started con nombre y vida (%s)" % str(log_events))
 	_check(not bool(gate.get("is_open")), "la reja se cierra detrás del jugador")
 	_check((hud.get_node("BossPanel") as Control).visible, "barra de vida del jefe visible")
 

@@ -24,8 +24,9 @@ size = Vector2(60, 64)
 collision_layer = 4
 collision_mask = 1
 script = ExtResource("1_boss")
-display_name = "El Cadejo"
-phase_messages = Array[String](["¡El Cadejo se enfurece!"])
+display_name = "El Cadejo negro"
+phase_messages = Array[String](["¡Se ha enfurecido, Emma! Esquiva sus embestidas y ataca cuando retroceda."])
+defeat_lines = PackedStringArray("Lo lograste, Emma. El Cadejo ha sido purificado.", "El Cadejo blanco volverá a cuidar de los viajeros... Quedan más leyendas atrapadas en el sueño.")
 
 [node name="Visual" type="Node2D" parent="."]
 

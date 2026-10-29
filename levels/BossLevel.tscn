@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Autumn BG/GandalfHardcore Background layers_layer 3.png" id="26_bg3"]
 [ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Autumn BG/GandalfHardcore Background layers_layer 2.png" id="27_bg4"]
 [ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Autumn BG/GandalfHardcore Background layers_layer 1.png" id="28_bg5"]
+[ext_resource type="Script" path="res://entities/level/DialogueTrigger.gd" id="40_dlg"]
 
 [sub_resource type="RectangleShape2D" id="Shape_Floor"]
 size = Vector2(1700, 40)
@@ -36,14 +37,17 @@ size = Vector2(140, 20)
 [sub_resource type="RectangleShape2D" id="Shape_ArenaTrigger"]
 size = Vector2(40, 300)
 
+[sub_resource type="RectangleShape2D" id="Shape_DialogueZone"]
+size = Vector2(40, 300)
+
 [node name="BossLevel" type="Node2D"]
 
 [node name="LevelManager" type="Node" parent="."]
 script = ExtResource("1_lm")
-level_name = "Guarida del Cadejo"
+level_name = "Sueño I: Guarida del Cadejo"
 win_condition = 1
 kill_y = 800.0
-completed_message = "¡Has derrotado al Cadejo!
+completed_message = "¡El Cadejo negro ha sido purificado!
 Pulsa R para reiniciar"
 
 [node name="HUD" parent="." instance=ExtResource("2_hud")]
@@ -181,6 +185,28 @@ boss = NodePath("../Cadejo")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ArenaTrigger"]
 shape = SubResource("Shape_ArenaTrigger")
+
+[node name="Story" type="Node2D" parent="."]
+
+[node name="Intro" type="Area2D" parent="Story"]
+position = Vector2(100, 450)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("40_dlg")
+lines = PackedStringArray("Aquí habita el Cadejo negro, el que acecha a los viajeros en la noche.", "Si lo purificamos, el Cadejo blanco volverá a protegerlos.")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Story/Intro"]
+shape = SubResource("Shape_DialogueZone")
+
+[node name="BeforeArena" type="Area2D" parent="Story"]
+position = Vector2(460, 450)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("40_dlg")
+lines = PackedStringArray("Ya viene... ¡Prepárate, Emma!")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Story/BeforeArena"]
+shape = SubResource("Shape_DialogueZone")
 
 [node name="Player" parent="." instance=ExtResource("3_player")]
 position = Vector2(100, 560)

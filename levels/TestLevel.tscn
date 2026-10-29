@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Normal BG/GandalfHardcore Background layers_layer 3.png" id="26_bg3"]
 [ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Normal BG/GandalfHardcore Background layers_layer 2.png" id="27_bg4"]
 [ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Normal BG/GandalfHardcore Background layers_layer 1.png" id="28_bg5"]
+[ext_resource type="Script" path="res://entities/level/DialogueTrigger.gd" id="40_dlg"]
 
 [sub_resource type="RectangleShape2D" id="Shape_Ground1"]
 size = Vector2(800, 40)
@@ -39,14 +40,17 @@ size = Vector2(20, 700)
 [sub_resource type="RectangleShape2D" id="Shape_WallRight"]
 size = Vector2(20, 700)
 
+[sub_resource type="RectangleShape2D" id="Shape_DialogueZone"]
+size = Vector2(40, 300)
+
 [node name="TestLevel" type="Node2D"]
 
 [node name="LevelManager" type="Node" parent="."]
 script = ExtResource("1_lm")
-level_name = "Bosque de los Pinos"
+level_name = "Sueño I: Bosque de los Pinos"
 kill_y = 800.0
 pause_on_complete = false
-completed_message = "¡La puerta se ha abierto!"
+completed_message = "¡La luz abrió la puerta!"
 
 [node name="HUD" parent="." instance=ExtResource("2_hud")]
 
@@ -242,6 +246,38 @@ start_direction = -1
 position = Vector2(1868, 552)
 target_scene = "res://levels/BossLevel.tscn"
 open_on = 1
+
+[node name="Story" type="Node2D" parent="."]
+
+[node name="Intro" type="Area2D" parent="Story"]
+position = Vector2(100, 450)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("40_dlg")
+lines = PackedStringArray("Emma... ¿me escuchas? Soy la voz de tu pulsera.", "Te has dormido y estás en el mundo de los sueños. Las leyendas se han convertido en monstruos.", "Reúne las monedas de luz para abrir la puerta. Yo te guiaré.")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Story/Intro"]
+shape = SubResource("Shape_DialogueZone")
+
+[node name="FirstSpirit" type="Area2D" parent="Story"]
+position = Vector2(420, 450)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("40_dlg")
+lines = PackedStringArray("Ese espíritu está corrompido. ¡Usa mi poder con J o X para purificarlo!")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Story/FirstSpirit"]
+shape = SubResource("Shape_DialogueZone")
+
+[node name="BeforeDoor" type="Area2D" parent="Story"]
+position = Vector2(1700, 450)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("40_dlg")
+lines = PackedStringArray("Esa puerta lleva a la guarida del Cadejo negro. Ten valor, Emma.")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Story/BeforeDoor"]
+shape = SubResource("Shape_DialogueZone")
 
 [node name="Player" parent="." instance=ExtResource("3_player")]
 position = Vector2(100, 560)

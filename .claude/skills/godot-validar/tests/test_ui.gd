@@ -43,7 +43,7 @@ func _run() -> void:
 
 	# --- Rótulo y monedas ---
 	var banner: Control = hud.get_node("LevelBanner") as Control
-	_check(banner.visible and (banner.get_node("BannerLabel") as Label).text == "Bosque de los Pinos", "rótulo con el nombre del nivel")
+	_check(banner.visible and (banner.get_node("BannerLabel") as Label).text == "Sueño I: Bosque de los Pinos", "rótulo con el nombre del nivel")
 	_check(banner.get_combined_minimum_size().x > 200.0, "el tablón se adapta al texto (%.0f px)" % banner.get_combined_minimum_size().x)
 	await create_timer(3.0).timeout
 	_check(not banner.visible, "el rótulo desaparece solo")
