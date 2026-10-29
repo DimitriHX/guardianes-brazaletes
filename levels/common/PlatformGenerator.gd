@@ -18,6 +18,7 @@ extends RefCounted
 ##      `.` Aire | `#` Suelo grueso | `=` Plataforma fina | `-` Plataforma one-way
 ##      `|` Muro | `^` Pinchos (Hazard) | `P` Player | `C` Moneda | `H` Vida
 ##      `E`/`e` Enemigo patrulla (izq/der) | `D` Demonio | `X` Puerta-portal de salida
+##      (con `@exit_fade = s` aparece al ganar y funde lentamente a @next_level)
 ##      `G` Reja de arena | `A` Disparador de arena | `B` Jefe (Cadejo)
 ##      `1`..`9` Disparadores de diálogo (@dialogue_1..@dialogue_9)
 
@@ -38,6 +39,11 @@ const GROUND_DEPTH: int = 5
 ## Ancho (celdas) de los muros de borde y cuánto suben por encima del mapa.
 const BORDER_WALL_CELLS: int = 2
 const BORDER_WALL_TOP_PX: float = 100.0
+## Grosor de la colisión de las plataformas finas (= y -), pegada a su borde
+## superior. El arte sigue ocupando la celda entera (20 px), pero con 10 px de
+## colisión quedan 50 px libres bajo una plataforma a 3 celdas del suelo y el
+## jugador (40 px de alto) puede pasar por debajo.
+const THIN_COLLISION_PX: float = 10.0
 
 const HUD_SCENE_PATH: String = "res://ui/hud/HUD.tscn"
 const PLAYER_SCENE_PATH: String = "res://entities/player/Player.tscn"
@@ -476,7 +482,7 @@ static func _build_level_3_boss_text() -> String:
 	_paint_rect(grid, 70, 24, 6, 1, "-")
 	_paint_rect(grid, 79, 27, 6, 1, "-")
 	# Repisa junto al muro derecho para escapar si el jefe te arrincona.
-	_paint_rect(grid, 89, 27, 5, 1, "-")
+	_paint_rect(grid, 90, 27, 5, 1, "-")
 
 	# Jugador, curaciones, reja, disparador de arena, jefe y diálogos
 	grid[29][5] = "P"
@@ -487,13 +493,17 @@ static func _build_level_3_boss_text() -> String:
 	grid[22][31] = "A"
 	grid[20][61] = "H"
 	grid[29][62] = "B"
+	# Portal de salida: aparece al purificar al Cadejo y vuelve al título.
+	grid[29][87] = "X"
 
 	var headers: PackedStringArray = PackedStringArray([
 		"@name = Sueño I: Guarida del Cadejo",
 		"@season = AUTUMN",
 		"@win_condition = BOSS_DEFEATED",
-		"@pause_on_complete = true",
-		"@completed_message = ¡El Cadejo negro ha sido purificado!\\nPulsa R para reiniciar",
+		"@pause_on_complete = false",
+		"@next_level = res://ui/menus/MainMenu.tscn",
+		"@exit_fade = 3.5",
+		"@completed_message = ¡El Cadejo negro ha sido purificado!\\nCruza el portal para despertar.",
 		"@kill_y = 800",
 		"@tint = 0.62, 0.55, 0.62, 1.0",
 		"@dialogue_1 = Aquí habita el Cadejo negro, el que acecha a los viajeros en la noche. | Si lo purificamos, el Cadejo blanco volverá a protegerlos.",
@@ -628,7 +638,7 @@ static func parse_text(text: String) -> Dictionary:
 					platforms.append({
 						"name": "Platform%d" % plat_idx,
 						"kind": "thin",
-						"rect": rect_px,
+						"rect": Rect2(rect_px.position, Vector2(rect_px.size.x, THIN_COLLISION_PX)),
 						"one_way": false,
 					})
 					plat_idx += 1
@@ -636,7 +646,7 @@ static func parse_text(text: String) -> Dictionary:
 					platforms.append({
 						"name": "OneWayPlatform%d" % one_way_idx,
 						"kind": "one_way",
-						"rect": rect_px,
+						"rect": Rect2(rect_px.position, Vector2(rect_px.size.x, THIN_COLLISION_PX)),
 						"one_way": true,
 					})
 					one_way_idx += 1
@@ -964,6 +974,12 @@ static func populate_level_node(root: Node2D, text: String) -> void:
 				exit_door.position = Vector2(world_pos.x, surface_y - 48.0)
 				exit_door.set("target_scene", String(meta.get("next_level", "")))
 				exit_door.set("open_on", 1)
+				# Puerta final: aparece al completar el nivel y lleva a la escena
+				# con un fundido lento y porcentual en vez de la transición normal.
+				var exit_fade: float = float(String(meta.get("exit_fade", "0")))
+				if exit_fade > 0.0:
+					exit_door.set("hidden_until_open", true)
+					exit_door.set("fade_out_time", exit_fade)
 				root.add_child(exit_door)
 			"G":
 				var gate: Area2D = gate_scene.instantiate() as Area2D

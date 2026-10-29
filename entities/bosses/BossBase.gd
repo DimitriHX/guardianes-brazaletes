@@ -19,6 +19,8 @@ signal phase_changed(phase: int)
 @export var first_state: StringName = &"Chase"
 ## Hacia dónde mira el dibujo original. Desmarcar si el sprite sale al revés.
 @export var art_faces_right: bool = true
+## Distancia horizontal (px) dentro de la cual no se gira hacia el objetivo.
+@export var turn_deadzone: float = 48.0
 @export_group("Fases")
 ## Fracciones de vida que inician cada fase: [0.5] = fase 2 al 50 %.
 @export var phase_thresholds: Array[float] = [0.5]
@@ -118,10 +120,16 @@ func distance_to_target() -> float:
 
 
 ## 1 si el objetivo está a la derecha, -1 si está a la izquierda.
+## Dentro de `turn_deadzone` mantiene la dirección actual: si el jugador salta
+## por encima, el jefe sigue de largo en vez de girar en cada frame (temblaba
+## y lo seguía por debajo, así que no se le podía saltar).
 func direction_to_target() -> int:
 	if not has_valid_target():
 		return facing
-	return 1 if target.global_position.x >= global_position.x else -1
+	var dx: float = target.global_position.x - global_position.x
+	if absf(dx) < turn_deadzone:
+		return facing
+	return 1 if dx >= 0.0 else -1
 
 
 func face_target() -> void:

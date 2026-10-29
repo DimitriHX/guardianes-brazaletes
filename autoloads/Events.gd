@@ -57,6 +57,9 @@ signal level_restart_requested
 ## Pide cambiar a otra escena de nivel (p. ej. al cruzar una puerta).
 @warning_ignore("unused_signal")
 signal level_change_requested(scene_path: String)
+## Como level_change_requested, pero con un fundido lento y porcentual (final).
+@warning_ignore("unused_signal")
+signal level_fade_requested(scene_path: String, duration: float)
 
 ## Un nivel acaba de empezar (el HUD muestra su nombre).
 @warning_ignore("unused_signal")

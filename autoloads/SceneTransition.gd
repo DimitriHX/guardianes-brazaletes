@@ -4,6 +4,8 @@ extends CanvasLayer
 ## cambia o recarga la escena y la vuelve a descubrir.
 ## Uso: SceneTransition.change_scene("res://levels/sueno_1/Guarida.tscn")
 ##      SceneTransition.reload_scene()
+##      SceneTransition.fade_to_scene(path, 3.5): fundido a negro lento con
+##      porcentaje en pantalla (final del sueño -> título).
 ## Funciona con el árbol en pausa y bloquea el input mientras cubre.
 
 signal covered
@@ -16,11 +18,17 @@ const SHADER: Shader = preload("res://shaders/transition.gdshader")
 @export var color: Color = Color(0.04, 0.03, 0.06)
 ## Patrón: nº de círculos por ancho de pantalla.
 @export var shape_tiling: float = 18.0
+@export_group("Fundido lento")
+@export var fade_text: String = "Despertando..."
+@export var fade_hold_time: float = 0.5
+@export var fade_reveal_time: float = 0.9
 
 var is_transitioning: bool = false
 
 var _rect: ColorRect
 var _material: ShaderMaterial
+var _fade_rect: ColorRect
+var _fade_label: Label
 
 
 func _ready() -> void:
@@ -44,6 +52,7 @@ func _ready() -> void:
 	_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_rect)
+	_build_fade_nodes()
 	get_viewport().size_changed.connect(_update_resolution)
 	_update_resolution()
 	_rect.hide()
@@ -55,6 +64,49 @@ func change_scene(scene_path: String) -> void:
 
 func reload_scene() -> void:
 	_run(func() -> void: get_tree().reload_current_scene())
+
+
+## Fundido progresivo a negro durante `duration` s mostrando el porcentaje,
+## cambia de escena y vuelve a descubrir. También apaga la música poco a poco.
+func fade_to_scene(scene_path: String, duration: float) -> void:
+	if is_transitioning:
+		return
+	is_transitioning = true
+	_fade_rect.mouse_filter = Control.MOUSE_FILTER_STOP
+	_fade_rect.show()
+	_fade_label.show()
+	set_fade_progress(0.0)
+	AudioManager.stop_music(duration)
+	var tween: Tween = create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.tween_method(set_fade_progress, 0.0, 1.0, maxf(duration, 0.01))
+	tween.tween_interval(fade_hold_time)
+	await tween.finished
+	covered.emit()
+	get_tree().paused = false
+	get_tree().change_scene_to_file(scene_path)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_fade_label.hide()
+	var reveal: Tween = create_tween()
+	reveal.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	reveal.tween_property(_fade_rect, "color:a", 0.0, fade_reveal_time)
+	await reveal.finished
+	_fade_rect.hide()
+	_fade_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	is_transitioning = false
+	finished.emit()
+
+
+## 0..1: opacidad del fundido lento y porcentaje del texto.
+func set_fade_progress(value: float) -> void:
+	var p: float = clampf(value, 0.0, 1.0)
+	_fade_rect.color.a = p
+	_fade_label.text = "%s %d%%" % [fade_text, roundi(p * 100.0)]
+
+
+func get_fade_text() -> String:
+	return _fade_label.text if _fade_label.visible else ""
 
 
 ## 0 = despejado, 1 = cubierto (útil para menús o efectos propios).
@@ -83,6 +135,25 @@ func _run(swap: Callable) -> void:
 	_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	is_transitioning = false
 	finished.emit()
+
+
+func _build_fade_nodes() -> void:
+	_fade_rect = ColorRect.new()
+	_fade_rect.name = "Fade"
+	_fade_rect.color = Color(color, 0.0)
+	_fade_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_fade_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_fade_rect)
+	_fade_label = Label.new()
+	_fade_label.name = "FadeLabel"
+	_fade_label.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_fade_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_fade_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_fade_label.add_theme_font_size_override("font_size", 48)
+	_fade_label.add_theme_color_override("font_color", Color(1.0, 0.84, 0.29))
+	_fade_rect.add_child(_fade_label)
+	_fade_rect.hide()
+	_fade_label.hide()
 
 
 func _tween_factor(target: float, duration: float) -> void:

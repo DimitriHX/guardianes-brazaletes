@@ -146,7 +146,9 @@ func _run() -> void:
 	await create_timer(0.4).timeout
 	_check(not (hud.get_node("BossPanel") as Control).visible, "la barra del jefe se oculta")
 	_check(bool(gate.get("is_open")), "la reja se vuelve a abrir")
-	_check(paused and bool(hud.call("is_message_visible")), "victoria: pausa y mensaje")
+	_check(not paused and bool(hud.call("is_message_visible")), "victoria: mensaje y el juego sigue (sin pausa)")
+	var exit_door: Area2D = current_scene.get_node("ExitDoor") as Area2D
+	_check(exit_door.visible and bool(exit_door.get("is_open")), "al purificar al Cadejo aparece el portal de salida")
 
 	# Regresión: tras reiniciar el nivel no quedan conexiones de Events a nodos liberados
 	# (antes: "Attempt to call function 'null::close (Callable)'" al empezar el combate).
@@ -167,6 +169,28 @@ func _run() -> void:
 	p2.position = Vector2(640, 560)
 	await _frames(10)
 	_check(not bool((current_scene.get_node("ArenaGate") as Area2D).get("is_open")), "tras reiniciar, la reja vuelve a cerrarse al empezar el combate")
+	_check(not (current_scene.get_node("ExitDoor") as Area2D).visible, "el portal final está oculto hasta derrotar al jefe")
+
+	# ================= Portal final: fundido lento al título =================
+	var boss2: CharacterBody2D = current_scene.get_node("Cadejo") as CharacterBody2D
+	boss2.call("activate", p2)
+	await _frames(2)
+	p2.get_node("Stats").set("damage_taken_multiplier", 0.0)
+	boss2.get_node("Stats").call("take_damage", 99)
+	await create_timer(1.6).timeout
+	var portal: Area2D = current_scene.get_node("ExitDoor") as Area2D
+	p2.global_position = portal.global_position + Vector2(0, 28)
+	p2.velocity = Vector2.ZERO
+	await create_timer(1.2).timeout
+	var st: CanvasLayer = root.get_node("SceneTransition") as CanvasLayer
+	var fade_text: String = String(st.call("get_fade_text"))
+	_check(current_scene.name == "Guarida" and fade_text.ends_with("%") and not fade_text.ends_with(" 0%") and not fade_text.ends_with("100%"),
+		"cruzar el portal funde poco a poco con porcentaje (%s)" % fade_text)
+	for i: int in 600:
+		if current_scene != null and current_scene.name == "MainMenu":
+			break
+		await process_frame
+	_check(current_scene != null and current_scene.name == "MainMenu", "al terminar el fundido vuelve al título")
 
 	print("RESULT: %d fallos" % _failures)
 	quit(1 if _failures > 0 else 0)

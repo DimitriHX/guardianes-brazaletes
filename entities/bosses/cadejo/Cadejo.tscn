@@ -15,10 +15,10 @@
 [ext_resource type="Script" path="res://entities/bosses/cadejo/states/BossDeadState.gd" id="13_dead"]
 
 [sub_resource type="RectangleShape2D" id="Shape_body"]
-size = Vector2(56, 64)
+size = Vector2(68, 40)
 
 [sub_resource type="RectangleShape2D" id="Shape_hitbox"]
-size = Vector2(60, 64)
+size = Vector2(60, 34)
 
 [node name="Cadejo" type="CharacterBody2D" groups=["bosses"]]
 collision_layer = 4
@@ -53,6 +53,7 @@ anchor_bottom = true
 placeholders = [NodePath("../Placeholder")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 12)
 shape = SubResource("Shape_body")
 
 [node name="Stats" type="Node" parent="."]
@@ -67,6 +68,7 @@ script = ExtResource("4_hurtbox")
 health = NodePath("../Stats")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, 12)
 shape = SubResource("Shape_body")
 
 [node name="Hitbox" type="Area2D" parent="." node_paths=PackedStringArray("stats")]
@@ -77,6 +79,7 @@ stats = NodePath("../Stats")
 continuous = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, 15)
 shape = SubResource("Shape_hitbox")
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]

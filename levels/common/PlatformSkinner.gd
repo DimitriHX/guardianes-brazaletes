@@ -87,7 +87,12 @@ func skin(body: StaticBody2D) -> Control:
 	region.position.y += float(season) * SEASON_STRIDE
 	patch.region_rect = region
 
-	patch.size = size / texel
+	# Las plataformas finas tienen una colisión más delgada que la celda
+	# (para poder pasar por debajo): el arte ocupa la celda entera desde arriba.
+	var art_size: Vector2 = size
+	if region.size.y == THIN_REGION.size.y:
+		art_size.y = tile_world_size
+	patch.size = art_size / texel
 	patch.scale = Vector2(texel, texel)
 	patch.position = shape_node.position - size / 2.0
 	_hide_placeholder(body)

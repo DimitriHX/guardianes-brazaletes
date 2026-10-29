@@ -46,7 +46,7 @@ A partir de los parámetros de `Player.gd` (`move_speed = 220`, `jump_velocity =
 ### Leyenda de Símbolos (Grilla 20x20 px)
 - `.` o espacio: Aire
 - `#`: Suelo grueso (`StaticBody2D`, `BLOCK_REGION` 3x3)
-- `=`: Plataforma fina sólida (`StaticBody2D` de 20 px de alto, `THIN_REGION`)
+- `=`: Plataforma fina sólida (arte de 20 px, `THIN_REGION`; colisión de 10 px pegada arriba para poder pasar por debajo)
 - `-`: Plataforma fina `one_way_collision = true` (atravesable desde abajo; se dibuja como tablones de madera)
 - `|`: Muro vertical (`StaticBody2D` de 20 px de ancho, `PILLAR_REGION`)
 - `^`: Pinchos / Peligro (`HazardSpike`, capa 6 `Hazards`)
@@ -55,7 +55,7 @@ A partir de los parámetros de `Player.gd` (`move_speed = 220`, `jump_velocity =
 - `H`: Poción de curación (`Pickup` tipo `HEALTH`)
 - `E` / `e`: Enemigo patrullero (`EnemyBase`, `E` = izq, `e` = der)
 - `D`: Enemigo demonio rápido (`EnemyDemon`)
-- `X`: Puerta-portal de salida (`PortalDoor`: `Door` con sprite, hacia `@next_level`, se abre en `LEVEL_COMPLETED`)
+- `X`: Puerta-portal de salida (`PortalDoor`: `Door` con sprite, hacia `@next_level`, se abre en `LEVEL_COMPLETED`). Con `@exit_fade = <s>` está oculta hasta ganar y funde lentamente (con porcentaje) a `@next_level`.
 - `G`: Reja de arena (`ArenaGate`, empieza abierta, se cierra en `BOSS_FIGHT_STARTED` y se abre en `BOSS_DEFEATED`)
 - `A`: Disparador de arena (`BossArena` que activa al jefe)
 - `B`: Jefe (`Cadejo`)

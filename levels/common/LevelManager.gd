@@ -40,6 +40,7 @@ func _ready() -> void:
 	Events.player_died.connect(_on_player_died)
 	Events.level_restart_requested.connect(_on_restart_requested)
 	Events.level_change_requested.connect(change_level)
+	Events.level_fade_requested.connect(fade_to_level)
 	Events.boss_defeated.connect(_on_boss_defeated)
 	# Diferido: los Pickups se registran en el grupo durante su propio _ready.
 	_count_required.call_deferred()
@@ -75,6 +76,14 @@ func change_level(scene_path: String) -> void:
 	SceneTransition.change_scene(scene_path)
 
 
+## Cambio de escena con fundido lento y porcentaje (p. ej. salir al título).
+func fade_to_level(scene_path: String, duration: float) -> void:
+	if _restarting:
+		return
+	_restarting = true
+	SceneTransition.fade_to_scene(scene_path, duration)
+
+
 func _count_required() -> void:
 	if required_collectibles > 0:
 		required = required_collectibles
@@ -95,6 +104,7 @@ func _complete() -> void:
 	Events.hud_message.emit(completed_message, 0.0 if pause_on_complete else 2.5)
 	if pause_on_complete:
 		get_tree().paused = true
+	if pause_on_complete or win_condition == WinCondition.BOSS_DEFEATED:
 		AudioManager.play_music(&"victory")
 
 

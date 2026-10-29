@@ -5,6 +5,9 @@ extends Area2D
 ## - Abierta + target_scene: al tocarla el jugador pide el cambio de nivel
 ##   (Events.level_change_requested; lo ejecuta el LevelManager).
 ## - Abierta sin target_scene: simple paso (p. ej. reja de una arena).
+## - hidden_until_open: invisible y sin bloquear hasta abrirse (portal final).
+## - fade_out_time > 0: en vez de la transición normal pide un fundido lento
+##   (Events.level_fade_requested).
 ## Se abre/cierra por código (open/close) o sola, reaccionando a Events.
 ## Area2D sin capa; detecta al Player (2).
 
@@ -20,6 +23,11 @@ enum Trigger { NONE, LEVEL_COMPLETED, BOSS_FIGHT_STARTED, BOSS_DEFEATED }
 @export var open_on: Trigger = Trigger.NONE
 ## Evento global que la cierra.
 @export var close_on: Trigger = Trigger.NONE
+## Invisible y sin bloquear el paso hasta que se abre; entonces aparece.
+@export var hidden_until_open: bool = false
+## Segundos del fundido al cruzarla. 0 = transición normal de nivel.
+@export var fade_out_time: float = 0.0
+@export var appear_time: float = 0.8
 @export_group("Sprite")
 ## Arte de la puerta cerrada. Vacío = se usa el ColorRect provisional
 ## (p. ej. la reja de la arena, que aún no tiene arte).
@@ -70,7 +78,10 @@ func _physics_process(_delta: float) -> void:
 		if body.is_in_group("player") and not (body.has_method("is_dead") and bool(body.call("is_dead"))):
 			_used = true
 			player_entered.emit()
-			Events.level_change_requested.emit(target_scene)
+			if fade_out_time > 0.0:
+				Events.level_fade_requested.emit(target_scene, fade_out_time)
+			else:
+				Events.level_change_requested.emit(target_scene)
 			return
 
 
@@ -87,7 +98,10 @@ func _set_open(value: bool, notify: bool) -> void:
 		return
 	is_open = value
 	# set_deferred: puede llamarse durante un callback de física.
-	_blocker_shape.set_deferred("disabled", value)
+	# Una puerta oculta no bloquea: sería un muro invisible.
+	_blocker_shape.set_deferred("disabled", value or hidden_until_open)
+	if hidden_until_open:
+		_update_visibility(value, notify)
 	_visual.color = open_color if value else closed_color
 	_update_sprite(value)
 	if notify:
@@ -96,6 +110,16 @@ func _set_open(value: bool, notify: bool) -> void:
 			Events.sfx_requested.emit(&"door_open")
 		else:
 			closed.emit()
+
+
+func _update_visibility(value: bool, animate: bool) -> void:
+	if not value:
+		visible = false
+		return
+	visible = true
+	if animate:
+		modulate.a = 0.0
+		create_tween().tween_property(self, "modulate:a", 1.0, appear_time)
 
 
 func _update_sprite(value: bool) -> void:

@@ -42,5 +42,6 @@ func _roar() -> void:
 	if not boss.has_valid_target() or boss.distance_to_target() > push_range:
 		return
 	if boss.target.has_method("apply_knockback"):
-		var away: float = float(boss.direction_to_target())
+		# Lado real del jugador (sin la zona muerta de giro del jefe).
+		var away: float = 1.0 if boss.target.global_position.x >= boss.global_position.x else -1.0
 		boss.target.call("apply_knockback", Vector2(push_force.x * away, push_force.y))

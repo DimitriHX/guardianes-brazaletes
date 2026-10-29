@@ -45,6 +45,11 @@ func _run() -> void:
 			if not is_equal_approx(skin.size.x * skin.scale.x, shape.size.x):
 				sizes_match = false
 				print("   ancho distinto en ", body.name)
+		elif patch != null and shape.size.y < 20.0:
+			# Plataforma fina: colisión delgada (se pasa por debajo), arte de celda entera.
+			if not (patch.size * patch.scale).is_equal_approx(Vector2(shape.size.x, 20.0)):
+				sizes_match = false
+				print("   plataforma fina con arte distinto en ", body.name, ": ", patch.size * patch.scale)
 		elif patch == null or not (patch.size * patch.scale).is_equal_approx(shape.size):
 			sizes_match = false
 			print("   tamaño distinto en ", body.name, ": ", patch.size * patch.scale, " vs ", shape.size)
