@@ -26,14 +26,20 @@ Sigue este orden secuencial para pedirle tareas a Claude Code en la terminal
 | Estado | Sprint | Tarea de Claude Code | Entregable de Código |
 |---|---|---|---|
 | [x] | 09: Control Maestro de Plataformas | Coyote time, jump buffering y altura de salto variable. **Ya implementado y probado en el Sprint 02.** | `entities/player/Player.gd` |
-| [ ] | 10: Impacto Visual y Feedback | Hitstop (`Engine.time_scale`) al impactar, camera shake procedural y partículas básicas (polvo al saltar/correr, chispas al recibir daño). | Sistema de hitstop, cámara con shake, escenas de partículas |
 
-### Fase 3: Boss AI Framework
+## Ruta hacia el jefe (plan fusionado)
+
+Orden de ejecución: **A → B → 10 → C → D (incluye 11 y 12) → E**.
+Arte: placeholders (ColorRect/colores) + `TODO(assets):`; el diseñador cambia texturas.
 
 | Estado | Sprint | Tarea de Claude Code | Entregable de Código |
 |---|---|---|---|
-| [ ] | 11: Framework de IA para Jefes | `BossBase` con máquina de estados y fases. Ataques como "acciones" elegidas según distancia, vida y tiempo. Primer jefe (El Cadejo): persecución, salto/embestida, rugido que empuja. | `entities/bosses/BossBase.gd`, acciones, jefe Cadejo |
-| [ ] | 12: Fases y Progresión | Transición Fase 1 → Fase 2 (velocidad, nuevos ataques). Barra de vida del jefe en el HUD vía `Events`. | Gestión de fases, barra de vida del jefe |
+| [x] | A: Cámara y Enfoque | Camera2D reutilizable: zoom cerrado sobre el jugador, `position_smoothing`, márgenes de arrastre, look-ahead hacia donde mira y límites automáticos desde un rectángulo de bounds del nivel (sin mostrar el vacío). | `components/GameCamera.gd`, `CameraBounds` en TestLevel |
+| [ ] | B: Ambientación y Capas | Parallax de varias capas (fondo lejano, montañas, árboles cercanos), `CanvasModulate` con tono ambiental, `PointLight2D` en antorchas/puntos de interés y `WorldEnvironment` con glow suave. | Escena de ambientación reutilizable por nivel |
+| [ ] | 10: Impacto Visual y Feedback | Hitstop (`Engine.time_scale`) al impactar, camera shake procedural (sobre GameCamera) y partículas básicas (polvo al saltar/correr, chispas al recibir daño), todo vía `Events`. | Sistema de hitstop, shake, escenas de partículas |
+| [ ] | C: Nivel 2 | Meta/bandera al final del Nivel 1 que hace que `LevelManager` cargue el Nivel 2. Nivel 2 con otra paleta (cueva o cementerio) sobre TileMapLayer placeholder. Nuevos obstáculos: plataformas móviles/que caen y Hazards (pinchos) en la capa 6. | Goal, transición en LevelManager, `levels/Level2.tscn`, hazards |
+| [ ] | D: Arena y Jefe (incl. 11 y 12) | Arena cerrada al final del Nivel 2 que bloquea la salida hasta derrotar al jefe. `BossBase` con máquina de estados, ataques como acciones y fases. El Cadejo: Perseguir → Atacar (embestida/salto) → Retroceder, rugido que empuja y fase 2 más rápida. Barra de vida del jefe en el HUD solo durante el combate. Animaciones: AnimatedSprite2D preparado para los sprites del jefe (los .piskel deben exportarse a PNG). | `entities/bosses/*`, arena, barra de vida del jefe |
+| [ ] | E: Victoria y Cierre | Secuencia de derrota del jefe y aparición de la bandera final. Pantalla "¡Victoria!" con reiniciar / volver al menú principal (menú simple). | Secuencia de derrota, `VictoryScreen`, `MainMenu` |
 
 ### Matriz de calidad (cada sprint)
 1. Tipado estático. 2. Hijo→padre con señales, global vía `Events`. 3. `/godot-validar` + tests de regresión. 4. `TODO(assets):` en todo recurso pendiente.
