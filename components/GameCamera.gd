@@ -29,11 +29,23 @@ extends Camera2D
 @export var look_ahead_speed: float = 3.0
 @export_group("Límites")
 @export var bounds_group: StringName = &"camera_bounds"
+@export_group("Shake (Sprint 10)")
+@export var player_hurt_shake: float = 6.0
+@export var player_hurt_shake_time: float = 0.22
+@export var enemy_hit_shake: float = 2.5
+@export var enemy_hit_shake_time: float = 0.10
+@export var boss_defeat_shake: float = 8.0
+@export var boss_defeat_shake_time: float = 0.40
+@export var shake_frequency: float = 38.0
 
 var _follows_parent: bool = true
 var _look_ahead: float = 0.0
 var _bounds: Rect2 = Rect2()
 var _has_bounds: bool = false
+var _shake_intensity: float = 0.0
+var _shake_duration: float = 0.0
+var _shake_left: float = 0.0
+var _shake_time: float = 0.0
 
 
 func _ready() -> void:
@@ -42,12 +54,16 @@ func _ready() -> void:
 	_follows_parent = target == get_parent()
 	_apply_bounds_from_group()
 	get_viewport().size_changed.connect(_update_zoom)
+	Events.camera_shake_requested.connect(shake)
+	Events.entity_damaged.connect(_on_entity_damaged)
+	Events.boss_defeated.connect(_on_boss_defeated)
 	_update_zoom()
 	if target != null:
 		_snap_to_target()
 
 
 func _process(delta: float) -> void:
+	_update_shake(delta)
 	if target == null or not is_instance_valid(target):
 		return
 	var facing_value: Variant = target.get("facing")
@@ -58,6 +74,29 @@ func _process(delta: float) -> void:
 		position.x = _look_ahead
 	else:
 		global_position = target.global_position + Vector2(_look_ahead, 0.0)
+
+
+## Sacude la cámara usando `offset` (sin alterar `position` ni salirse de límites).
+func shake(intensity: float, duration: float = 0.2) -> void:
+	if intensity <= 0.0 or duration <= 0.0:
+		return
+	_shake_intensity = maxf(_shake_intensity, intensity)
+	_shake_duration = maxf(_shake_left, duration)
+	_shake_left = maxf(_shake_left, duration)
+
+
+func stop_shake() -> void:
+	_shake_left = 0.0
+	_shake_intensity = 0.0
+	offset = Vector2.ZERO
+
+
+func is_shaking() -> bool:
+	return _shake_left > 0.0
+
+
+func get_shake_intensity() -> float:
+	return _shake_intensity if _shake_left > 0.0 else 0.0
 
 
 ## Fija los límites a un rectángulo en coordenadas globales.
@@ -109,3 +148,32 @@ func _snap_to_target() -> void:
 	else:
 		global_position = target.global_position
 	reset_smoothing()
+
+
+func _update_shake(delta: float) -> void:
+	if _shake_left <= 0.0:
+		if offset != Vector2.ZERO:
+			offset = Vector2.ZERO
+		return
+	_shake_left = maxf(_shake_left - delta, 0.0)
+	if _shake_left <= 0.0:
+		_shake_intensity = 0.0
+		offset = Vector2.ZERO
+		return
+	_shake_time += delta * shake_frequency
+	var decay: float = _shake_left / maxf(_shake_duration, 0.001)
+	var amp: float = _shake_intensity * decay
+	var wave_x: float = sin(_shake_time * 1.7) * 0.7 + cos(_shake_time * 3.1) * 0.3
+	var wave_y: float = cos(_shake_time * 2.3) * 0.7 + sin(_shake_time * 3.7) * 0.3
+	offset = Vector2(wave_x, wave_y) * amp
+
+
+func _on_entity_damaged(entity: Node, amount: int) -> void:
+	if entity != null and entity.is_in_group("player"):
+		shake(player_hurt_shake, player_hurt_shake_time)
+	else:
+		shake(enemy_hit_shake + float(maxi(amount - 1, 0)) * 0.8, enemy_hit_shake_time)
+
+
+func _on_boss_defeated(_boss: Node) -> void:
+	shake(boss_defeat_shake, boss_defeat_shake_time)

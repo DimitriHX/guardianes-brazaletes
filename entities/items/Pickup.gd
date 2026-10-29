@@ -27,6 +27,7 @@ var _time: float = 0.0
 
 @onready var _visual: ColorRect = $Visual
 @onready var _sprite: Sprite2D = $Sprite
+@onready var _light: PointLight2D = get_node_or_null("PointLight2D") as PointLight2D
 
 
 func _ready() -> void:
@@ -38,6 +39,11 @@ func _ready() -> void:
 	_sprite.texture = texture
 	_sprite.visible = texture != null
 	_visual.visible = texture == null
+	if _light != null:
+		_light.add_to_group("point_lights")
+		if _light.texture == null:
+			_light.texture = LevelAmbience.make_radial_light_texture()
+		_light.color = Color(1.0, 0.85, 0.3, 1.0) if type == PickupType.COLLECTIBLE else Color(0.35, 1.0, 0.55, 1.0)
 	# Desfase aleatorio: que no se balanceen todos a la vez.
 	_time = randf() * TAU
 
@@ -45,6 +51,9 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_time += delta * bob_speed * TAU
 	_sprite.position.y = sin(_time) * bob_amplitude
+	if _light != null:
+		_light.position.y = _sprite.position.y
+		_light.energy = 0.85 + sin(_time) * 0.12
 
 
 func _physics_process(_delta: float) -> void:

@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/fx/ParticleBurst.gd" id="1_burst"]
+
+[sub_resource type="Curve" id="Curve_dust_scale"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.2), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_dust"]
+colors = PackedColorArray(0.92, 0.88, 0.8, 0.8, 0.75, 0.72, 0.68, 0)
+
+[node name="DustParticles" type="CPUParticles2D"]
+z_index = 5
+emitting = false
+amount = 8
+lifetime = 0.32
+one_shot = true
+explosiveness = 0.85
+direction = Vector2(0, -1)
+spread = 68.0
+gravity = Vector2(0, -35)
+initial_velocity_min = 18.0
+initial_velocity_max = 46.0
+scale_amount_min = 2.5
+scale_amount_max = 4.5
+scale_amount_curve = SubResource("Curve_dust_scale")
+color_ramp = SubResource("Gradient_dust")
+script = ExtResource("1_burst")
+particle_group = &"dust_particles"

@@ -1,6 +1,6 @@
 class_name MainMenu
 extends Control
-## Menú principal (adaptado del menú del proyecto de referencia):
+## Menú principal:
 ## Iniciar juego -> secuencia de historia (StoryCrawl) -> Nivel 1.
 ## Opciones -> panel con volumen de música/efectos y pantalla completa
 ## (persistido por GameSettings; la pantalla se elige con dos botones

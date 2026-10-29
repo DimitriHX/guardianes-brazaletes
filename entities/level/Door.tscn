@@ -23,6 +23,11 @@ metadata/_todo_assets = "Sprite de puerta / reja con animación de apertura"
 visible = false
 texture_filter = 1
 
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(0.55, 0.88, 1, 1)
+energy = 0.45
+texture_scale = 1.5
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("Shape_door")
 

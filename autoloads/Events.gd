@@ -51,6 +51,10 @@ signal collectible_picked(value: int)
 @warning_ignore("unused_signal")
 signal collectibles_changed(collected: int, required: int)
 @warning_ignore("unused_signal")
+signal checkpoint_reached(world_pos: Vector2)
+@warning_ignore("unused_signal")
+signal player_revived
+@warning_ignore("unused_signal")
 signal level_completed
 @warning_ignore("unused_signal")
 signal level_restart_requested
@@ -74,6 +78,17 @@ signal pickup_collected(kind: StringName)
 @warning_ignore("unused_signal")
 signal sfx_requested(sfx_name: StringName)
 
+# --- Impacto Visual y Feedback (Sprint 10) ---
+## Pide una pausa breve de impacto (hitstop) ajustando Engine.time_scale.
+@warning_ignore("unused_signal")
+signal hitstop_requested(scale: float, duration: float)
+## Pide una sacudida procedural en la cámara activa (GameCamera).
+@warning_ignore("unused_signal")
+signal camera_shake_requested(intensity: float, duration: float)
+## Pide spawnear un estallido de partículas ("dust", "sparks") en una posición global.
+@warning_ignore("unused_signal")
+signal particles_requested(kind: StringName, world_pos: Vector2)
+
 # --- UI ---
 ## Muestra líneas de diálogo en la caja inferior (no pausa el juego).
 @warning_ignore("unused_signal")
@@ -84,3 +99,6 @@ signal dialogue_finished
 ## Mensaje centrado en el HUD. duration <= 0 = permanente.
 @warning_ignore("unused_signal")
 signal hud_message(text: String, duration: float)
+## Abre la pantalla "¡Victoria!" con opciones de reiniciar o volver al menú.
+@warning_ignore("unused_signal")
+signal victory_screen_requested(subtitle: String)

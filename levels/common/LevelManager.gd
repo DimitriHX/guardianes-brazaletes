@@ -31,12 +31,15 @@ var required: int = 0
 var is_completed: bool = false
 
 var _restarting: bool = false
+var _has_checkpoint: bool = false
+var _checkpoint_pos: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
 	# Debe seguir funcionando con el árbol en pausa (victoria) para poder reiniciar.
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	Events.collectible_picked.connect(_on_collectible_picked)
+	Events.checkpoint_reached.connect(_on_checkpoint_reached)
 	Events.player_died.connect(_on_player_died)
 	Events.level_restart_requested.connect(_on_restart_requested)
 	Events.level_change_requested.connect(change_level)
@@ -104,6 +107,7 @@ func _complete() -> void:
 	Events.hud_message.emit(completed_message, 0.0 if pause_on_complete else 2.5)
 	if pause_on_complete:
 		get_tree().paused = true
+		Events.victory_screen_requested.emit(completed_message)
 	if pause_on_complete or win_condition == WinCondition.BOSS_DEFEATED:
 		AudioManager.play_music(&"victory")
 
@@ -120,12 +124,42 @@ func _on_boss_defeated(_boss: Node) -> void:
 		_complete()
 
 
+func _on_checkpoint_reached(world_pos: Vector2) -> void:
+	_has_checkpoint = true
+	_checkpoint_pos = world_pos
+
+
+func has_checkpoint() -> bool:
+	return _has_checkpoint
+
+
+func get_checkpoint_position() -> Vector2:
+	return _checkpoint_pos
+
+
+func _revive_at_checkpoint() -> void:
+	_restarting = false
+	var player: Node2D = get_tree().get_first_node_in_group("player") as Node2D
+	if player != null and player.has_method("revive_at"):
+		player.call("revive_at", _checkpoint_pos + Vector2(0.0, -26.0))
+		for fp: Node in get_tree().get_nodes_in_group("falling_platforms"):
+			if fp.has_method("reset_platform"):
+				fp.call("reset_platform")
+		Events.particles_requested.emit(&"sparks", _checkpoint_pos)
+		Events.hud_message.emit("Luz restaurada", 1.2)
+	else:
+		restart_level()
+
+
 func _on_player_died() -> void:
 	if _restarting or (is_completed and pause_on_complete):
 		return
 	_restarting = true
 	# Conexión a un método (no await): si el nivel se recarga antes, se desconecta sola.
-	get_tree().create_timer(restart_delay).timeout.connect(restart_level)
+	if _has_checkpoint:
+		get_tree().create_timer(restart_delay).timeout.connect(_revive_at_checkpoint)
+	else:
+		get_tree().create_timer(restart_delay).timeout.connect(restart_level)
 
 
 func _on_restart_requested() -> void:

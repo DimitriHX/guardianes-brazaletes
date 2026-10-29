@@ -39,6 +39,7 @@ func physics_update(delta: float) -> void:
 func _roar() -> void:
 	# TODO(assets): onda expansiva/partículas del rugido.
 	Events.sfx_requested.emit(&"boss_roar")
+	Events.camera_shake_requested.emit(5.0, 0.25)
 	if not boss.has_valid_target() or boss.distance_to_target() > push_range:
 		return
 	if boss.target.has_method("apply_knockback"):

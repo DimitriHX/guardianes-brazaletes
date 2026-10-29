@@ -50,9 +50,14 @@ var _is_dead: bool = false
 @onready var _animator: CharacterAnimator = $Visual/Animator
 @onready var _stats: StatsComponent = $Stats
 @onready var _state_machine: StateMachine = $StateMachine
+@onready var _bracelet_light: PointLight2D = get_node_or_null("BraceletLight") as PointLight2D
 
 
 func _ready() -> void:
+	if _bracelet_light != null:
+		_bracelet_light.add_to_group("point_lights")
+		if _bracelet_light.texture == null:
+			_bracelet_light.texture = LevelAmbience.make_radial_light_texture()
 	_stats.health_changed.connect(_on_health_changed)
 	_stats.died.connect(_on_health_died)
 	_stats.damaged.connect(_on_damaged)
@@ -97,6 +102,21 @@ func kill() -> void:
 
 func is_dead() -> bool:
 	return _is_dead
+
+
+## Restaura al jugador con toda su salud en una posición global (p. ej. un Checkpoint).
+func revive_at(world_pos: Vector2) -> void:
+	global_position = world_pos
+	velocity = Vector2.ZERO
+	_coyote_left = 0.0
+	_jump_buffer_left = 0.0
+	_knockback_left = 0.0
+	_is_dead = false
+	_animator.unlock()
+	_stats.reset()
+	_state_machine.transition_to(PlayerState.IDLE)
+	Events.player_revived.emit()
+
 
 
 ## true si una curación tendría efecto (no está muerto ni con la vida al máximo).

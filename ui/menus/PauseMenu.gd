@@ -8,10 +8,13 @@ extends Control
 signal opened
 signal closed
 
+@export_file("*.tscn") var menu_scene: String = "res://ui/menus/MainMenu.tscn"
+
 var is_open: bool = false
 
 @onready var _continue_button: Button = %ContinueButton
 @onready var _restart_button: Button = %RestartButton
+@onready var _menu_button: Button = get_node_or_null("%MenuButton") as Button
 
 
 func _ready() -> void:
@@ -19,6 +22,8 @@ func _ready() -> void:
 	hide()
 	_continue_button.pressed.connect(close)
 	_restart_button.pressed.connect(_on_restart_pressed)
+	if _menu_button != null:
+		_menu_button.pressed.connect(_on_menu_pressed)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -59,3 +64,8 @@ func close() -> void:
 func _on_restart_pressed() -> void:
 	close()
 	Events.level_restart_requested.emit()
+
+
+func _on_menu_pressed() -> void:
+	close()
+	SceneTransition.change_scene(menu_scene)

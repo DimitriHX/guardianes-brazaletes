@@ -44,6 +44,8 @@ func physics_update(delta: float) -> void:
 	_dash_left -= delta
 	var hit_wall: bool = boss.is_on_wall() and signf(boss.get_wall_normal().x) == -float(boss.facing)
 	if _dash_left <= 0.0 or hit_wall:
+		if hit_wall:
+			Events.camera_shake_requested.emit(4.5, 0.18)
 		boss.stats.damage_multiplier = _base_damage_multiplier
 		if _charges_left > 0 and boss.has_valid_target():
 			_charges_left -= 1

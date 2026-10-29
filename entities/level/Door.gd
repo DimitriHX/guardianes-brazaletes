@@ -56,9 +56,14 @@ var _frame_time: float = 0.0
 @onready var _blocker_shape: CollisionShape2D = $Blocker/CollisionShape2D
 @onready var _visual: ColorRect = $Visual
 @onready var _sprite: Sprite2D = $Sprite
+@onready var _light: PointLight2D = get_node_or_null("PointLight2D") as PointLight2D
 
 
 func _ready() -> void:
+	if _light != null:
+		_light.add_to_group("point_lights")
+		if _light.texture == null:
+			_light.texture = LevelAmbience.make_radial_light_texture()
 	_set_open(start_open, false)
 	_connect_trigger(open_on, open)
 	_connect_trigger(close_on, close)
@@ -79,7 +84,10 @@ func _physics_process(_delta: float) -> void:
 			_used = true
 			player_entered.emit()
 			if fade_out_time > 0.0:
-				Events.level_fade_requested.emit(target_scene, fade_out_time)
+				# Portal final del sueño: abre la pantalla de victoria; el fundido
+				# lento con porcentaje se ejecuta al pulsar "Menú principal" en ella.
+				Events.sfx_requested.emit(&"door_enter")
+				Events.victory_screen_requested.emit("")
 			else:
 				Events.level_change_requested.emit(target_scene)
 			return
@@ -104,6 +112,7 @@ func _set_open(value: bool, notify: bool) -> void:
 		_update_visibility(value, notify)
 	_visual.color = open_color if value else closed_color
 	_update_sprite(value)
+	_update_light(value)
 	if notify:
 		if value:
 			opened.emit()
@@ -194,3 +203,15 @@ func _on_boss_defeated_open(_boss: Node) -> void:
 
 func _on_boss_defeated_close(_boss: Node) -> void:
 	close()
+
+
+func _update_light(value: bool) -> void:
+	if _light == null:
+		return
+	if slides_open or (hidden_until_open and not value):
+		_light.enabled = false
+		return
+	_light.enabled = true
+	_light.color = Color(0.55, 0.88, 1.0, 1.0) if value else Color(0.95, 0.72, 0.35, 1.0)
+	_light.energy = 1.25 if value else 0.45
+	_light.texture_scale = 2.1 if value else 1.4

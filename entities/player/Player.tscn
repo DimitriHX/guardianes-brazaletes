@@ -53,6 +53,12 @@ placeholders = [NodePath("../Body"), NodePath("../Eye")]
 [node name="Muzzle" type="Marker2D" parent="Visual"]
 position = Vector2(18, -4)
 
+[node name="BraceletLight" type="PointLight2D" parent="."]
+position = Vector2(0, -4)
+color = Color(0.75, 0.9, 1, 1)
+energy = 0.65
+texture_scale = 1.6
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_body")
 

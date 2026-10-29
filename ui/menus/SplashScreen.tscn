@@ -1,0 +1,88 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/menus/SplashScreen.gd" id="1_splash"]
+
+[sub_resource type="Curve" id="Curve_ember_scale"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.15), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_embers"]
+offsets = PackedFloat32Array(0, 0.45, 1)
+colors = PackedColorArray(1, 0.75, 0.2, 0.9, 1, 0.25, 0.05, 0.75, 0.4, 0.02, 0.01, 0)
+
+[node name="SplashScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_splash")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BrandBox" type="VBoxContainer" parent="Center"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="EmberHolder" type="Control" parent="Center/BrandBox"]
+layout_mode = 2
+
+[node name="EmberParticles" type="CPUParticles2D" parent="Center/BrandBox/EmberHolder"]
+unique_name_in_owner = true
+position = Vector2(260, 48)
+emitting = false
+amount = 24
+lifetime = 1.5
+emission_shape = 3
+emission_rect_extents = Vector2(220, 18)
+direction = Vector2(0, -1)
+spread = 35.0
+gravity = Vector2(0, -45)
+initial_velocity_min = 18.0
+initial_velocity_max = 48.0
+scale_amount_min = 3.0
+scale_amount_max = 6.0
+scale_amount_curve = SubResource("Curve_ember_scale")
+color_ramp = SubResource("Gradient_embers")
+
+[node name="TeamLabel" type="Label" parent="Center/BrandBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.2, 0.06, 1)
+theme_override_colors/font_shadow_color = Color(1, 0.42, 0.08, 0.5)
+theme_override_colors/font_outline_color = Color(0.35, 0.03, 0.01, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 96
+text = "PLAYER FIRE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="Center/BrandBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.58, 0.22, 0.85)
+theme_override_colors/font_outline_color = Color(0.25, 0.03, 0.01, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "PRESENTA"
+horizontal_alignment = 1

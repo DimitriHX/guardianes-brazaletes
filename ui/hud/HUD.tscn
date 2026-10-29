@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" path="res://assets/32rogues-0.5.0/32rogues/items.png" id="6_items"]
 [ext_resource type="PackedScene" path="res://ui/menus/PauseMenu.tscn" id="7_pause"]
 [ext_resource type="Script" path="res://ui/hud/DialogueBox.gd" id="8_dialogue"]
+[ext_resource type="PackedScene" path="res://ui/menus/VictoryScreen.tscn" id="9_victory"]
 
 [sub_resource type="AtlasTexture" id="Atlas_coin"]
 atlas = ExtResource("6_items")
@@ -192,3 +193,5 @@ text = "..."
 autowrap_mode = 3
 
 [node name="PauseMenu" parent="." instance=ExtResource("7_pause")]
+
+[node name="VictoryScreen" parent="." instance=ExtResource("9_victory")]

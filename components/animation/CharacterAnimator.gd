@@ -84,6 +84,12 @@ func is_locked() -> bool:
 	return _locked_by != &""
 
 
+func unlock() -> void:
+	_locked_by = &""
+	_token += 1
+
+
+
 func _start(anim: StringName) -> void:
 	current_animation = anim
 	_token += 1

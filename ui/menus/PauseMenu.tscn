@@ -123,6 +123,20 @@ text = "Reiniciar nivel"
 icon = SubResource("Icon_restart")
 expand_icon = true
 
+[node name="MenuButton" type="Button" parent="Center/Panel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 56)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.93, 0.78, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 0.93, 0.78, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("Style_button")
+theme_override_styles/hover = SubResource("Style_button_hover")
+theme_override_styles/pressed = SubResource("Style_button_hover")
+theme_override_styles/focus = SubResource("Style_button_focus")
+text = "Menú principal"
+
 [node name="Help" type="Label" parent="Center/Panel/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.32, 0.17, 0.09, 1)

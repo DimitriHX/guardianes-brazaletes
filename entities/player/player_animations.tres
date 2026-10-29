@@ -66,4 +66,4 @@ regions = Array[Rect2i]([Rect2i(64, 192, 64, 64), Rect2i(128, 192, 64, 64)])
 script = ExtResource("1_set")
 align_sheet_frames = true
 entries = Array[ExtResource("2_entry")]([SubResource("Entry_idle"), SubResource("Entry_walk"), SubResource("Entry_jump"), SubResource("Entry_fall"), SubResource("Entry_land"), SubResource("Entry_attack"), SubResource("Entry_hurt"), SubResource("Entry_death")])
-metadata/source = "SpriteCook: Emma - hoja de poses 4x4 (ver spritecook-assets.json)"
+metadata/source = "SpriteCook: Emma - hoja de poses 4x4 (assets/spritecook/emma/emma_sheet.png)"

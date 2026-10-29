@@ -20,6 +20,8 @@ extends RefCounted
 ##      `E`/`e` Enemigo patrulla (izq/der) | `D` Demonio | `X` Puerta-portal de salida
 ##      (con `@exit_fade = s` aparece al ganar y funde lentamente a @next_level)
 ##      `G` Reja de arena | `A` Disparador de arena | `B` Jefe (Cadejo)
+##      `T` Antorcha con PointLight2D | `~` Plataforma frágil que cae (`FallingPlatform`)
+##      `K` Altar de control intermedio (`Checkpoint`)
 ##      `1`..`9` Disparadores de diálogo (@dialogue_1..@dialogue_9)
 
 const CELL_SIZE: float = 20.0
@@ -55,6 +57,10 @@ const ARENA_GATE_SCENE_PATH: String = "res://entities/level/ArenaGate.tscn"
 const PORTAL_DOOR_SCENE_PATH: String = "res://entities/level/PortalDoor.tscn"
 const CADEJO_SCENE_PATH: String = "res://entities/bosses/cadejo/Cadejo.tscn"
 const HAZARD_SPIKE_SCENE_PATH: String = "res://entities/level/HazardSpike.tscn"
+const AMBIENCE_SCENE_PATH: String = "res://levels/common/LevelAmbience.tscn"
+const TORCH_SCENE_PATH: String = "res://entities/level/Torch.tscn"
+const FALLING_PLATFORM_SCENE_PATH: String = "res://entities/level/FallingPlatform.tscn"
+const CHECKPOINT_SCENE_PATH: String = "res://entities/level/Checkpoint.tscn"
 const TILESET_PATH: String = "res://assets/GandalfHardcore FREE Platformer Assets/Floor Tiles1.png"
 
 const BG_PATHS: Dictionary = {
@@ -349,7 +355,13 @@ static func _build_level_1_text() -> String:
 	grid[29][146] = "e"
 	grid[29][125] = "D"
 
-	# Puerta de salida hacia Nivel 2 (Sendero)
+	# Puerta de salida hacia Nivel 2 (Sendero), altar de control (K) y antorchas (T)
+	grid[29][8] = "T"
+	grid[29][46] = "T"
+	grid[29][92] = "K"
+	grid[29][94] = "T"
+	grid[29][140] = "T"
+	grid[29][173] = "T"
 	grid[29][175] = "X"
 
 	var headers: PackedStringArray = PackedStringArray([
@@ -388,9 +400,9 @@ static func _build_level_2_text() -> String:
 	_paint_rect(grid, 39, 30, 36, GROUND_DEPTH, "#")
 	_paint_rect(grid, 45, 27, 8, 1, "=")
 	_paint_rect(grid, 47, 29, 4, 1, "^")
-	_paint_rect(grid, 56, 24, 7, 1, "-")
-	# Foso 2: cols 75..84 (10 celdas) con plataforma flotante
-	_paint_rect(grid, 78, 27, 4, 1, "=")
+	_paint_rect(grid, 56, 24, 7, 1, "~")
+	# Foso 2: cols 75..84 (10 celdas) con plataforma flotante frágil
+	_paint_rect(grid, 78, 27, 4, 1, "~")
 
 	# --- Tramo 3 (cols 85..124): escalera alta ---
 	_paint_rect(grid, 85, 30, 40, GROUND_DEPTH, "#")
@@ -441,7 +453,13 @@ static func _build_level_2_text() -> String:
 	grid[29][120] = "D"
 	grid[29][178] = "D"
 
-	# Puerta hacia la Guarida del Jefe (Nivel 3)
+	# Puerta hacia la Guarida del Jefe (Nivel 3), altar de control (K) y antorchas (T)
+	grid[29][8] = "T"
+	grid[29][40] = "T"
+	grid[29][86] = "T"
+	grid[29][90] = "K"
+	grid[29][132] = "T"
+	grid[29][193] = "T"
 	grid[29][195] = "X"
 
 	var headers: PackedStringArray = PackedStringArray([
@@ -494,6 +512,11 @@ static func _build_level_3_boss_text() -> String:
 	grid[20][61] = "H"
 	grid[29][62] = "B"
 	# Portal de salida: aparece al purificar al Cadejo y vuelve al título.
+	grid[29][8] = "T"
+	grid[29][24] = "T"
+	grid[20][58] = "T"
+	grid[20][64] = "T"
+	grid[29][85] = "T"
 	grid[29][87] = "X"
 
 	var headers: PackedStringArray = PackedStringArray([
@@ -589,10 +612,11 @@ static func parse_text(text: String) -> Dictionary:
 			if _char_at(grid_lines, r, width_cells - 1) == "|":
 				used[r][width_cells - 1] = true
 
-	# 2. Greedy Meshing para suelos (#), plataformas finas (=), one-way (-), muros internos (|) y pinchos (^)
+	# 2. Greedy Meshing para suelos (#), plataformas finas (=), one-way (-), frágiles (~), muros internos (|) y pinchos (^)
 	var ground_idx: int = 1
 	var plat_idx: int = 1
 	var one_way_idx: int = 1
+	var falling_idx: int = 1
 	var wall_idx: int = 1
 
 	for r: int in height_cells:
@@ -600,7 +624,7 @@ static func parse_text(text: String) -> Dictionary:
 			if bool(used[r][c]):
 				continue
 			var ch: String = _char_at(grid_lines, r, c)
-			if ch == "#" or ch == "=" or ch == "-" or ch == "|" or ch == "^":
+			if ch == "#" or ch == "=" or ch == "-" or ch == "~" or ch == "|" or ch == "^":
 				# Expandir horizontalmente
 				var w: int = 1
 				while c + w < width_cells and not bool(used[r][c + w]) and _char_at(grid_lines, r, c + w) == ch:
@@ -650,6 +674,14 @@ static func parse_text(text: String) -> Dictionary:
 						"one_way": true,
 					})
 					one_way_idx += 1
+				elif ch == "~":
+					platforms.append({
+						"name": "FallingPlatform%d" % falling_idx,
+						"kind": "falling",
+						"rect": Rect2(rect_px.position, Vector2(rect_px.size.x, THIN_COLLISION_PX)),
+						"one_way": true,
+					})
+					falling_idx += 1
 				elif ch == "|":
 					walls.append({
 						"name": "WallInner%d" % wall_idx,
@@ -817,7 +849,7 @@ static func populate_level_node(root: Node2D, text: String) -> void:
 	var win_cond: int = 1 if String(meta.get("win_condition", "COLLECTIBLES")) == "BOSS_DEFEATED" else 0
 	var pause_complete: bool = String(meta.get("pause_on_complete", "false")).to_lower() == "true"
 
-	# 1. LevelManager
+	# 1. LevelManager + CombatFeedback (Sprint 10)
 	var lm: Node = (load("res://levels/common/LevelManager.gd") as GDScript).new()
 	lm.name = "LevelManager"
 	lm.set("level_name", String(meta.get("name", "")))
@@ -826,6 +858,10 @@ static func populate_level_node(root: Node2D, text: String) -> void:
 	lm.set("completed_message", String(meta.get("completed_message", "¡Nivel completado!")))
 	lm.set("kill_y", float(String(meta.get("kill_y", "800"))))
 	root.add_child(lm)
+
+	var feedback: Node = (load("res://components/CombatFeedback.gd") as GDScript).new()
+	feedback.name = "CombatFeedback"
+	root.add_child(feedback)
 
 	# 2. HUD
 	var hud: CanvasLayer = (load(HUD_SCENE_PATH) as PackedScene).instantiate() as CanvasLayer
@@ -860,6 +896,17 @@ static func populate_level_node(root: Node2D, text: String) -> void:
 	backdrop.set("tint", _parse_color(String(meta.get("tint", "1.0, 1.0, 1.0, 1.0"))))
 	root.add_child(backdrop)
 
+	# 4b. Ambience (CanvasModulate + WorldEnvironment con glow suave)
+	var ambience_scene: PackedScene = load(AMBIENCE_SCENE_PATH) as PackedScene
+	if ambience_scene != null:
+		var ambience: Node2D = ambience_scene.instantiate() as Node2D
+		ambience.name = "Ambience"
+		var custom_ambient: Color = Color(0.0, 0.0, 0.0, 0.0)
+		if meta.has("ambient"):
+			custom_ambient = _parse_color(String(meta["ambient"]))
+		ambience.call("set_season", season_idx, custom_ambient)
+		root.add_child(ambience)
+
 	# 5. World (Plataformas y Muros) + PlatformSkinner
 	var world: Node2D = Node2D.new()
 	world.name = "World"
@@ -872,13 +919,23 @@ static func populate_level_node(root: Node2D, text: String) -> void:
 	skinner.set("season", season_idx)
 	root.add_child(skinner)
 
+	var falling_scene: PackedScene = load(FALLING_PLATFORM_SCENE_PATH) as PackedScene
 	for p_info: Dictionary in parsed["platforms"] as Array:
-		var body: StaticBody2D = _create_platform_body(
-			String(p_info["name"]),
-			p_info["rect"] as Rect2,
-			bool(p_info["one_way"])
-		)
-		world.add_child(body)
+		var p_rect: Rect2 = p_info["rect"] as Rect2
+		var p_kind: String = String(p_info.get("kind", ""))
+		if p_kind == "falling" and falling_scene != null:
+			var fp: StaticBody2D = falling_scene.instantiate() as StaticBody2D
+			fp.name = String(p_info["name"])
+			fp.position = p_rect.get_center()
+			fp.call("set_size_px", p_rect.size)
+			world.add_child(fp)
+		else:
+			var body: StaticBody2D = _create_platform_body(
+				String(p_info["name"]),
+				p_rect,
+				bool(p_info["one_way"])
+			)
+			world.add_child(body)
 
 	for w_info: Dictionary in parsed["walls"] as Array:
 		var wall_body: StaticBody2D = _create_platform_body(
@@ -915,17 +972,29 @@ static func populate_level_node(root: Node2D, text: String) -> void:
 	story_root.name = "Story"
 	root.add_child(story_root)
 
+	var torches_root: Node2D = Node2D.new()
+	torches_root.name = "Torches"
+	root.add_child(torches_root)
+
+	var checkpoints_root: Node2D = Node2D.new()
+	checkpoints_root.name = "Checkpoints"
+	root.add_child(checkpoints_root)
+
 	# 7. Instanciar Entidades
 	var pickup_scene: PackedScene = load(PICKUP_SCENE_PATH) as PackedScene
 	var enemy_scene: PackedScene = load(ENEMY_BASE_SCENE_PATH) as PackedScene
 	var demon_scene: PackedScene = load(ENEMY_DEMON_SCENE_PATH) as PackedScene
 	var portal_scene: PackedScene = load(PORTAL_DOOR_SCENE_PATH) as PackedScene
 	var gate_scene: PackedScene = load(ARENA_GATE_SCENE_PATH) as PackedScene
+	var torch_scene: PackedScene = load(TORCH_SCENE_PATH) as PackedScene
+	var checkpoint_scene: PackedScene = load(CHECKPOINT_SCENE_PATH) as PackedScene
 	var player_scene: PackedScene = load(PLAYER_SCENE_PATH) as PackedScene
 
 	var collect_idx: int = 1
 	var health_idx: int = 1
 	var enemy_idx: int = 1
+	var torch_idx: int = 1
+	var checkpoint_idx: int = 1
 	var player_pos: Vector2 = Vector2(100.0, 560.0)
 	var boss_node: Node2D = null
 	var arena_trigger_pos: Vector2 = Vector2.ZERO
@@ -998,6 +1067,20 @@ static func populate_level_node(root: Node2D, text: String) -> void:
 			"A":
 				arena_trigger_pos = Vector2(world_pos.x, 450.0)
 				has_arena_trigger = true
+			"T":
+				if torch_scene != null:
+					var torch: Node2D = torch_scene.instantiate() as Node2D
+					torch.name = "Torch%d" % torch_idx
+					torch.position = Vector2(world_pos.x, surface_y - 10.0)
+					torches_root.add_child(torch)
+					torch_idx += 1
+			"K":
+				if checkpoint_scene != null:
+					var ckpt: Area2D = checkpoint_scene.instantiate() as Area2D
+					ckpt.name = "Checkpoint%d" % checkpoint_idx
+					ckpt.position = Vector2(world_pos.x, surface_y - 14.0)
+					checkpoints_root.add_child(ckpt)
+					checkpoint_idx += 1
 			_:
 				if dialogues_dict.has(sym):
 					var dlg: Area2D = (load("res://entities/level/DialogueTrigger.gd") as GDScript).new()
@@ -1087,7 +1170,7 @@ static func _char_at(lines: PackedStringArray, r: int, c: int) -> String:
 static func _find_surface_y_below(lines: PackedStringArray, start_r: int, c: int, height_cells: int) -> float:
 	for rr: int in range(start_r + 1, height_cells):
 		var ch: String = _char_at(lines, rr, c)
-		if ch == "#" or ch == "=" or ch == "-":
+		if ch == "#" or ch == "=" or ch == "-" or ch == "~":
 			return float(rr) * CELL_SIZE
 	return 600.0
 
