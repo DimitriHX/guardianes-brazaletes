@@ -31,7 +31,7 @@ func _run() -> void:
 			player_hits.append(a))
 
 	# ================= Nivel 1: la puerta =================
-	change_scene_to_file("res://levels/TestLevel.tscn")
+	change_scene_to_file("res://levels/sueno_1/Bosque.tscn")
 	await _frames(5)
 	for e: Node in get_nodes_in_group("enemies"):
 		e.queue_free()
@@ -42,7 +42,7 @@ func _run() -> void:
 	Input.action_press("move_right")
 	await _frames(60)
 	Input.action_release("move_right")
-	_check(current_scene.name == "TestLevel" and p.position.x < 1855.0, "cerrada bloquea el paso (x=%.0f)" % p.position.x)
+	_check(current_scene.name == "Bosque" and p.position.x < 1855.0, "cerrada bloquea el paso (x=%.0f)" % p.position.x)
 	for n: Node in get_nodes_in_group("collectibles"):
 		p.global_position = (n as Node2D).global_position
 		p.velocity = Vector2.ZERO
@@ -54,7 +54,7 @@ func _run() -> void:
 	await _frames(60)
 	Input.action_release("move_right")
 	await _frames(5)
-	_check(current_scene != null and current_scene.name == "BossLevel", "cruzar la puerta carga BossLevel")
+	_check(current_scene != null and current_scene.name == "Guarida", "cruzar la puerta carga BossLevel")
 
 	# ================= BossLevel =================
 	var boss: CharacterBody2D = current_scene.get_node("Cadejo") as CharacterBody2D

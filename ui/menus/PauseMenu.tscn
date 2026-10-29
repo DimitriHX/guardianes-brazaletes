@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://levels/ui/PauseMenu.gd" id="1_menu"]
-[ext_resource type="Script" path="res://levels/ui/PixelPanel.gd" id="2_panel"]
+[ext_resource type="Script" path="res://ui/menus/PauseMenu.gd" id="1_menu"]
+[ext_resource type="Script" path="res://ui/widgets/PixelPanel.gd" id="2_panel"]
 [ext_resource type="Texture2D" path="res://assets/MediavelFree.png/MediavelFree.png" id="3_ui"]
 
 [sub_resource type="AtlasTexture" id="Icon_play"]

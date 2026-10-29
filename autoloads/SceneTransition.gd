@@ -1,15 +1,15 @@
 extends CanvasLayer
 ## Transiciones entre escenas (Autoload "SceneTransition") con el shader
-## res://shader/transition.gdshader: cubre la pantalla con un patrón que avanza,
+## res://shaders/transition.gdshader: cubre la pantalla con un patrón que avanza,
 ## cambia o recarga la escena y la vuelve a descubrir.
-## Uso: SceneTransition.change_scene("res://levels/BossLevel.tscn")
+## Uso: SceneTransition.change_scene("res://levels/sueno_1/Guarida.tscn")
 ##      SceneTransition.reload_scene()
 ## Funciona con el árbol en pausa y bloquea el input mientras cubre.
 
 signal covered
 signal finished
 
-const SHADER: Shader = preload("res://shader/transition.gdshader")
+const SHADER: Shader = preload("res://shaders/transition.gdshader")
 
 @export var cover_time: float = 0.45
 @export var reveal_time: float = 0.45

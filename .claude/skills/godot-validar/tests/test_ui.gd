@@ -36,7 +36,7 @@ func _effects(prefix: String) -> int:
 func _run() -> void:
 	root.size = Vector2i(1280, 720)
 	root.get_node("Events").connect("enemy_died", func(_e: Node) -> void: enemy_died += 1)
-	change_scene_to_file("res://levels/TestLevel.tscn")
+	change_scene_to_file("res://levels/sueno_1/Bosque.tscn")
 	await _frames(5)
 	var hud: CanvasLayer = current_scene.get_node("HUD") as CanvasLayer
 	var player: CharacterBody2D = current_scene.get_node("Player") as CharacterBody2D
@@ -120,8 +120,8 @@ func _run() -> void:
 
 	# --- Barra del jefe ---
 	await create_timer(0.6).timeout  # que termine de descubrirse la transición
-	change_scene_to_file("res://levels/BossLevel.tscn")
-	while current_scene == null or current_scene.name != "BossLevel":
+	change_scene_to_file("res://levels/sueno_1/Guarida.tscn")
+	while current_scene == null or current_scene.name != "Guarida":
 		await process_frame
 	await _frames(3)
 	var boss_bar: Control = current_scene.get_node("HUD/BossPanel/VBox/BossBar") as Control

@@ -21,22 +21,22 @@ func _run() -> void:
 	st.connect("covered", func() -> void: covered_count += 1)
 	st.connect("finished", func() -> void: finished_count += 1)
 	var cover: ColorRect = st.get_node("Cover") as ColorRect
-	_check((cover.material as ShaderMaterial).shader.resource_path == "res://shader/transition.gdshader", "usa shader/transition.gdshader")
+	_check((cover.material as ShaderMaterial).shader.resource_path == "res://shaders/transition.gdshader", "usa shader/transition.gdshader")
 	_check(not cover.visible and is_zero_approx(float(st.call("get_factor"))), "en reposo: invisible y factor 0")
 
-	change_scene_to_file("res://levels/TestLevel.tscn")
+	change_scene_to_file("res://levels/sueno_1/Bosque.tscn")
 	await _frames(5)
 	var first_id: int = current_scene.get_instance_id()
 
 	# Cambio de escena con transición
-	st.call("change_scene", "res://levels/BossLevel.tscn")
+	st.call("change_scene", "res://levels/sueno_1/Guarida.tscn")
 	await create_timer(0.2).timeout
 	var mid: float = float(st.call("get_factor"))
 	_check(mid > 0.1 and mid < 1.0 and cover.visible, "cubriendo a mitad (factor %.2f)" % mid)
 	_check(current_scene.get_instance_id() == first_id, "la escena no cambia hasta estar cubierta")
-	st.call("change_scene", "res://levels/TestLevel.tscn")
+	st.call("change_scene", "res://levels/sueno_1/Bosque.tscn")
 	await create_timer(0.4).timeout
-	_check(covered_count == 1 and current_scene != null and current_scene.name == "BossLevel", "cubierta: cambia a BossLevel (ignora la 2.ª petición)")
+	_check(covered_count == 1 and current_scene != null and current_scene.name == "Guarida", "cubierta: cambia a BossLevel (ignora la 2.ª petición)")
 	await create_timer(0.7).timeout
 	_check(finished_count == 1 and not cover.visible and is_zero_approx(float(st.call("get_factor"))), "se descubre y termina")
 	_check(not bool(st.get("is_transitioning")), "is_transitioning vuelve a false")

@@ -22,7 +22,7 @@ func _run() -> void:
 	var events: Node = root.get_node("Events")
 	events.connect("dialogue_requested", func(sp: String, lines: PackedStringArray) -> void: dialogues.append("%s:%d" % [sp, lines.size()]))
 	events.connect("dialogue_finished", func() -> void: finished += 1)
-	change_scene_to_file("res://levels/TestLevel.tscn")
+	change_scene_to_file("res://levels/sueno_1/Bosque.tscn")
 	await _frames(8)
 	var box: Control = current_scene.get_node("HUD/DialogueBox") as Control
 	var text: Label = box.get_node("%Text") as Label
@@ -55,8 +55,8 @@ func _run() -> void:
 	_check(not paused, "el juego sigue en marcha durante el diálogo")
 
 	# --- Purificación del jefe ---
-	change_scene_to_file("res://levels/BossLevel.tscn")
-	while current_scene == null or current_scene.name != "BossLevel":
+	change_scene_to_file("res://levels/sueno_1/Guarida.tscn")
+	while current_scene == null or current_scene.name != "Guarida":
 		await process_frame
 	await _frames(5)
 	dialogues.clear()

@@ -23,7 +23,7 @@ func _view_rect() -> Rect2:
 
 func _run() -> void:
 	root.size = Vector2i(1280, 720)
-	change_scene_to_file("res://levels/TestLevel.tscn")
+	change_scene_to_file("res://levels/sueno_1/Bosque.tscn")
 	await _frames(6)
 	for e: Node in get_nodes_in_group("enemies"):
 		e.queue_free()
@@ -104,7 +104,7 @@ func _run() -> void:
 	_check(collect.value > 0.0, "barra azul avanza al recoger (%.0f)" % collect.value)
 
 	# --- Nivel del jefe: tiles de otoño y sin barra azul ---
-	change_scene_to_file("res://levels/BossLevel.tscn")
+	change_scene_to_file("res://levels/sueno_1/Guarida.tscn")
 	await _frames(6)
 	var boss_floor: NinePatchRect = current_scene.get_node("World/Floor/TileSkin") as NinePatchRect
 	_check(boss_floor.region_rect.position.y == 192.0, "BossLevel usa los tiles de otoño")

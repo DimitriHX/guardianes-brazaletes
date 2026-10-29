@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://do6xf8s6xarij"]
 
-[ext_resource type="Script" uid="uid://boaw1lyq20ov3" path="res://levels/LevelManager.gd" id="1_lm"]
-[ext_resource type="PackedScene" path="res://levels/HUD.tscn" id="2_hud"]
+[ext_resource type="Script" uid="uid://boaw1lyq20ov3" path="res://levels/common/LevelManager.gd" id="1_lm"]
+[ext_resource type="PackedScene" path="res://ui/hud/HUD.tscn" id="2_hud"]
 [ext_resource type="PackedScene" path="res://entities/player/Player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://entities/enemies/EnemyBase.tscn" id="4_enemy"]
 [ext_resource type="PackedScene" path="res://entities/items/Pickup.tscn" id="5_pickup"]
 [ext_resource type="Script" uid="uid://bl44pwrdj6fyy" path="res://components/GameCamera.gd" id="6_camera"]
 [ext_resource type="PackedScene" path="res://entities/level/Door.tscn" id="7_door"]
 [ext_resource type="PackedScene" path="res://entities/enemies/EnemyDemon.tscn" id="8_demon"]
-[ext_resource type="Script" uid="uid://c4aepor1wjsq3" path="res://levels/ParallaxBackdrop.gd" id="20_backdrop"]
-[ext_resource type="Script" uid="uid://bwea62gcy8kn1" path="res://levels/PlatformSkinner.gd" id="21_skinner"]
+[ext_resource type="Script" uid="uid://c4aepor1wjsq3" path="res://levels/common/ParallaxBackdrop.gd" id="20_backdrop"]
+[ext_resource type="Script" uid="uid://bwea62gcy8kn1" path="res://levels/common/PlatformSkinner.gd" id="21_skinner"]
 [ext_resource type="Texture2D" uid="uid://b0vllbl02wc5k" path="res://assets/GandalfHardcore FREE Platformer Assets/Floor Tiles1.png" id="22_tiles"]
 [ext_resource type="Texture2D" uid="uid://bljw3fo7mke41" path="res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Normal BG/GandalfHardcore Background layers_layer 5.png" id="23_bg0"]
 [ext_resource type="Texture2D" uid="uid://dpxlq0yqdx5to" path="res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Normal BG/GandalfHardcore Background layers_layer 4.png" id="24_bg1"]
@@ -43,7 +43,7 @@ size = Vector2(20, 700)
 [sub_resource type="RectangleShape2D" id="Shape_DialogueZone"]
 size = Vector2(40, 300)
 
-[node name="TestLevel" type="Node2D" unique_id=618437920]
+[node name="Bosque" type="Node2D" unique_id=618437920]
 
 [node name="LevelManager" type="Node" parent="." unique_id=722648424]
 script = ExtResource("1_lm")
@@ -222,7 +222,7 @@ position = Vector2(1700, 570)
 
 [node name="ExitDoor" parent="." unique_id=454450741 instance=ExtResource("7_door")]
 position = Vector2(1868, 552)
-target_scene = "res://levels/BossLevel.tscn"
+target_scene = "res://levels/sueno_1/Guarida.tscn"
 open_on = 1
 
 [node name="Story" type="Node2D" parent="." unique_id=556704684]

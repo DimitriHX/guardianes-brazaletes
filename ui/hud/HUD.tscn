@@ -1,13 +1,13 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://levels/HUD.gd" id="1_hud"]
-[ext_resource type="PackedScene" path="res://levels/ui/PlayerHealthBar.tscn" id="2_bar"]
-[ext_resource type="Script" path="res://levels/ui/PixelPanel.gd" id="3_panel"]
-[ext_resource type="Script" path="res://levels/ui/PixelBar.gd" id="4_pixelbar"]
+[ext_resource type="Script" path="res://ui/hud/HUD.gd" id="1_hud"]
+[ext_resource type="PackedScene" path="res://ui/hud/PlayerHealthBar.tscn" id="2_bar"]
+[ext_resource type="Script" path="res://ui/widgets/PixelPanel.gd" id="3_panel"]
+[ext_resource type="Script" path="res://ui/widgets/PixelBar.gd" id="4_pixelbar"]
 [ext_resource type="Texture2D" path="res://assets/MediavelFree.png/MediavelFree.png" id="5_ui"]
 [ext_resource type="Texture2D" path="res://assets/32rogues-0.5.0/32rogues/items.png" id="6_items"]
-[ext_resource type="PackedScene" path="res://levels/ui/PauseMenu.tscn" id="7_pause"]
-[ext_resource type="Script" path="res://levels/ui/DialogueBox.gd" id="8_dialogue"]
+[ext_resource type="PackedScene" path="res://ui/menus/PauseMenu.tscn" id="7_pause"]
+[ext_resource type="Script" path="res://ui/hud/DialogueBox.gd" id="8_dialogue"]
 
 [sub_resource type="AtlasTexture" id="Atlas_coin"]
 atlas = ExtResource("6_items")

@@ -1,15 +1,15 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://levels/LevelManager.gd" id="1_lm"]
-[ext_resource type="PackedScene" path="res://levels/HUD.tscn" id="2_hud"]
+[ext_resource type="Script" path="res://levels/common/LevelManager.gd" id="1_lm"]
+[ext_resource type="PackedScene" path="res://ui/hud/HUD.tscn" id="2_hud"]
 [ext_resource type="PackedScene" path="res://entities/player/Player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://entities/bosses/cadejo/Cadejo.tscn" id="4_cadejo"]
 [ext_resource type="PackedScene" path="res://entities/items/Pickup.tscn" id="5_pickup"]
 [ext_resource type="Script" path="res://components/GameCamera.gd" id="6_camera"]
 [ext_resource type="PackedScene" path="res://entities/level/Door.tscn" id="7_door"]
-[ext_resource type="Script" path="res://levels/BossArena.gd" id="8_arena"]
-[ext_resource type="Script" path="res://levels/ParallaxBackdrop.gd" id="20_backdrop"]
-[ext_resource type="Script" path="res://levels/PlatformSkinner.gd" id="21_skinner"]
+[ext_resource type="Script" path="res://levels/common/BossArena.gd" id="8_arena"]
+[ext_resource type="Script" path="res://levels/common/ParallaxBackdrop.gd" id="20_backdrop"]
+[ext_resource type="Script" path="res://levels/common/PlatformSkinner.gd" id="21_skinner"]
 [ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/Floor Tiles1.png" id="22_tiles"]
 [ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Autumn BG/GandalfHardcore Background layers_layer 5.png" id="23_bg0"]
 [ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Autumn BG/GandalfHardcore Background layers_layer 4.png" id="24_bg1"]
@@ -40,7 +40,7 @@ size = Vector2(40, 300)
 [sub_resource type="RectangleShape2D" id="Shape_DialogueZone"]
 size = Vector2(40, 300)
 
-[node name="BossLevel" type="Node2D"]
+[node name="Guarida" type="Node2D"]
 
 [node name="LevelManager" type="Node" parent="."]
 script = ExtResource("1_lm")

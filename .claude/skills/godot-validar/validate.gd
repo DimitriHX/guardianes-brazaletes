@@ -4,7 +4,7 @@ extends SceneTree
 ## No referenciar aquí ningún class_name del proyecto: este script se compila
 ## antes de que existan los autoloads.
 
-const DIRS: Array[String] = ["res://autoloads", "res://components", "res://entities", "res://levels"]
+const DIRS: Array[String] = ["res://autoloads", "res://components", "res://entities", "res://levels", "res://ui"]
 
 var _failures: int = 0
 var _checked: int = 0

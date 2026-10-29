@@ -26,7 +26,7 @@ func _clear_enemies() -> void:
 
 
 func _run() -> void:
-	change_scene_to_file("res://levels/TestLevel.tscn")
+	change_scene_to_file("res://levels/sueno_1/Bosque.tscn")
 	await _frames(5)
 	_clear_enemies()
 	var player: CharacterBody2D = current_scene.get_node("Player") as CharacterBody2D
