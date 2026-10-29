@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/fx/Effect.gd" id="1_effect"]
+[ext_resource type="Resource" path="res://entities/fx/impact_animation.tres" id="2_anim"]
+
+[node name="ImpactEffect" type="AnimatedSprite2D"]
+z_index = 5
+scale = Vector2(0.625, 0.625)
+script = ExtResource("1_effect")
+animation_set = ExtResource("2_anim")

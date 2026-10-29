@@ -15,3 +15,12 @@ Godot_*.exe
 # Assets de GandalfHardcore: su licencia prohíbe redistribuirlos (el repo es público).
 # Se usan en local; cada colaborador debe descargarlos de https://gandalfhardcore.itch.io/
 assets/GandalfHardcore*/
+# Paquetes sin permiso de redistribución o sin licencia indicada (ver CREDITS.md).
+assets/32rogues-0.5.0/
+assets/Effect and FX Pixel All Free/
+assets/FREE/
+assets/Food.png
+assets/Food.png.import
+assets/MediavelFree.png/
+assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/
+assets/*.rar

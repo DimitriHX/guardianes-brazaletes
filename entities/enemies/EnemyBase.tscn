@@ -4,40 +4,51 @@
 [ext_resource type="Script" path="res://components/StatsComponent.gd" id="2_stats"]
 [ext_resource type="Script" path="res://components/HitboxComponent.gd" id="3_hitbox"]
 [ext_resource type="Script" path="res://components/HurtboxComponent.gd" id="4_hurtbox"]
+[ext_resource type="Script" path="res://components/animation/CharacterAnimator.gd" id="5_animator"]
+[ext_resource type="Resource" path="res://entities/enemies/blood_monster_animations.tres" id="6_anims"]
+[ext_resource type="PackedScene" path="res://entities/fx/BurstEffect.tscn" id="7_burst"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
-size = Vector2(28, 28)
+size = Vector2(24, 22)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hitbox"]
-size = Vector2(30, 30)
+size = Vector2(26, 24)
 
 [node name="EnemyBase" type="CharacterBody2D" groups=["enemies"]]
 collision_layer = 4
 collision_mask = 1
 script = ExtResource("1_enemy")
+death_effect = ExtResource("7_burst")
 
 [node name="Visual" type="Node2D" parent="."]
 
 [node name="Body" type="ColorRect" parent="Visual"]
-offset_left = -14.0
-offset_top = -14.0
-offset_right = 14.0
-offset_bottom = 14.0
+offset_left = -12.0
+offset_top = -11.0
+offset_right = 12.0
+offset_bottom = 11.0
 mouse_filter = 2
 color = Color(0.85, 0.2, 0.25, 1)
-metadata/_todo_assets = "Sustituir Visual por AnimatedSprite2D del enemigo"
 
 [node name="Eye" type="ColorRect" parent="Visual"]
 offset_left = 4.0
-offset_top = -8.0
-offset_right = 10.0
-offset_bottom = -2.0
+offset_top = -6.0
+offset_right = 9.0
+offset_bottom = -1.0
 mouse_filter = 2
 color = Color(1, 0.9, 0.3, 1)
 
+[node name="Animator" type="AnimatedSprite2D" parent="Visual" node_paths=PackedStringArray("placeholders")]
+position = Vector2(0, 11)
+scale = Vector2(1.25, 1.25)
+script = ExtResource("5_animator")
+animation_set = ExtResource("6_anims")
+anchor_bottom = true
+placeholders = [NodePath("../Body"), NodePath("../Eye")]
+
 [node name="LedgeRay" type="RayCast2D" parent="Visual"]
-position = Vector2(16, 0)
-target_position = Vector2(0, 24)
+position = Vector2(14, 0)
+target_position = Vector2(0, 22)
 collision_mask = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

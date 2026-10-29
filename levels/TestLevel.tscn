@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://entities/items/Pickup.tscn" id="5_pickup"]
 [ext_resource type="Script" path="res://components/GameCamera.gd" id="6_camera"]
 [ext_resource type="PackedScene" path="res://entities/level/Door.tscn" id="7_door"]
+[ext_resource type="PackedScene" path="res://entities/enemies/EnemyDemon.tscn" id="8_demon"]
 [ext_resource type="Script" path="res://levels/ParallaxBackdrop.gd" id="20_backdrop"]
 [ext_resource type="Script" path="res://levels/PlatformSkinner.gd" id="21_skinner"]
 [ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/Floor Tiles1.png" id="22_tiles"]
@@ -42,6 +43,7 @@ size = Vector2(20, 700)
 
 [node name="LevelManager" type="Node" parent="."]
 script = ExtResource("1_lm")
+level_name = "Bosque de los Pinos"
 kill_y = 800.0
 pause_on_complete = false
 completed_message = "¡La puerta se ha abierto!"
@@ -232,7 +234,7 @@ start_direction = -1
 position = Vector2(1200, 520)
 start_direction = 1
 
-[node name="Enemy3" parent="Enemies" instance=ExtResource("4_enemy")]
+[node name="Enemy3" parent="Enemies" instance=ExtResource("8_demon")]
 position = Vector2(1700, 570)
 start_direction = -1
 

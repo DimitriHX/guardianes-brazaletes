@@ -1,6 +1,16 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://entities/items/Pickup.gd" id="1_pickup"]
+[ext_resource type="Texture2D" path="res://assets/32rogues-0.5.0/32rogues/items.png" id="2_items"]
+[ext_resource type="PackedScene" path="res://entities/fx/SparkleEffect.tscn" id="3_sparkle"]
+
+[sub_resource type="AtlasTexture" id="Atlas_coin"]
+atlas = ExtResource("2_items")
+region = Rect2(42, 779, 13, 14)
+
+[sub_resource type="AtlasTexture" id="Atlas_potion"]
+atlas = ExtResource("2_items")
+region = Rect2(41, 617, 13, 17)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pickup"]
 size = Vector2(18, 18)
@@ -9,6 +19,9 @@ size = Vector2(18, 18)
 collision_layer = 16
 collision_mask = 2
 script = ExtResource("1_pickup")
+collectible_texture = SubResource("Atlas_coin")
+health_texture = SubResource("Atlas_potion")
+collect_effect = ExtResource("3_sparkle")
 
 [node name="Visual" type="ColorRect" parent="."]
 offset_left = -8.0
@@ -17,7 +30,9 @@ offset_right = 8.0
 offset_bottom = 8.0
 mouse_filter = 2
 color = Color(1, 0.8, 0.15, 1)
-metadata/_todo_assets = "Sustituir por Sprite2D/AnimatedSprite2D según el tipo"
+
+[node name="Sprite" type="Sprite2D" parent="."]
+scale = Vector2(1.25, 1.25)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_pickup")

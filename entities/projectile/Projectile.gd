@@ -7,6 +7,7 @@ extends Area2D
 @export var speed: float = 650.0
 ## Segundos de vida antes de autodestruirse.
 @export var lifetime: float = 1.2
+@export var impact_effect: PackedScene
 
 var direction: Vector2 = Vector2.RIGHT
 
@@ -43,7 +44,7 @@ func _spend() -> void:
 		return
 	_spent = true
 	_hitbox.active = false
-	# TODO(assets): instanciar efecto de impacto aquí.
+	Effect.spawn(impact_effect, self, global_position)
 	queue_free()
 
 

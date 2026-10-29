@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="AnimationSet" format=3]
+
+[ext_resource type="Script" path="res://components/animation/AnimationSet.gd" id="1_set"]
+[ext_resource type="Script" path="res://components/animation/AnimationEntry.gd" id="2_entry"]
+[ext_resource type="Texture2D" path="res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Idle.png" id="10_tex"]
+[ext_resource type="Texture2D" path="res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Walk.png" id="11_tex"]
+[ext_resource type="Texture2D" path="res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Attack01.png" id="12_tex"]
+[ext_resource type="Texture2D" path="res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Hurt.png" id="13_tex"]
+[ext_resource type="Texture2D" path="res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Death.png" id="14_tex"]
+
+[sub_resource type="Resource" id="Entry_idle"]
+script = ExtResource("2_entry")
+animation = &"idle"
+loop = true
+sheet = ExtResource("10_tex")
+grid_area = Rect2i(0, 0, 600, 100)
+grid_columns = 6
+
+[sub_resource type="Resource" id="Entry_walk"]
+script = ExtResource("2_entry")
+animation = &"walk"
+loop = true
+sheet = ExtResource("11_tex")
+grid_area = Rect2i(0, 0, 800, 100)
+grid_columns = 8
+
+[sub_resource type="Resource" id="Entry_attack"]
+script = ExtResource("2_entry")
+animation = &"attack"
+loop = false
+sheet = ExtResource("12_tex")
+grid_area = Rect2i(0, 0, 800, 100)
+grid_columns = 8
+
+[sub_resource type="Resource" id="Entry_hurt"]
+script = ExtResource("2_entry")
+animation = &"hurt"
+loop = false
+sheet = ExtResource("13_tex")
+grid_area = Rect2i(0, 0, 400, 100)
+grid_columns = 4
+
+[sub_resource type="Resource" id="Entry_death"]
+script = ExtResource("2_entry")
+animation = &"death"
+loop = false
+sheet = ExtResource("14_tex")
+grid_area = Rect2i(0, 0, 400, 100)
+grid_columns = 4
+
+[resource]
+script = ExtResource("1_set")
+default_fps = 10.0
+align_sheet_frames = true
+entries = Array[ExtResource("2_entry")]([SubResource("Entry_idle"), SubResource("Entry_walk"), SubResource("Entry_attack"), SubResource("Entry_hurt"), SubResource("Entry_death")])

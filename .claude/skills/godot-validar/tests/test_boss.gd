@@ -115,7 +115,8 @@ func _run() -> void:
 	await _frames(2)
 	_check(log_events.has("phase:2") and int(boss.get("phase")) == 2, "al 50 %% pasa a fase 2")
 	_check(is_equal_approx(float(boss.call("speed_multiplier")), 1.4), "fase 2 más rápida (x1.4)")
-	_check(int((hud.get_node("BossPanel/VBox/BossBar") as ProgressBar).value) == 12, "la barra del HUD baja con la vida")
+	await create_timer(0.4).timeout
+	_check(roundi(float(hud.get_node("BossPanel/VBox/BossBar").get("value"))) == 12, "la barra del HUD baja con la vida")
 
 	# Derrota
 	boss_stats.call("take_damage", 99)
@@ -123,9 +124,10 @@ func _run() -> void:
 	_check(boss.call("get_state_name") == &"Dead" and not log_events.has("defeated"), "muere: estado Dead y espera a la animación")
 	await create_timer(0.8).timeout
 	_check(log_events.has("defeated"), "boss_defeated al acabar la animación de muerte")
+	await create_timer(0.4).timeout
 	_check(not (hud.get_node("BossPanel") as Control).visible, "la barra del jefe se oculta")
 	_check(bool(gate.get("is_open")), "la reja se vuelve a abrir")
-	_check(paused and (hud.get_node("MessageLabel") as Label).visible, "victoria: pausa y mensaje")
+	_check(paused and bool(hud.call("is_message_visible")), "victoria: pausa y mensaje")
 
 	# Regresión: tras reiniciar el nivel no quedan conexiones de Events a nodos liberados
 	# (antes: "Attempt to call function 'null::close (Callable)'" al empezar el combate).

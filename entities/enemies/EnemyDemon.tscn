@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://entities/enemies/EnemyBase.tscn" id="1_base"]
+[ext_resource type="Resource" path="res://entities/enemies/demon_animations.tres" id="2_anims"]
+
+[node name="EnemyDemon" instance=ExtResource("1_base")]
+move_speed = 115.0
+
+[node name="Animator" parent="Visual"]
+animation_set = ExtResource("2_anims")
+
+[node name="Stats" parent="."]
+max_health = 3

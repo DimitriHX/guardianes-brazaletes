@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AnimationSet" format=3]
+
+[ext_resource type="Script" path="res://components/animation/AnimationSet.gd" id="1_set"]
+[ext_resource type="Script" path="res://components/animation/AnimationEntry.gd" id="2_entry"]
+[ext_resource type="Texture2D" path="res://assets/Effect and FX Pixel All Free/Free/Part 5/220.png" id="10_tex"]
+
+[sub_resource type="Resource" id="Entry_play"]
+script = ExtResource("2_entry")
+animation = &"play"
+loop = false
+sheet = ExtResource("10_tex")
+grid_area = Rect2i(0, 0, 512, 64)
+grid_columns = 8
+
+[resource]
+script = ExtResource("1_set")
+default_fps = 20.0
+align_sheet_frames = false
+entries = Array[ExtResource("2_entry")]([SubResource("Entry_play")])

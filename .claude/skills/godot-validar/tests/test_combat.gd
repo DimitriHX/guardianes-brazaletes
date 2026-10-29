@@ -114,8 +114,8 @@ func _run() -> void:
 	Input.action_press("shoot")
 	await _frames(2)
 	Input.action_release("shoot")
-	await _frames(40)
-	_check(not is_instance_valid(target), "2.º disparo elimina al enemigo")
+	await _frames(80)
+	_check(not is_instance_valid(target), "2.º disparo elimina al enemigo (tras su animación de muerte)")
 	_check(died.has("EnemyBase"), "entity_died del enemigo (%s)" % str(died))
 
 	# Multiplicador del jugador: daño x2 mata de un disparo
@@ -126,7 +126,7 @@ func _run() -> void:
 	Input.action_press("shoot")
 	await _frames(2)
 	Input.action_release("shoot")
-	await _frames(40)
+	await _frames(80)
 	_check(not is_instance_valid(target2), "damage_multiplier 2 del jugador mata de un disparo")
 
 	# Proyectil contra pared (World)

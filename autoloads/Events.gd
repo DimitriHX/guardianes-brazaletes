@@ -56,6 +56,10 @@ signal level_restart_requested
 @warning_ignore("unused_signal")
 signal level_change_requested(scene_path: String)
 
+## Un nivel acaba de empezar (el HUD muestra su nombre).
+@warning_ignore("unused_signal")
+signal level_started(level_name: String)
+
 # --- UI ---
 ## Mensaje centrado en el HUD. duration <= 0 = permanente.
 @warning_ignore("unused_signal")

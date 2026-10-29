@@ -55,7 +55,7 @@ func _run() -> void:
 	# Fuente del proyecto
 	var font_path: String = String(ProjectSettings.get_setting("gui/theme/custom_font"))
 	_check(font_path.ends_with("boldpixels.ttf") and load(font_path) is FontFile, "fuente BoldPixels configurada y cargable")
-	var label: Label = current_scene.get_node("HUD/MessageLabel") as Label
+	var label: Label = current_scene.get_node("HUD/MessagePanel/MessageLabel") as Label
 	_check(label.get_theme_font("font").resource_path == font_path, "las etiquetas del HUD usan BoldPixels")
 
 	print("RESULT: %d fallos" % _failures)

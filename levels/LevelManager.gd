@@ -12,6 +12,8 @@ extends Node
 
 enum WinCondition { COLLECTIBLES, BOSS_DEFEATED }
 
+## Nombre que el HUD muestra al empezar el nivel. Vacío = sin rótulo.
+@export var level_name: String = ""
 @export var win_condition: WinCondition = WinCondition.COLLECTIBLES
 ## Coleccionables necesarios para ganar. 0 = la suma de todos los del nivel.
 @export var required_collectibles: int = 0
@@ -39,6 +41,8 @@ func _ready() -> void:
 	Events.boss_defeated.connect(_on_boss_defeated)
 	# Diferido: los Pickups se registran en el grupo durante su propio _ready.
 	_count_required.call_deferred()
+	if not level_name.is_empty():
+		Events.level_started.emit.call_deferred(level_name)
 
 
 func _physics_process(_delta: float) -> void:
