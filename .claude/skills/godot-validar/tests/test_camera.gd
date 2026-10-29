@@ -37,12 +37,13 @@ func _run() -> void:
 	# Arranque: la cámara no viaja desde el origen y no muestra el vacío
 	var v0: Rect2 = _view_rect(cam)
 	_check(bounds.encloses(v0), "al cargar, la vista está dentro del mapa %s" % str(v0))
-	_check(cam.zoom.x >= 2.0 and cam.zoom.x == cam.zoom.y, "zoom cerrado >= x2 (%s)" % str(cam.zoom))
+	var zl: float = float(cam.get("zoom_level"))
+	_check(cam.zoom.x >= zl and cam.zoom.x == cam.zoom.y, "zoom >= zoom_level %.1f (%s)" % [zl, str(cam.zoom)])
 	var vs: Vector2 = cam.get_viewport_rect().size / cam.zoom
 	_check(vs.x <= bounds.size.x + 0.5 and vs.y <= bounds.size.y + 0.5, "ventana alta (%s): el zoom sube para caber en el mapa" % str(cam.get_viewport_rect().size))
 	root.size = Vector2i(1280, 720)
 	await _frames(3)
-	_check(is_equal_approx(cam.zoom.x, 2.0), "ventana 16:9 (%s): zoom exacto x2 (%s)" % [str(cam.get_viewport_rect().size), str(cam.zoom)])
+	_check(is_equal_approx(cam.zoom.x, zl), "ventana 16:9 (%s): zoom exacto = zoom_level (%s)" % [str(cam.get_viewport_rect().size), str(cam.zoom)])
 	_check(cam.position_smoothing_enabled, "position_smoothing activado")
 	_check(cam.limit_left == floori(bounds.position.x) and cam.limit_right == ceili(bounds.end.x)
 		and cam.limit_top == floori(bounds.position.y) and cam.limit_bottom == ceili(bounds.end.y),

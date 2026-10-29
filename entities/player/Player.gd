@@ -175,6 +175,7 @@ func shoot() -> void:
 	var container: Node = get_tree().current_scene if get_tree().current_scene != null else get_parent()
 	container.add_child(projectile)
 	projectile.global_position = _muzzle.global_position
+	Events.player_shot.emit(shoot_cooldown)
 	# TODO(assets): sonido de disparo.
 
 

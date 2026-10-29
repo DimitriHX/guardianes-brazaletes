@@ -16,7 +16,8 @@ extends Camera2D
 ## Nodo a seguir. Vacío = el padre (lo normal: la cámara cuelga del Player).
 @export var target: Node2D
 ## Zoom deseado. El real puede ser mayor si la vista no cabe en los límites.
-@export_range(0.5, 4.0, 0.1) var zoom_level: float = 2.0
+## 1.6 = pixel-perfect con tiles a 0.625 (PlatformSkinner) y jugador a 1.25.
+@export_range(0.5, 4.0, 0.1) var zoom_level: float = 1.6
 @export_group("Look-ahead")
 @export var look_ahead_distance: float = 48.0
 ## Rapidez con la que el look-ahead alcanza su posición (mayor = más brusco).

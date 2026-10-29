@@ -7,6 +7,15 @@
 [ext_resource type="PackedScene" path="res://entities/items/Pickup.tscn" id="5_pickup"]
 [ext_resource type="Script" path="res://components/GameCamera.gd" id="6_camera"]
 [ext_resource type="PackedScene" path="res://entities/level/Door.tscn" id="7_door"]
+[ext_resource type="Script" path="res://levels/ParallaxBackdrop.gd" id="20_backdrop"]
+[ext_resource type="Script" path="res://levels/PlatformSkinner.gd" id="21_skinner"]
+[ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/Floor Tiles1.png" id="22_tiles"]
+[ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Normal BG/GandalfHardcore Background layers_layer 5.png" id="23_bg0"]
+[ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Normal BG/GandalfHardcore Background layers_layer 4.png" id="24_bg1"]
+[ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Normal BG/Background Castle .png" id="25_bg2"]
+[ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Normal BG/GandalfHardcore Background layers_layer 3.png" id="26_bg3"]
+[ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Normal BG/GandalfHardcore Background layers_layer 2.png" id="27_bg4"]
+[ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Normal BG/GandalfHardcore Background layers_layer 1.png" id="28_bg5"]
 
 [sub_resource type="RectangleShape2D" id="Shape_Ground1"]
 size = Vector2(800, 40)
@@ -48,15 +57,17 @@ mouse_filter = 2
 border_color = Color(0.2, 0.9, 1, 1)
 border_width = 3.0
 
-[node name="Background" type="ColorRect" parent="."]
-z_index = -10
-offset_left = -400.0
-offset_top = -300.0
-offset_right = 2300.0
-offset_bottom = 1000.0
-mouse_filter = 2
-color = Color(0.09, 0.1, 0.14, 1)
-metadata/_todo_assets = "Fondo/parallax del nivel"
+[node name="Backdrop" type="Node2D" parent="."]
+script = ExtResource("20_backdrop")
+layers = Array[Texture2D]([ExtResource("23_bg0"), ExtResource("24_bg1"), ExtResource("25_bg2"), ExtResource("26_bg3"), ExtResource("27_bg4"), ExtResource("28_bg5")])
+scroll_factors = Array[float]([0.0, 0.08, 0.1, 0.22, 0.38, 0.55])
+tint = Color(1, 1, 1, 1)
+
+[node name="PlatformSkinner" type="Node" parent="." node_paths=PackedStringArray("platforms_root")]
+script = ExtResource("21_skinner")
+platforms_root = NodePath("../World")
+tileset = ExtResource("22_tiles")
+season = 0
 
 [node name="World" type="Node2D" parent="."]
 

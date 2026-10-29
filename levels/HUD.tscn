@@ -1,24 +1,17 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://levels/HUD.gd" id="1_hud"]
+[ext_resource type="PackedScene" path="res://levels/ui/PlayerHealthBar.tscn" id="2_bar"]
 
 [node name="HUD" type="CanvasLayer"]
 process_mode = 3
 script = ExtResource("1_hud")
 
-[node name="Margin" type="MarginContainer" parent="."]
-offset_right = 400.0
-offset_bottom = 80.0
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 12
-
-[node name="VBox" type="VBoxContainer" parent="Margin"]
-
-[node name="HealthLabel" type="Label" parent="Margin/VBox"]
-text = "Vida: - / -"
-
-[node name="CollectLabel" type="Label" parent="Margin/VBox"]
-text = "Coleccionables: - / -"
+[node name="PlayerHealthBar" parent="." instance=ExtResource("2_bar")]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 132.0
+offset_bottom = 76.0
 
 [node name="BossPanel" type="MarginContainer" parent="."]
 anchors_preset = 5

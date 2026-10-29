@@ -11,3 +11,7 @@ Godot_*.exe
 
 # Ajustes personales de Claude Code
 .claude/settings.local.json
+
+# Assets de GandalfHardcore: su licencia prohíbe redistribuirlos (el repo es público).
+# Se usan en local; cada colaborador debe descargarlos de https://gandalfhardcore.itch.io/
+assets/GandalfHardcore*/

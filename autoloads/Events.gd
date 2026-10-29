@@ -12,6 +12,9 @@ extends Node
 signal player_health_changed(current: int, maximum: int)
 @warning_ignore("unused_signal")
 signal player_died
+## El jugador disparó; `cooldown` = segundos hasta poder volver a disparar.
+@warning_ignore("unused_signal")
+signal player_shot(cooldown: float)
 
 # --- Entidades (enemigos, jefes) ---
 @warning_ignore("unused_signal")

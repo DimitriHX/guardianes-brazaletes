@@ -1,12 +1,10 @@
 extends CanvasLayer
-## HUD mínimo de depuración: vida, coleccionables, barra del jefe y mensajes.
+## HUD: barra de vida del jugador (PlayerHealthBar), barra del jefe y mensajes.
 ## Solo escucha a Events; no conoce al jugador, al jefe ni al LevelManager.
-## TODO(assets): sustituir por el HUD final (corazones, iconos, fuentes, marco de la barra).
+## TODO(assets): marco/estilo de la barra del jefe y fuente del juego.
 
 var _message_token: int = 0
 
-@onready var _health_label: Label = $Margin/VBox/HealthLabel
-@onready var _collect_label: Label = $Margin/VBox/CollectLabel
 @onready var _message_label: Label = $MessageLabel
 @onready var _boss_panel: Control = $BossPanel
 @onready var _boss_name: Label = $BossPanel/VBox/BossName
@@ -16,8 +14,6 @@ var _message_token: int = 0
 func _ready() -> void:
 	_message_label.hide()
 	_boss_panel.hide()
-	Events.player_health_changed.connect(_on_player_health_changed)
-	Events.collectibles_changed.connect(_on_collectibles_changed)
 	Events.player_died.connect(_on_player_died)
 	Events.hud_message.connect(show_message)
 	Events.boss_fight_started.connect(_on_boss_fight_started)
@@ -38,15 +34,6 @@ func show_message(text: String, duration: float) -> void:
 func _hide_message(token: int) -> void:
 	if token == _message_token:
 		_message_label.hide()
-
-
-func _on_player_health_changed(current: int, maximum: int) -> void:
-	_health_label.text = "Vida: %d / %d" % [current, maximum]
-
-
-func _on_collectibles_changed(collected: int, required: int) -> void:
-	_collect_label.visible = required > 0
-	_collect_label.text = "Coleccionables: %d / %d" % [collected, required]
 
 
 func _on_player_died() -> void:
