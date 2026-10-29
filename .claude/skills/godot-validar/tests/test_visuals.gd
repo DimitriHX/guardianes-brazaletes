@@ -51,7 +51,7 @@ func _run() -> void:
 	var wall: NinePatchRect = current_scene.get_node("World/WallLeft/TileSkin") as NinePatchRect
 	_check(ground.region_rect == Rect2(0, 0, 96, 96), "suelo grueso = bloque 3x3 (%s)" % str(ground.region_rect))
 	_check(thin.region_rect == Rect2(192, 160, 96, 32), "plataforma fina = pieza de 1 tile (%s)" % str(thin.region_rect))
-	_check(wall.region_rect == Rect2(192, 96, 32, 64), "pared = pilar (%s)" % str(wall.region_rect))
+	_check(wall.region_rect == Rect2(32, 0, 32, 64), "pared = columna de tierra (%s)" % str(wall.region_rect))
 	_check(is_equal_approx(ground.scale.x * root.get_viewport().get_camera_2d().zoom.x, 1.0), "pixel-perfect: 1 píxel del tile = 1 píxel de pantalla")
 
 	# --- Fondo parallax ---

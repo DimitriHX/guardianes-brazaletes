@@ -35,6 +35,13 @@ con estado `[ ]` en `sprints.md`.
      nodos liberados ("Attempt to call function 'null::...'").
    - Hojas de sprites (PNG/JPEG): `AnimationEntry.sheet` + `regions`; para JPEG con
      fondo opaco `remove_background` y `AnimationSet.align_sheet_frames`.
+   - Cambios de escena: SIEMPRE `SceneTransition.change_scene(path)` /
+     `SceneTransition.reload_scene()` (o Events.level_change_requested), nunca
+     `get_tree().change_scene_to_file` directo.
+   - Plataformas: colisión con StaticBody2D + RectangleShape2D; el arte lo pone
+     `PlatformSkinner` (no dibujar tiles a mano). Medidas en múltiplos de 20.
+   - Assets con licencia que prohíbe redistribuir: añadirlos a `.gitignore` y a
+     CREDITS.md (el repo es público).
    - Plataformas que deban atravesar jefes/enemigos altos: `one_way_collision = true`.
    - `Area2D` que deban detectar cuerpos: NO poner `monitorable = false`.
      En Godot 4.7 eso impide detectar StaticBody2D (verificado en el Sprint 03).

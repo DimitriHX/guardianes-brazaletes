@@ -4,7 +4,7 @@ extends Node
 ## Recorre los StaticBody2D hijos de `platforms_root`, lee su RectangleShape2D
 ## y le añade un NinePatchRect con la pieza adecuada de la hoja de tiles
 ## (GandalfHardcore "Floor Tiles"): bloque 3x3 para suelos, plataforma fina de
-## 1 tile de alto y pilar de 1 tile de ancho. Oculta el ColorRect provisional.
+## 1 tile de alto y columna de 1 tile de ancho para paredes. Oculta el ColorRect provisional.
 ## La colisión no cambia: el arte se adapta al tamaño de cada plataforma.
 
 enum Season { GREEN, AUTUMN, WINTER }
@@ -15,7 +15,8 @@ const SEASON_STRIDE: int = 192
 ## Piezas de la hoja (estación verde; las demás se desplazan SEASON_STRIDE).
 const BLOCK_REGION: Rect2 = Rect2(0, 0, 96, 96)
 const THIN_REGION: Rect2 = Rect2(192, 160, 96, 32)
-const PILLAR_REGION: Rect2 = Rect2(192, 96, 32, 64)
+## Pared: columna central del bloque (hierba arriba, tierra continua debajo).
+const PILLAR_REGION: Rect2 = Rect2(32, 0, 32, 64)
 
 @export var platforms_root: Node
 @export var tileset: Texture2D

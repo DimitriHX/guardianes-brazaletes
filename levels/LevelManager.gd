@@ -54,17 +54,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		Events.level_restart_requested.emit()
 
 
+## Los cambios de escena pasan por SceneTransition (cubre, cambia, descubre;
+## también quita la pausa).
 func restart_level() -> void:
-	get_tree().paused = false
-	get_tree().reload_current_scene.call_deferred()
+	SceneTransition.reload_scene()
 
 
 func change_level(scene_path: String) -> void:
 	if _restarting:
 		return
 	_restarting = true
-	get_tree().paused = false
-	get_tree().change_scene_to_file.call_deferred(scene_path)
+	SceneTransition.change_scene(scene_path)
 
 
 func _count_required() -> void:
