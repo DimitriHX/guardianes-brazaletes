@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://3qjxbfnp5vqb" path="res://levels/common/TextLevel.gd" id="1_text"]
+
+[node name="Sendero" type="Node2D"]
+script = ExtResource("1_text")
+level_txt_path = "res://levels/sueno_1/sendero.txt"
+fallback_level_number = 2

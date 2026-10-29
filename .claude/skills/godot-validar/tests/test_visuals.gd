@@ -33,12 +33,19 @@ func _run() -> void:
 	var sizes_match: bool = true
 	var placeholders_hidden: bool = true
 	for body: Node in current_scene.get_node("World").get_children():
-		var patch: NinePatchRect = body.get_node_or_null("TileSkin") as NinePatchRect
-		if patch == null:
+		var skin: Control = body.get_node_or_null("TileSkin") as Control
+		if skin == null:
 			all_skinned = false
 			continue
-		var shape: RectangleShape2D = (body.get_node("CollisionShape2D") as CollisionShape2D).shape as RectangleShape2D
-		if not (patch.size * patch.scale).is_equal_approx(shape.size):
+		var shape_node: CollisionShape2D = body.get_node("CollisionShape2D") as CollisionShape2D
+		var shape: RectangleShape2D = shape_node.shape as RectangleShape2D
+		var patch: NinePatchRect = skin as NinePatchRect
+		if shape_node.one_way_collision:
+			# Tablones: mismo ancho que la colisión (el alto es el del arte).
+			if not is_equal_approx(skin.size.x * skin.scale.x, shape.size.x):
+				sizes_match = false
+				print("   ancho distinto en ", body.name)
+		elif patch == null or not (patch.size * patch.scale).is_equal_approx(shape.size):
 			sizes_match = false
 			print("   tamaño distinto en ", body.name, ": ", patch.size * patch.scale, " vs ", shape.size)
 		if (body.get_node("Visual") as CanvasItem).visible:
@@ -47,12 +54,16 @@ func _run() -> void:
 	_check(sizes_match, "el arte de cada plataforma mide lo mismo que su colisión")
 	_check(placeholders_hidden, "los ColorRect provisionales se ocultan")
 	var ground: NinePatchRect = current_scene.get_node("World/Ground1/TileSkin") as NinePatchRect
-	var thin: NinePatchRect = current_scene.get_node("World/PlatformA/TileSkin") as NinePatchRect
+	var thin: NinePatchRect = current_scene.get_node("World/Platform1/TileSkin") as NinePatchRect
 	var wall: NinePatchRect = current_scene.get_node("World/WallLeft/TileSkin") as NinePatchRect
 	_check(ground.region_rect == Rect2(0, 0, 96, 96), "suelo grueso = bloque 3x3 (%s)" % str(ground.region_rect))
 	_check(thin.region_rect == Rect2(192, 160, 96, 32), "plataforma fina = pieza de 1 tile (%s)" % str(thin.region_rect))
-	_check(wall.region_rect == Rect2(32, 0, 32, 64), "pared = columna de tierra (%s)" % str(wall.region_rect))
-	_check(is_equal_approx(ground.scale.x * root.get_viewport().get_camera_2d().zoom.x, 1.0), "pixel-perfect: 1 píxel del tile = 1 píxel de pantalla")
+	_check(wall.region_rect == Rect2(0, 0, 96, 96), "muro de borde = bloque de tierra (%s)" % str(wall.region_rect))
+	var bridge: Control = current_scene.get_node("World/OneWayPlatform1/TileSkin") as Control
+	_check(bridge is TextureRect, "plataformas one-way = tablones de madera")
+	var cam2d: Camera2D = root.get_viewport().get_camera_2d()
+	var res_scale: float = float(cam2d.call("get_effective_zoom_level")) / float(cam2d.get("zoom_level"))
+	_check(is_equal_approx(ground.scale.x * cam2d.zoom.x, res_scale), "pixel-perfect: 1 píxel del tile = 1 píxel a 720p (x%.2f en esta resolución)" % res_scale)
 
 	# --- Fondo parallax ---
 	await process_frame
@@ -106,7 +117,7 @@ func _run() -> void:
 	# --- Nivel del jefe: tiles de otoño y sin barra azul ---
 	change_scene_to_file("res://levels/sueno_1/Guarida.tscn")
 	await _frames(6)
-	var boss_floor: NinePatchRect = current_scene.get_node("World/Floor/TileSkin") as NinePatchRect
+	var boss_floor: NinePatchRect = current_scene.get_node("World/Ground1/TileSkin") as NinePatchRect
 	_check(boss_floor.region_rect.position.y == 192.0, "BossLevel usa los tiles de otoño")
 	_check(not (current_scene.get_node("HUD/PlayerHealthBar/CollectBar") as CanvasItem).visible, "sin coleccionables la barra azul se oculta")
 

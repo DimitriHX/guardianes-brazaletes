@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://entities/level/Door.tscn" id="1_door"]
+[ext_resource type="Texture2D" path="res://assets/pixellab/door/door_closed.png" id="2_closed"]
+[ext_resource type="Texture2D" path="res://assets/pixellab/door/door_open.png" id="3_open"]
+
+[node name="PortalDoor" instance=ExtResource("1_door")]
+closed_texture = ExtResource("2_closed")
+open_texture = ExtResource("3_open")
+open_frames = 4

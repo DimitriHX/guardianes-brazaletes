@@ -5,6 +5,8 @@ extends Node
 ## y le añade un NinePatchRect con la pieza adecuada de la hoja de tiles
 ## (GandalfHardcore "Floor Tiles"): bloque 3x3 para suelos, plataforma fina de
 ## 1 tile de alto y columna de 1 tile de ancho para paredes. Oculta el ColorRect provisional.
+## Las plataformas one-way (atravesables desde abajo) se dibujan como tablones de
+## madera (`bridge_texture`) para que se distingan de las sólidas.
 ## La colisión no cambia: el arte se adapta al tamaño de cada plataforma.
 
 enum Season { GREEN, AUTUMN, WINTER }
@@ -26,6 +28,12 @@ const PILLAR_REGION: Rect2 = Rect2(32, 0, 32, 64)
 @export var tile_world_size: float = 20.0
 ## Nombre del nodo provisional a ocultar dentro de cada plataforma.
 @export var placeholder_name: StringName = &"Visual"
+@export_group("Plataformas one-way")
+## Tile de tablones que se repite a lo ancho. Vacío = misma pieza que las sólidas.
+@export var bridge_texture: Texture2D = preload("res://assets/platforms/bridge_planks.png")
+## Zona útil del tile de tablones (vacía = la textura entera).
+@export var bridge_region: Rect2 = Rect2()
+@export var bridge_scale: float = 1.25
 
 
 func _ready() -> void:
@@ -43,14 +51,17 @@ func skin_all() -> void:
 			skin(body)
 
 
-## Añade el NinePatchRect a una plataforma. Devuelve null si no tiene forma rectangular.
-func skin(body: StaticBody2D) -> NinePatchRect:
+## Añade el arte ("TileSkin") a una plataforma: NinePatchRect, o TextureRect de
+## tablones si es one-way. Devuelve null si no tiene forma rectangular.
+func skin(body: StaticBody2D) -> Control:
 	if body.has_node("TileSkin"):
-		return body.get_node("TileSkin") as NinePatchRect
+		return body.get_node("TileSkin") as Control
 	var shape_node: CollisionShape2D = _find_rect_shape(body)
 	if shape_node == null:
 		return null
 	var size: Vector2 = (shape_node.shape as RectangleShape2D).size
+	if shape_node.one_way_collision and bridge_texture != null:
+		return _skin_bridge(body, shape_node, size)
 	var texel: float = tile_world_size / float(TILE)
 	var patch: NinePatchRect = NinePatchRect.new()
 	patch.name = "TileSkin"
@@ -79,11 +90,36 @@ func skin(body: StaticBody2D) -> NinePatchRect:
 	patch.size = size / texel
 	patch.scale = Vector2(texel, texel)
 	patch.position = shape_node.position - size / 2.0
+	_hide_placeholder(body)
+	body.add_child(patch)
+	return patch
+
+
+func _skin_bridge(body: StaticBody2D, shape_node: CollisionShape2D, size: Vector2) -> TextureRect:
+	var region: Rect2 = bridge_region if bridge_region.has_area() else Rect2(Vector2.ZERO, bridge_texture.get_size())
+	var atlas: AtlasTexture = AtlasTexture.new()
+	atlas.atlas = bridge_texture
+	atlas.region = region
+	var rect: TextureRect = TextureRect.new()
+	rect.name = "TileSkin"
+	rect.texture = atlas
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	rect.stretch_mode = TextureRect.STRETCH_TILE
+	rect.scale = Vector2(bridge_scale, bridge_scale)
+	rect.size = Vector2(size.x / bridge_scale, region.size.y)
+	# Tablones apoyados en el borde superior de la colisión (donde se pisa).
+	rect.position = shape_node.position - size / 2.0
+	_hide_placeholder(body)
+	body.add_child(rect)
+	return rect
+
+
+func _hide_placeholder(body: StaticBody2D) -> void:
 	var placeholder: CanvasItem = body.get_node_or_null(NodePath(placeholder_name)) as CanvasItem
 	if placeholder != null:
 		placeholder.hide()
-	body.add_child(patch)
-	return patch
 
 
 func _find_rect_shape(body: StaticBody2D) -> CollisionShape2D:

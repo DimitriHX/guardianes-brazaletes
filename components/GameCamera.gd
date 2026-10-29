@@ -15,9 +15,14 @@ extends Camera2D
 
 ## Nodo a seguir. Vacío = el padre (lo normal: la cámara cuelga del Player).
 @export var target: Node2D
-## Zoom deseado. El real puede ser mayor si la vista no cabe en los límites.
-## 1.6 = pixel-perfect con tiles a 0.625 (PlatformSkinner) y jugador a 1.25.
+## Zoom deseado para una resolución base de `reference_height` px de alto.
+## El real se escala con la resolución del proyecto (1080p -> x1.5) y puede ser
+## mayor si la vista no cabe en los límites.
+## 1.6 a 720p = pixel-perfect con tiles a 0.625 (PlatformSkinner) y jugador a 1.25.
 @export_range(0.5, 4.0, 0.1) var zoom_level: float = 1.6
+## Alto de la resolución para la que está pensado `zoom_level`. Así el encuadre
+## es el mismo a 1280x720 que a 1920x1080 (antes, a 1080p se veía todo alejado).
+@export var reference_height: float = 720.0
 @export_group("Look-ahead")
 @export var look_ahead_distance: float = 48.0
 ## Rapidez con la que el look-ahead alcanza su posición (mayor = más brusco).
@@ -74,10 +79,16 @@ func _apply_bounds_from_group() -> void:
 	set_bounds(bounds.get_global_rect())
 
 
+## Zoom objetivo ya escalado a la resolución base del proyecto.
+func get_effective_zoom_level() -> float:
+	var base_height: float = float(ProjectSettings.get_setting("display/window/size/viewport_height", reference_height))
+	return zoom_level * base_height / maxf(reference_height, 1.0)
+
+
 func _update_zoom() -> void:
 	if not is_inside_tree():
 		return
-	var z: float = zoom_level
+	var z: float = get_effective_zoom_level()
 	if _has_bounds and _bounds.size.x > 0.0 and _bounds.size.y > 0.0:
 		var view: Vector2 = get_viewport_rect().size
 		z = maxf(z, maxf(view.x / _bounds.size.x, view.y / _bounds.size.y))

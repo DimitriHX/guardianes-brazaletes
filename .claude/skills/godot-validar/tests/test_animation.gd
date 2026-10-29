@@ -61,6 +61,16 @@ func _run() -> void:
 				same_size = false
 	_check(same_size, "todos los frames alineados en el mismo lienzo %s" % str(idle_img.get_size()))
 	_check(cadejo_set.call("build_sprite_frames") == sf, "el procesado de la hoja se cachea")
+	var px_set: Resource = load("res://entities/bosses/cadejo/cadejo_pixellab_animations.tres")
+	var pxf: SpriteFrames = px_set.call("build_sprite_frames")
+	_check(pxf.get_animation_names().size() == 9 and pxf.get_frame_count(&"idle") == 8 and pxf.get_frame_count(&"death") == 6,
+		"set PixelLab del Cadejo: 9 animaciones (idle 8, death 6)")
+	var px_size: Vector2i = Vector2i(pxf.get_frame_texture(&"idle", 0).get_size())
+	_check(Vector2i(pxf.get_frame_texture(&"attack", 0).get_size()) == px_size, "frames de 92 y 104 px alineados en un lienzo común %s" % str(px_size))
+	var boss_scene: PackedScene = load("res://entities/bosses/cadejo/Cadejo.tscn")
+	var boss_anim: Node = boss_scene.instantiate().get_node("Visual/Animator")
+	_check(boss_anim.get("animation_set") == px_set, "Cadejo.tscn usa el set de PixelLab")
+	boss_anim.get_parent().get_parent().free()
 	var player_set: Resource = load("res://entities/player/player_animations.tres")
 	var psf: SpriteFrames = player_set.call("build_sprite_frames")
 	_check(psf.get_frame_count(&"walk") == 6, "jugador (Personaje.png): walk con 6 frames")

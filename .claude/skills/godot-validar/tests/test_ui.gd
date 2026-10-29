@@ -48,22 +48,22 @@ func _run() -> void:
 	await create_timer(3.0).timeout
 	_check(not banner.visible, "el rótulo desaparece solo")
 	var coins: Label = hud.get_node("CoinCounter/HBox/CoinLabel") as Label
-	_check((hud.get_node("CoinCounter") as Control).visible and coins.text == "0/5", "contador de monedas 0/5")
+	_check((hud.get_node("CoinCounter") as Control).visible and coins.text == "0/8", "contador de monedas 0/8")
 
 	# --- Pickups con sprite y destello ---
 	var coin: Area2D = get_nodes_in_group("collectibles")[0] as Area2D
 	_check((coin.get_node("Sprite") as Sprite2D).visible and not (coin.get_node("Visual") as CanvasItem).visible, "la moneda usa su sprite (no el cuadrado)")
 	player.global_position = coin.global_position
 	await _frames(4)
-	_check(coins.text == "1/5", "contador sube al recoger (%s)" % coins.text)
+	_check(coins.text == "1/8", "contador sube al recoger (%s)" % coins.text)
 	_check(_effects("SparkleEffect") >= 1, "destello al recoger")
 
 	# --- Enemigo animado, efecto al morir y desaparición tras la animación ---
 	var enemy: CharacterBody2D = current_scene.get_node("Enemies/Enemy1") as CharacterBody2D
 	var animator: AnimatedSprite2D = enemy.get_node("Visual/Animator") as AnimatedSprite2D
 	_check(bool(animator.get("has_frames")) and animator.get("current_animation") == &"walk", "el enemigo camina con sprite animado")
-	var demon: Node = current_scene.get_node("Enemies/Enemy3")
-	_check((demon.get_node("Visual/Animator") as AnimatedSprite2D).get("animation_set").resource_path.ends_with("demon_animations.tres"), "el 3.er enemigo es el Demon")
+	var demon: Node = current_scene.get_node("Enemies/Enemy4")
+	_check((demon.get_node("Visual/Animator") as AnimatedSprite2D).get("animation_set").resource_path.ends_with("demon_animations.tres"), "el 4.º enemigo es el Demon")
 	player.get_node("Stats").set("damage_taken_multiplier", 0.0)
 	enemy.get_node("Stats").call("take_damage", 99)
 	await _frames(2)

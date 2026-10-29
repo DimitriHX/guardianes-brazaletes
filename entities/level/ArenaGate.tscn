@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://entities/level/Door.tscn" id="1_door"]
+[ext_resource type="Texture2D" path="res://assets/pixellab/door/arena_gate.png" id="2_gate"]
+
+[node name="ArenaGate" instance=ExtResource("1_door")]
+closed_texture = ExtResource("2_gate")
+slides_open = true

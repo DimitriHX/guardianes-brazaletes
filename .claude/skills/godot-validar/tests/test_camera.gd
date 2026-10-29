@@ -39,7 +39,7 @@ func _run() -> void:
 	# Arranque: la cámara no viaja desde el origen y no muestra el vacío
 	var v0: Rect2 = _view_rect(cam)
 	_check(bounds.encloses(v0), "al cargar, la vista está dentro del mapa %s" % str(v0))
-	var zl: float = float(cam.get("zoom_level"))
+	var zl: float = float(cam.call("get_effective_zoom_level"))
 	_check(cam.zoom.x >= zl and cam.zoom.x == cam.zoom.y, "zoom >= zoom_level %.1f (%s)" % [zl, str(cam.zoom)])
 	var vs: Vector2 = cam.get_viewport_rect().size / cam.zoom
 	_check(vs.x <= bounds.size.x + 0.5 and vs.y <= bounds.size.y + 0.5, "ventana alta (%s): el zoom sube para caber en el mapa" % str(cam.get_viewport_rect().size))
@@ -68,7 +68,7 @@ func _run() -> void:
 
 	# Bordes: nunca fuera del mapa
 	var all_inside: bool = true
-	for pos: Vector2 in [Vector2(30, 580), Vector2(1880, 580), Vector2(1450, 460)]:
+	for pos: Vector2 in [Vector2(30, 580), Vector2(3560, 580), Vector2(1450, 460)]:
 		player.position = pos
 		player.velocity = Vector2.ZERO
 		await _frames(120)

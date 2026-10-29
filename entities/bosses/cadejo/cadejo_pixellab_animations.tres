@@ -1,0 +1,78 @@
+[gd_resource type="Resource" script_class="AnimationSet" format=3]
+
+[ext_resource type="Script" path="res://components/animation/AnimationSet.gd" id="1_set"]
+[ext_resource type="Script" path="res://components/animation/AnimationEntry.gd" id="2_entry"]
+[ext_resource type="Texture2D" path="res://assets/pixellab/cadejo/cadejo_sheet.png" id="3_sheet"]
+
+[sub_resource type="Resource" id="Entry_idle"]
+script = ExtResource("2_entry")
+animation = &"idle"
+loop = true
+fps_override = 6.0
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(0, 0, 92, 92), Rect2i(92, 0, 92, 92), Rect2i(184, 0, 92, 92), Rect2i(276, 0, 92, 92), Rect2i(368, 0, 92, 92), Rect2i(460, 0, 92, 92), Rect2i(552, 0, 92, 92), Rect2i(644, 0, 92, 92)])
+
+[sub_resource type="Resource" id="Entry_walk"]
+script = ExtResource("2_entry")
+animation = &"walk"
+loop = true
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(0, 92, 92, 92), Rect2i(92, 92, 92, 92), Rect2i(184, 92, 92, 92), Rect2i(276, 92, 92, 92), Rect2i(368, 92, 92, 92), Rect2i(460, 92, 92, 92)])
+
+[sub_resource type="Resource" id="Entry_run"]
+script = ExtResource("2_entry")
+animation = &"run"
+loop = true
+fps_override = 12.0
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(0, 184, 92, 92), Rect2i(92, 184, 92, 92), Rect2i(184, 184, 92, 92), Rect2i(276, 184, 92, 92), Rect2i(368, 184, 92, 92), Rect2i(460, 184, 92, 92)])
+
+[sub_resource type="Resource" id="Entry_jump"]
+script = ExtResource("2_entry")
+animation = &"jump"
+loop = true
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(92, 184, 92, 92), Rect2i(184, 184, 92, 92)])
+
+[sub_resource type="Resource" id="Entry_fall"]
+script = ExtResource("2_entry")
+animation = &"fall"
+loop = true
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(276, 184, 92, 92), Rect2i(368, 184, 92, 92)])
+
+[sub_resource type="Resource" id="Entry_attack"]
+script = ExtResource("2_entry")
+animation = &"attack"
+loop = false
+fps_override = 12.0
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(0, 276, 104, 104), Rect2i(104, 276, 104, 104), Rect2i(208, 276, 104, 104), Rect2i(312, 276, 104, 104), Rect2i(416, 276, 104, 104), Rect2i(520, 276, 104, 104)])
+
+[sub_resource type="Resource" id="Entry_special"]
+script = ExtResource("2_entry")
+animation = &"special"
+loop = false
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(0, 380, 92, 92), Rect2i(92, 380, 92, 92), Rect2i(184, 380, 92, 92), Rect2i(276, 380, 92, 92), Rect2i(368, 380, 92, 92), Rect2i(460, 380, 92, 92)])
+
+[sub_resource type="Resource" id="Entry_hurt"]
+script = ExtResource("2_entry")
+animation = &"hurt"
+loop = false
+fps_override = 12.0
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(0, 472, 104, 104), Rect2i(104, 472, 104, 104), Rect2i(208, 472, 104, 104), Rect2i(312, 472, 104, 104)])
+
+[sub_resource type="Resource" id="Entry_death"]
+script = ExtResource("2_entry")
+animation = &"death"
+loop = false
+sheet = ExtResource("3_sheet")
+regions = Array[Rect2i]([Rect2i(0, 576, 104, 104), Rect2i(104, 576, 104, 104), Rect2i(208, 576, 104, 104), Rect2i(312, 576, 104, 104), Rect2i(416, 576, 104, 104), Rect2i(520, 576, 104, 104)])
+
+[resource]
+script = ExtResource("1_set")
+default_fps = 8.0
+align_sheet_frames = true
+entries = Array[ExtResource("2_entry")]([SubResource("Entry_idle"), SubResource("Entry_walk"), SubResource("Entry_run"), SubResource("Entry_jump"), SubResource("Entry_fall"), SubResource("Entry_attack"), SubResource("Entry_special"), SubResource("Entry_hurt"), SubResource("Entry_death")])

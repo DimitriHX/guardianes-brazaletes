@@ -1,0 +1,123 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/story/StoryCrawl.gd" id="1_crawl"]
+[ext_resource type="Shader" path="res://shaders/story_crawl.gdshader" id="2_shader"]
+[ext_resource type="FontFile" path="res://assets/fonts/alagard.ttf" id="3_title"]
+
+[sub_resource type="ShaderMaterial" id="Mat_crawl"]
+shader = ExtResource("2_shader")
+shader_parameter/top_width = 0.28
+shader_parameter/fade_height = 0.35
+
+[node name="StoryCrawl" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_crawl")
+paragraphs = PackedStringArray("Emma se ha quedado dormida con el viejo brazalete de su abuela en la muñeca. Al cerrar los ojos despierta en el MUNDO DE LOS SUEÑOS, un reino donde las leyendas cobran vida.", "Pero una sombra ha corrompido el sueño. El Cadejo, la Siguanaba, la Llorona, el Cipitío y otros espíritus de la tradición se han convertido en monstruos que acechan entre los pinos y las sombras.", "Guiada por la voz del brazalete, Emma debe reunir las MONEDAS DE LUZ que abren los portales entre los mundos y purificar a los espíritus con el poder del guardián.", "Su primer destino la espera al final del Sendero de las Sombras: la guarida del temible CADEJO NEGRO, el que acecha a los viajeros en la noche...", "Solo venciendo a las leyendas corrompidas podrá despertar y devolver la paz a los sueños.")
+next_scene = "res://levels/sueno_1/Bosque.tscn"
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.01, 0.01, 0.03, 1)
+show_behind_parent = true
+
+[node name="PrologueLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.35, 0.75, 0.95, 1)
+theme_override_font_sizes/font_size = 44
+text = "Hace no mucho tiempo, en un sueño muy, muy profundo..."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="CrawlView" type="TextureRect" parent="."]
+unique_name_in_owner = true
+texture_filter = 2
+material = SubResource("Mat_crawl")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.08
+anchor_right = 0.9
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+
+[node name="CrawlViewport" type="SubViewport" parent="."]
+unique_name_in_owner = true
+disable_3d = true
+transparent_bg = true
+size = Vector2i(1200, 1400)
+render_target_update_mode = 4
+
+[node name="TextBox" type="VBoxContainer" parent="CrawlViewport"]
+unique_name_in_owner = true
+offset_left = 40.0
+offset_top = 1400.0
+offset_right = 1160.0
+offset_bottom = 1400.0
+theme_override_constants/separation = 36
+
+[node name="TitleLabel" type="Label" parent="CrawlViewport/TextBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0.29, 1)
+theme_override_fonts/font = ExtResource("3_title")
+theme_override_font_sizes/font_size = 110
+text = "EL BRAZALETE
+DEL GUARDIÁN"
+horizontal_alignment = 1
+
+[node name="EpisodeLabel" type="Label" parent="CrawlViewport/TextBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0.29, 1)
+theme_override_font_sizes/font_size = 52
+text = "Sueño I: El Cadejo negro"
+horizontal_alignment = 1
+
+[node name="BodyLabel" type="Label" parent="CrawlViewport/TextBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(1120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0.29, 1)
+theme_override_constants/line_spacing = 10
+theme_override_font_sizes/font_size = 54
+horizontal_alignment = 3
+autowrap_mode = 3
+
+[node name="SkipHint" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -460.0
+offset_top = -64.0
+offset_right = -32.0
+offset_bottom = -24.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.7, 0.7, 0.8, 0.7)
+theme_override_font_sizes/font_size = 26
+text = "Enter / clic: saltar"
+horizontal_alignment = 2

@@ -1,0 +1,303 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/menus/MainMenu.gd" id="1_menu"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu_background.jpg" id="2_bg"]
+[ext_resource type="FontFile" path="res://assets/fonts/alagard.ttf" id="3_title"]
+
+[sub_resource type="StyleBoxFlat" id="Btn_normal"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.235)
+shadow_size = 5
+shadow_offset = Vector2(0, 3.4)
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="Btn_hover"]
+bg_color = Color(0.255, 0.196, 0.486, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.235)
+shadow_size = 5
+shadow_offset = Vector2(0, 3.4)
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="Btn_pressed"]
+bg_color = Color(0.157, 0.047, 0.337, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="Btn_focus"]
+draw_center = false
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 0.84, 0.29, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 4.0
+expand_margin_top = 4.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxFlat" id="Panel_options"]
+bg_color = Color(0.12, 0.06, 0.24, 0.92)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.91, 0.85, 0.98, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+content_margin_left = 40.0
+content_margin_top = 32.0
+content_margin_right = 40.0
+content_margin_bottom = 32.0
+
+[sub_resource type="StyleBoxFlat" id="Slider_track"]
+bg_color = Color(0.06, 0.03, 0.14, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.91, 0.85, 0.98, 0.6)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_top = 7.0
+content_margin_bottom = 7.0
+
+[sub_resource type="StyleBoxFlat" id="Slider_fill"]
+bg_color = Color(1, 0.84, 0.29, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_top = 7.0
+content_margin_bottom = 7.0
+
+[sub_resource type="Gradient" id="Grabber_gradient"]
+offsets = PackedFloat32Array(0, 0.62, 0.7, 0.86, 0.9)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 0.319, 0.066, 0.513, 1, 0.319, 0.066, 0.513, 1, 0.319, 0.066, 0.513, 0)
+
+[sub_resource type="GradientTexture2D" id="Grabber_tex"]
+gradient = SubResource("Grabber_gradient")
+width = 30
+height = 30
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="ButtonGroup" id="ScreenGroup"]
+
+[sub_resource type="Theme" id="Theme_menu"]
+Button/colors/font_color = Color(0.319, 0.066, 0.513, 1)
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/colors/font_focus_color = Color(0.319, 0.066, 0.513, 1)
+Button/colors/font_disabled_color = Color(0.5, 0.45, 0.6, 1)
+Button/font_sizes/font_size = 40
+Button/styles/disabled = SubResource("Btn_pressed")
+Button/styles/focus = SubResource("Btn_focus")
+Button/styles/hover = SubResource("Btn_hover")
+Button/styles/normal = SubResource("Btn_normal")
+Button/styles/pressed = SubResource("Btn_pressed")
+HSlider/icons/grabber = SubResource("Grabber_tex")
+HSlider/icons/grabber_highlight = SubResource("Grabber_tex")
+HSlider/styles/grabber_area = SubResource("Slider_fill")
+HSlider/styles/grabber_area_highlight = SubResource("Slider_fill")
+HSlider/styles/slider = SubResource("Slider_track")
+Label/colors/font_color = Color(0.91, 0.85, 0.98, 1)
+Label/font_sizes/font_size = 32
+PanelContainer/styles/panel = SubResource("Panel_options")
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_menu")
+script = ExtResource("1_menu")
+
+[node name="Background" type="TextureRect" parent="."]
+modulate = Color(0.779, 0.676, 0.914, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.08
+anchor_right = 0.5
+anchor_bottom = 0.08
+offset_left = -600.0
+offset_right = 600.0
+offset_bottom = 300.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.184, 0.098, 0.349, 1)
+theme_override_colors/font_outline_color = Color(0.914, 0.849, 0.978, 1)
+theme_override_constants/outline_size = 20
+theme_override_constants/line_spacing = -60
+theme_override_fonts/font = ExtResource("3_title")
+theme_override_font_sizes/font_size = 120
+text = "EL BRAZALETE
+DEL GUARDIÁN"
+horizontal_alignment = 1
+
+[node name="MainButtons" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = 40.0
+offset_right = 280.0
+offset_bottom = 340.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 18
+
+[node name="StartButton" type="Button" parent="MainButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "INICIAR JUEGO"
+
+[node name="OptionsButton" type="Button" parent="MainButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "OPCIONES"
+
+[node name="QuitButton" type="Button" parent="MainButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "SALIDA"
+
+[node name="OptionsPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -340.0
+offset_top = 0.0
+offset_right = 340.0
+offset_bottom = 470.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="OptionsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MusicRow" type="HBoxContainer" parent="OptionsPanel/VBox"]
+layout_mode = 2
+
+[node name="MusicLabel" type="Label" parent="OptionsPanel/VBox/MusicRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Música"
+
+[node name="MusicValue" type="Label" parent="OptionsPanel/VBox/MusicRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0.29, 1)
+text = "80%"
+
+[node name="MusicSlider" type="HSlider" parent="OptionsPanel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+
+[node name="SfxRow" type="HBoxContainer" parent="OptionsPanel/VBox"]
+layout_mode = 2
+
+[node name="SfxLabel" type="Label" parent="OptionsPanel/VBox/SfxRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Efectos"
+
+[node name="SfxValue" type="Label" parent="OptionsPanel/VBox/SfxRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0.29, 1)
+text = "90%"
+
+[node name="SfxSlider" type="HSlider" parent="OptionsPanel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+
+[node name="ScreenLabel" type="Label" parent="OptionsPanel/VBox"]
+layout_mode = 2
+text = "Pantalla"
+
+[node name="ScreenRow" type="HBoxContainer" parent="OptionsPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="WindowedButton" type="Button" parent="OptionsPanel/VBox/ScreenRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+toggle_mode = true
+button_group = SubResource("ScreenGroup")
+text = "VENTANA"
+
+[node name="FullscreenButton" type="Button" parent="OptionsPanel/VBox/ScreenRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+toggle_mode = true
+button_group = SubResource("ScreenGroup")
+text = "COMPLETA"
+
+[node name="Spacer" type="Control" parent="OptionsPanel/VBox"]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="OptionsPanel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "VOLVER"

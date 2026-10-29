@@ -38,23 +38,42 @@ func _run() -> void:
 	var door: Area2D = current_scene.get_node("ExitDoor") as Area2D
 	var p: CharacterBody2D = _player()
 	_check(not bool(door.get("is_open")), "la puerta empieza cerrada")
-	p.position = Vector2(1780, 580)
+	p.position = Vector2(door.position.x - 90.0, 580)
 	Input.action_press("move_right")
 	await _frames(60)
 	Input.action_release("move_right")
-	_check(current_scene.name == "Bosque" and p.position.x < 1855.0, "cerrada bloquea el paso (x=%.0f)" % p.position.x)
+	_check(current_scene.name == "Bosque" and p.position.x < door.position.x - 13.0, "cerrada bloquea el paso (x=%.0f)" % p.position.x)
 	for n: Node in get_nodes_in_group("collectibles"):
 		p.global_position = (n as Node2D).global_position
 		p.velocity = Vector2.ZERO
 		await _frames(4)
 	await _frames(2)
 	_check(bool(door.get("is_open")) and not paused, "al recoger todo se abre y el juego sigue (sin pausa)")
-	p.position = Vector2(1780, 580)
+	p.position = Vector2(door.position.x - 90.0, 580)
 	Input.action_press("move_right")
 	await _frames(60)
 	Input.action_release("move_right")
 	await _frames(5)
-	_check(current_scene != null and current_scene.name == "Guarida", "cruzar la puerta carga BossLevel")
+	_check(current_scene != null and current_scene.name == "Sendero", "cruzar la puerta del Nivel 1 carga el Nivel 2 (Sendero)")
+
+	# ================= Nivel 2: Sendero -> Guarida =================
+	for e2: Node in get_nodes_in_group("enemies"):
+		e2.queue_free()
+	var door2: Area2D = current_scene.get_node("ExitDoor") as Area2D
+	p = _player()
+	_check(not bool(door2.get("is_open")), "la puerta del Nivel 2 empieza cerrada")
+	for n2: Node in get_nodes_in_group("collectibles"):
+		p.global_position = (n2 as Node2D).global_position
+		p.velocity = Vector2.ZERO
+		await _frames(4)
+	await _frames(2)
+	_check(bool(door2.get("is_open")) and not paused, "al recoger las monedas del Nivel 2 se abre la puerta")
+	p.position = Vector2(door2.position.x - 90.0, 580)
+	Input.action_press("move_right")
+	await _frames(60)
+	Input.action_release("move_right")
+	await _frames(5)
+	_check(current_scene != null and current_scene.name == "Guarida", "cruzar la puerta del Nivel 2 carga BossLevel (Guarida)")
 
 	# ================= BossLevel =================
 	var boss: CharacterBody2D = current_scene.get_node("Cadejo") as CharacterBody2D

@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://components/HitboxComponent.gd" id="3_hitbox"]
 [ext_resource type="Script" path="res://components/HurtboxComponent.gd" id="4_hurtbox"]
 [ext_resource type="Script" path="res://components/animation/CharacterAnimator.gd" id="5_animator"]
-[ext_resource type="Resource" path="res://entities/bosses/cadejo/cadejo_animations.tres" id="6_anims"]
+[ext_resource type="Resource" path="res://entities/bosses/cadejo/cadejo_pixellab_animations.tres" id="6_anims"]
 [ext_resource type="Script" path="res://components/state_machine/StateMachine.gd" id="7_sm"]
 [ext_resource type="Script" path="res://entities/bosses/cadejo/states/DormantState.gd" id="8_dormant"]
 [ext_resource type="Script" path="res://entities/bosses/cadejo/states/ChaseState.gd" id="9_chase"]
@@ -40,7 +40,7 @@ color = Color(0.2, 0.15, 0.3, 1)
 
 [node name="Animator" type="AnimatedSprite2D" parent="Visual" node_paths=PackedStringArray("placeholders")]
 position = Vector2(0, 32)
-scale = Vector2(0.6, 0.6)
+scale = Vector2(1.4, 1.4)
 script = ExtResource("5_animator")
 animation_set = ExtResource("6_anims")
 one_shot_priorities = Dictionary[StringName, int]({
