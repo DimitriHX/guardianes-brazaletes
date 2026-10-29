@@ -1,8 +1,10 @@
 class_name Player
 extends CharacterBody2D
-## Jugador de plataformas: movimiento horizontal con aceleración,
-## salto con coyote time, jump buffer y altura variable.
-## Reenvía su vida y muerte al bus global Events.
+## Jugador de plataformas. Este script es el "cuerpo": expone parámetros y
+## operaciones de movimiento (gravedad, horizontal, salto, disparo).
+## El "cerebro" es la StateMachine hija: cada estado (Idle, Walk, Jump, Fall,
+## Attack, Dead) decide qué operaciones usar, a qué estado pasar y qué
+## animación reproducir. Reenvía vida y muerte al bus global Events.
 
 @export_group("Movimiento")
 @export var move_speed: float = 220.0
@@ -30,6 +32,8 @@ extends CharacterBody2D
 
 ## Dirección a la que mira el jugador: 1 derecha, -1 izquierda.
 var facing: int = 1
+## Última animación pedida por un estado (útil para depurar sin sprite).
+var current_animation: StringName = &""
 
 var _coyote_left: float = 0.0
 var _jump_buffer_left: float = 0.0
@@ -39,30 +43,38 @@ var _is_dead: bool = false
 @onready var _visual: Node2D = $Visual
 @onready var _muzzle: Marker2D = $Visual/Muzzle
 @onready var _health: HealthComponent = $HealthComponent
+@onready var _state_machine: StateMachine = $StateMachine
 
 
 func _ready() -> void:
 	_health.health_changed.connect(_on_health_changed)
 	_health.died.connect(_on_health_died)
+	for child: Node in _state_machine.get_children():
+		var state: PlayerState = child as PlayerState
+		if state != null:
+			state.setup(self)
+	_state_machine.start()
 	Events.player_health_changed.emit(_health.current_health, _health.max_health)
 
 
 func _physics_process(delta: float) -> void:
-	if _is_dead:
-		return
 	_update_timers(delta)
-	_apply_gravity(delta)
-	_apply_horizontal(delta)
-	_try_jump()
+	_state_machine.physics_update(delta)
 	move_and_slide()
-	_try_shoot()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	_state_machine.update(delta)
 	# Parpadeo durante la invulnerabilidad.
 	# TODO(assets): sustituir por animación/shader de daño del sprite.
 	_visual.modulate.a = 0.4 if _health.is_invulnerable() else 1.0
 
+
+func _unhandled_input(event: InputEvent) -> void:
+	_state_machine.handle_input(event)
+
+
+# --- Vida ---
 
 func take_damage(amount: int) -> void:
 	_health.take_damage(amount)
@@ -85,6 +97,75 @@ func can_heal() -> bool:
 	return not _is_dead and not _health.is_full()
 
 
+# --- Operaciones para los estados ---
+
+func get_state_name() -> StringName:
+	return _state_machine.get_current_state_name()
+
+
+func get_input_direction() -> float:
+	return Input.get_axis("move_left", "move_right")
+
+
+func apply_gravity(delta: float) -> void:
+	if is_on_floor():
+		return
+	var g: float = gravity * (fall_gravity_multiplier if velocity.y > 0.0 else 1.0)
+	velocity.y = minf(velocity.y + g * delta, max_fall_speed)
+
+	# Salto variable: soltar el botón corta la subida.
+	if Input.is_action_just_released("jump") and velocity.y < 0.0:
+		velocity.y *= jump_cut_multiplier
+
+
+func apply_horizontal(delta: float, direction: float) -> void:
+	var control: float = 1.0 if is_on_floor() else air_control
+	if direction != 0.0:
+		velocity.x = move_toward(velocity.x, direction * move_speed, acceleration * control * delta)
+		_set_facing(1 if direction > 0.0 else -1)
+	else:
+		velocity.x = move_toward(velocity.x, 0.0, friction * control * delta)
+
+
+## Hay un salto memorizado (buffer) y aún se puede saltar (suelo o coyote).
+func wants_jump() -> bool:
+	return _jump_buffer_left > 0.0 and _coyote_left > 0.0
+
+
+func start_jump() -> void:
+	velocity.y = jump_velocity
+	_jump_buffer_left = 0.0
+	_coyote_left = 0.0
+
+
+func wants_shoot() -> bool:
+	return projectile_scene != null and _shoot_cooldown_left <= 0.0 and Input.is_action_pressed("shoot")
+
+
+func shoot() -> void:
+	if projectile_scene == null:
+		return
+	_shoot_cooldown_left = shoot_cooldown
+	var projectile: Projectile = projectile_scene.instantiate() as Projectile
+	projectile.setup(Vector2(float(facing), 0.0))
+	# Se añade al nivel (no al jugador) para que no se mueva con él.
+	var container: Node = get_tree().current_scene if get_tree().current_scene != null else get_parent()
+	container.add_child(projectile)
+	projectile.global_position = _muzzle.global_position
+	# TODO(assets): sonido de disparo.
+
+
+func play_animation(anim: StringName) -> void:
+	current_animation = anim
+	# TODO(assets): añadir un AnimatedSprite2D llamado "AnimatedSprite2D" dentro de
+	# Visual con animaciones idle, walk, jump, fall, attack y death. Se usará solo.
+	var sprite: AnimatedSprite2D = _visual.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if sprite != null and sprite.sprite_frames != null and sprite.sprite_frames.has_animation(anim):
+		sprite.play(anim)
+
+
+# --- Privados ---
+
 func _update_timers(delta: float) -> void:
 	if is_on_floor():
 		_coyote_left = coyote_time
@@ -97,49 +178,6 @@ func _update_timers(delta: float) -> void:
 		_jump_buffer_left = maxf(_jump_buffer_left - delta, 0.0)
 
 	_shoot_cooldown_left = maxf(_shoot_cooldown_left - delta, 0.0)
-
-
-func _apply_gravity(delta: float) -> void:
-	if is_on_floor():
-		return
-	var g: float = gravity * (fall_gravity_multiplier if velocity.y > 0.0 else 1.0)
-	velocity.y = minf(velocity.y + g * delta, max_fall_speed)
-
-	# Salto variable: soltar el botón corta la subida.
-	if Input.is_action_just_released("jump") and velocity.y < 0.0:
-		velocity.y *= jump_cut_multiplier
-
-
-func _apply_horizontal(delta: float) -> void:
-	var direction: float = Input.get_axis("move_left", "move_right")
-	var control: float = 1.0 if is_on_floor() else air_control
-	if direction != 0.0:
-		velocity.x = move_toward(velocity.x, direction * move_speed, acceleration * control * delta)
-		_set_facing(1 if direction > 0.0 else -1)
-	else:
-		velocity.x = move_toward(velocity.x, 0.0, friction * control * delta)
-
-
-func _try_jump() -> void:
-	if _jump_buffer_left > 0.0 and _coyote_left > 0.0:
-		velocity.y = jump_velocity
-		_jump_buffer_left = 0.0
-		_coyote_left = 0.0
-
-
-func _try_shoot() -> void:
-	if projectile_scene == null or _shoot_cooldown_left > 0.0:
-		return
-	if not Input.is_action_pressed("shoot"):
-		return
-	_shoot_cooldown_left = shoot_cooldown
-	var projectile: Projectile = projectile_scene.instantiate() as Projectile
-	projectile.setup(Vector2(float(facing), 0.0))
-	# Se añade al nivel (no al jugador) para que no se mueva con él.
-	var container: Node = get_tree().current_scene if get_tree().current_scene != null else get_parent()
-	container.add_child(projectile)
-	projectile.global_position = _muzzle.global_position
-	# TODO(assets): animación de disparo y sonido.
 
 
 func _set_facing(new_facing: int) -> void:
@@ -156,6 +194,6 @@ func _on_health_changed(current: int, maximum: int) -> void:
 
 func _on_health_died() -> void:
 	_is_dead = true
-	velocity = Vector2.ZERO
-	# TODO(assets): reproducir animación de muerte antes de notificar.
+	_state_machine.transition_to(PlayerState.DEAD)
+	# TODO(assets): esperar a que termine la animación "death" antes de notificar.
 	Events.player_died.emit()

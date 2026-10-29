@@ -3,6 +3,13 @@
 [ext_resource type="Script" path="res://entities/player/Player.gd" id="1_player"]
 [ext_resource type="Script" path="res://components/HealthComponent.gd" id="2_health"]
 [ext_resource type="PackedScene" path="res://entities/projectile/Projectile.tscn" id="3_projectile"]
+[ext_resource type="Script" path="res://components/state_machine/StateMachine.gd" id="4_sm"]
+[ext_resource type="Script" path="res://entities/player/states/IdleState.gd" id="5_idle"]
+[ext_resource type="Script" path="res://entities/player/states/WalkState.gd" id="6_walk"]
+[ext_resource type="Script" path="res://entities/player/states/JumpState.gd" id="7_jump"]
+[ext_resource type="Script" path="res://entities/player/states/FallState.gd" id="8_fall"]
+[ext_resource type="Script" path="res://entities/player/states/AttackState.gd" id="9_attack"]
+[ext_resource type="Script" path="res://entities/player/states/DeadState.gd" id="10_dead"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(24, 40)
@@ -42,3 +49,31 @@ shape = SubResource("RectangleShape2D_body")
 script = ExtResource("2_health")
 max_health = 5
 invulnerability_time = 1.0
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("4_sm")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("5_idle")
+animation = &"idle"
+
+[node name="Walk" type="Node" parent="StateMachine"]
+script = ExtResource("6_walk")
+animation = &"walk"
+
+[node name="Jump" type="Node" parent="StateMachine"]
+script = ExtResource("7_jump")
+animation = &"jump"
+
+[node name="Fall" type="Node" parent="StateMachine"]
+script = ExtResource("8_fall")
+animation = &"fall"
+
+[node name="Attack" type="Node" parent="StateMachine"]
+script = ExtResource("9_attack")
+animation = &"attack"
+
+[node name="Dead" type="Node" parent="StateMachine"]
+script = ExtResource("10_dead")
+animation = &"death"
