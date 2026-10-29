@@ -1,13 +1,12 @@
-[gd_resource type="Resource" script_class="AnimationSet" format=3]
+[gd_resource type="Resource" script_class="AnimationSet" format=3 uid="uid://dnutxnjfxt04r"]
 
-[ext_resource type="Script" path="res://components/animation/AnimationSet.gd" id="1_set"]
-[ext_resource type="Script" path="res://components/animation/AnimationEntry.gd" id="2_entry"]
-[ext_resource type="Texture2D" path="res://assets/spritecook/emma/emma_sheet.png" id="3_sheet"]
+[ext_resource type="Script" uid="uid://y5jwp51eocmj" path="res://components/animation/AnimationSet.gd" id="1_set"]
+[ext_resource type="Script" uid="uid://p6bvohx8racr" path="res://components/animation/AnimationEntry.gd" id="2_entry"]
+[ext_resource type="Texture2D" uid="uid://d37be1tcaab4n" path="res://assets/spritecook/emma/emma_sheet.png" id="3_sheet"]
 
 [sub_resource type="Resource" id="Entry_idle"]
 script = ExtResource("2_entry")
 animation = &"idle"
-loop = true
 fps_override = 2.0
 sheet = ExtResource("3_sheet")
 regions = Array[Rect2i]([Rect2i(0, 0, 64, 64), Rect2i(64, 0, 64, 64)])
@@ -15,7 +14,6 @@ regions = Array[Rect2i]([Rect2i(0, 0, 64, 64), Rect2i(64, 0, 64, 64)])
 [sub_resource type="Resource" id="Entry_walk"]
 script = ExtResource("2_entry")
 animation = &"walk"
-loop = true
 fps_override = 10.0
 sheet = ExtResource("3_sheet")
 regions = Array[Rect2i]([Rect2i(128, 0, 64, 64), Rect2i(192, 0, 64, 64), Rect2i(0, 64, 64, 64), Rect2i(64, 64, 64, 64), Rect2i(128, 64, 64, 64), Rect2i(192, 64, 64, 64)])
@@ -23,14 +21,12 @@ regions = Array[Rect2i]([Rect2i(128, 0, 64, 64), Rect2i(192, 0, 64, 64), Rect2i(
 [sub_resource type="Resource" id="Entry_jump"]
 script = ExtResource("2_entry")
 animation = &"jump"
-loop = true
 sheet = ExtResource("3_sheet")
 regions = Array[Rect2i]([Rect2i(0, 128, 64, 64)])
 
 [sub_resource type="Resource" id="Entry_fall"]
 script = ExtResource("2_entry")
 animation = &"fall"
-loop = true
 sheet = ExtResource("3_sheet")
 regions = Array[Rect2i]([Rect2i(64, 128, 64, 64)])
 
@@ -68,7 +64,6 @@ regions = Array[Rect2i]([Rect2i(64, 192, 64, 64), Rect2i(128, 192, 64, 64)])
 
 [resource]
 script = ExtResource("1_set")
-default_fps = 8.0
 align_sheet_frames = true
 entries = Array[ExtResource("2_entry")]([SubResource("Entry_idle"), SubResource("Entry_walk"), SubResource("Entry_jump"), SubResource("Entry_fall"), SubResource("Entry_land"), SubResource("Entry_attack"), SubResource("Entry_hurt"), SubResource("Entry_death")])
 metadata/source = "SpriteCook: Emma - hoja de poses 4x4 (ver spritecook-assets.json)"

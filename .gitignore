@@ -24,3 +24,6 @@ assets/Food.png.import
 assets/MediavelFree.png/
 assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/
 assets/*.rar
+
+# Proyecto de referencia del equipo (consulta). Contiene paquetes de terceros.
+referencia/
