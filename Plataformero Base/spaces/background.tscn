@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://jnrusvm3gric"]
+
+[ext_resource type="Texture2D" uid="uid://dbuavdqia0ps2" path="res://assets/background-void.png" id="1_atv8a"]
+
+[node name="Background" type="Node2D" unique_id=474635500]
+editor_description = "This scene uses a Parallax2D node to repeat a background image endlessly in all directions, and make it appear to be a long way away from the camera by having it scroll more slowly than the level in the foreground."
+
+[node name="Parallax2D" type="Parallax2D" parent="." unique_id=554252723]
+scroll_scale = Vector2(0.5, 1)
+repeat_size = Vector2(1920, 1080)
+
+[node name="Sprite2D" type="Sprite2D" parent="Parallax2D" unique_id=534259580]
+editor_description = "Because the background sprite is smaller than the game viewport, we enable texture repeat, and define a region that is the same size as the viewport.
+
+https://docs.godotengine.org/en/stable/tutorials/2d/2d_parallax.html#repeat-the-textures"
+texture_repeat = 2
+position = Vector2(960, 540)
+texture = ExtResource("1_atv8a")
+region_enabled = true
+region_rect = Rect2(0, 0, 1920, 1080)

@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://cmcyty6hgvlxx"]
+
+[ext_resource type="Script" uid="uid://umb21eb2y1oj" path="res://scripts/player.gd" id="1_ymiwc"]
+[ext_resource type="Texture2D" uid="uid://b8ngelcdttv1y" path="res://assets/man.png" id="2_xov76"]
+[ext_resource type="AudioStream" uid="uid://bx1joarpc14j5" path="res://assets/sounds/538066__stevielematt__boing.ogg" id="3_34pqv"]
+[ext_resource type="AudioStream" uid="uid://p0b3e0t7h8j3" path="res://assets/sounds/596541__tothrec2__large-wings-flapping-foley.ogg" id="4_co12a"]
+[ext_resource type="AudioStream" uid="uid://dmx2rtf2vy1" path="res://assets/sounds/244654__dsg__pop-2.ogg" id="5_5u8cv"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7x5a4"]
+radius = 31.0
+height = 92.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_mpawu"]
+random_pitch = 1.1
+streams_count = 1
+stream_0/stream = ExtResource("3_34pqv")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_ph1f6"]
+random_pitch = 1.2
+streams_count = 1
+stream_0/stream = ExtResource("5_5u8cv")
+
+[node name="Player" type="CharacterBody2D" unique_id=1041196418 groups=["players"]]
+collision_layer = 3
+collision_mask = 5
+floor_constant_speed = true
+floor_snap_length = 32.0
+script = ExtResource("1_ymiwc")
+
+[node name="DoubleJumpParticles" type="CPUParticles2D" parent="." unique_id=1486600990]
+unique_name_in_owner = true
+emitting = false
+amount = 60
+lifetime = 0.2
+one_shot = true
+explosiveness = 0.54
+randomness = 0.25
+emission_shape = 1
+emission_sphere_radius = 36.72
+particle_flag_align_y = true
+gravity = Vector2(0, 1)
+scale_amount_max = 5.0
+color = Color(1, 1, 0, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1857892867]
+position = Vector2(0, -50)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_xov76")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1239802489]
+position = Vector2(0, -46)
+shape = SubResource("CapsuleShape2D_7x5a4")
+one_way_collision = true
+
+[node name="SoundEffects" type="Node" parent="." unique_id=971926404]
+
+[node name="JumpSFX" type="AudioStreamPlayer" parent="SoundEffects" unique_id=1297022897]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_mpawu")
+
+[node name="GlideSFX" type="AudioStreamPlayer" parent="SoundEffects" unique_id=1346432575]
+unique_name_in_owner = true
+stream = ExtResource("4_co12a")
+
+[node name="TeleportSFX" type="AudioStreamPlayer" parent="SoundEffects" unique_id=1064972734]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_ph1f6")
+volume_db = -10.0
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1378453681]

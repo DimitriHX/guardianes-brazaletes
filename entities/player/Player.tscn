@@ -1,0 +1,44 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/player/Player.gd" id="1_player"]
+[ext_resource type="Script" path="res://components/HealthComponent.gd" id="2_health"]
+[ext_resource type="PackedScene" path="res://entities/projectile/Projectile.tscn" id="3_projectile"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(24, 40)
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_player")
+projectile_scene = ExtResource("3_projectile")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Body" type="ColorRect" parent="Visual"]
+offset_left = -12.0
+offset_top = -20.0
+offset_right = 12.0
+offset_bottom = 20.0
+mouse_filter = 2
+color = Color(0.25, 0.6, 1, 1)
+metadata/_todo_assets = "Sustituir Visual por AnimatedSprite2D con las animaciones del protagonista"
+
+[node name="Eye" type="ColorRect" parent="Visual"]
+offset_left = 4.0
+offset_top = -14.0
+offset_right = 10.0
+offset_bottom = -8.0
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
+
+[node name="Muzzle" type="Marker2D" parent="Visual"]
+position = Vector2(18, -4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("2_health")
+max_health = 5
+invulnerability_time = 1.0

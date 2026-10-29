@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cnrag0ccbgcmf"]
+
+[ext_resource type="TileSet" uid="uid://321ocrwkcyye" path="res://spaces/tileset-threadbare.tres" id="1_i0h0n"]
+
+[node name="TileMapLayer" type="TileMapLayer" unique_id=631099981]
+tile_set = ExtResource("1_i0h0n")

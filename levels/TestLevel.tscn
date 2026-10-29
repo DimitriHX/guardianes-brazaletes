@@ -1,0 +1,255 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://levels/LevelManager.gd" id="1_lm"]
+[ext_resource type="Script" path="res://levels/HUD.gd" id="2_hud"]
+[ext_resource type="PackedScene" path="res://entities/player/Player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://entities/enemies/EnemyBase.tscn" id="4_enemy"]
+[ext_resource type="PackedScene" path="res://entities/items/Pickup.tscn" id="5_pickup"]
+
+[sub_resource type="RectangleShape2D" id="Shape_Ground1"]
+size = Vector2(800, 40)
+
+[sub_resource type="RectangleShape2D" id="Shape_Ground2"]
+size = Vector2(990, 40)
+
+[sub_resource type="RectangleShape2D" id="Shape_PlatformA"]
+size = Vector2(160, 20)
+
+[sub_resource type="RectangleShape2D" id="Shape_PlatformB"]
+size = Vector2(200, 20)
+
+[sub_resource type="RectangleShape2D" id="Shape_PlatformC"]
+size = Vector2(150, 20)
+
+[sub_resource type="RectangleShape2D" id="Shape_WallLeft"]
+size = Vector2(20, 700)
+
+[sub_resource type="RectangleShape2D" id="Shape_WallRight"]
+size = Vector2(20, 700)
+
+[node name="TestLevel" type="Node2D"]
+
+[node name="LevelManager" type="Node" parent="."]
+script = ExtResource("1_lm")
+kill_y = 800.0
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("2_hud")
+
+[node name="Margin" type="MarginContainer" parent="HUD"]
+offset_right = 400.0
+offset_bottom = 80.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+
+[node name="VBox" type="VBoxContainer" parent="HUD/Margin"]
+
+[node name="HealthLabel" type="Label" parent="HUD/Margin/VBox"]
+text = "Vida: - / -"
+
+[node name="CollectLabel" type="Label" parent="HUD/Margin/VBox"]
+text = "Coleccionables: - / -"
+
+[node name="MessageLabel" type="Label" parent="HUD"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -50.0
+offset_right = 300.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "Mensaje"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Background" type="ColorRect" parent="."]
+z_index = -10
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 2300.0
+offset_bottom = 1000.0
+mouse_filter = 2
+color = Color(0.09, 0.1, 0.14, 1)
+metadata/_todo_assets = "Fondo/parallax del nivel"
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="Ground1" type="StaticBody2D" parent="World"]
+position = Vector2(400, 620)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="World/Ground1"]
+offset_left = -400.0
+offset_top = -20.0
+offset_right = 400.0
+offset_bottom = 20.0
+mouse_filter = 2
+color = Color(0.35, 0.33, 0.4, 1)
+metadata/_todo_assets = "TileMapLayer con el tileset del bioma"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Ground1"]
+shape = SubResource("Shape_Ground1")
+
+[node name="Ground2" type="StaticBody2D" parent="World"]
+position = Vector2(1405, 620)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="World/Ground2"]
+offset_left = -495.0
+offset_top = -20.0
+offset_right = 495.0
+offset_bottom = 20.0
+mouse_filter = 2
+color = Color(0.35, 0.33, 0.4, 1)
+metadata/_todo_assets = "TileMapLayer con el tileset del bioma"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Ground2"]
+shape = SubResource("Shape_Ground2")
+
+[node name="PlatformA" type="StaticBody2D" parent="World"]
+position = Vector2(380, 550)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="World/PlatformA"]
+offset_left = -80.0
+offset_top = -10.0
+offset_right = 80.0
+offset_bottom = 10.0
+mouse_filter = 2
+color = Color(0.35, 0.33, 0.4, 1)
+metadata/_todo_assets = "TileMapLayer con el tileset del bioma"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/PlatformA"]
+shape = SubResource("Shape_PlatformA")
+
+[node name="PlatformB" type="StaticBody2D" parent="World"]
+position = Vector2(1200, 550)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="World/PlatformB"]
+offset_left = -100.0
+offset_top = -10.0
+offset_right = 100.0
+offset_bottom = 10.0
+mouse_filter = 2
+color = Color(0.35, 0.33, 0.4, 1)
+metadata/_todo_assets = "TileMapLayer con el tileset del bioma"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/PlatformB"]
+shape = SubResource("Shape_PlatformB")
+
+[node name="PlatformC" type="StaticBody2D" parent="World"]
+position = Vector2(1450, 490)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="World/PlatformC"]
+offset_left = -75.0
+offset_top = -10.0
+offset_right = 75.0
+offset_bottom = 10.0
+mouse_filter = 2
+color = Color(0.35, 0.33, 0.4, 1)
+metadata/_todo_assets = "TileMapLayer con el tileset del bioma"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/PlatformC"]
+shape = SubResource("Shape_PlatformC")
+
+[node name="WallLeft" type="StaticBody2D" parent="World"]
+position = Vector2(-10, 300)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="World/WallLeft"]
+offset_left = -10.0
+offset_top = -350.0
+offset_right = 10.0
+offset_bottom = 350.0
+mouse_filter = 2
+color = Color(0.35, 0.33, 0.4, 1)
+metadata/_todo_assets = "TileMapLayer con el tileset del bioma"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/WallLeft"]
+shape = SubResource("Shape_WallLeft")
+
+[node name="WallRight" type="StaticBody2D" parent="World"]
+position = Vector2(1910, 300)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="World/WallRight"]
+offset_left = -10.0
+offset_top = -350.0
+offset_right = 10.0
+offset_bottom = 350.0
+mouse_filter = 2
+color = Color(0.35, 0.33, 0.4, 1)
+metadata/_todo_assets = "TileMapLayer con el tileset del bioma"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/WallRight"]
+shape = SubResource("Shape_WallRight")
+
+[node name="Pickups" type="Node2D" parent="."]
+
+[node name="CollectA" parent="Pickups" instance=ExtResource("5_pickup")]
+position = Vector2(380, 515)
+type = 1
+amount = 1
+
+[node name="CollectGap" parent="Pickups" instance=ExtResource("5_pickup")]
+position = Vector2(855, 540)
+type = 1
+amount = 1
+
+[node name="CollectB" parent="Pickups" instance=ExtResource("5_pickup")]
+position = Vector2(1200, 515)
+type = 1
+amount = 1
+
+[node name="CollectC" parent="Pickups" instance=ExtResource("5_pickup")]
+position = Vector2(1450, 455)
+type = 1
+amount = 1
+
+[node name="CollectEnd" parent="Pickups" instance=ExtResource("5_pickup")]
+position = Vector2(1820, 570)
+type = 1
+amount = 1
+
+[node name="HealthGround2" parent="Pickups" instance=ExtResource("5_pickup")]
+position = Vector2(1000, 575)
+type = 0
+amount = 1
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="Enemy1" parent="Enemies" instance=ExtResource("4_enemy")]
+position = Vector2(600, 570)
+start_direction = -1
+
+[node name="Enemy2" parent="Enemies" instance=ExtResource("4_enemy")]
+position = Vector2(1200, 520)
+start_direction = 1
+
+[node name="Enemy3" parent="Enemies" instance=ExtResource("4_enemy")]
+position = Vector2(1700, 570)
+start_direction = -1
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+position = Vector2(100, 560)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+limit_left = -20
+limit_top = -300
+limit_right = 1920
+limit_bottom = 700
+position_smoothing_enabled = true

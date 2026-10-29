@@ -1,0 +1,13 @@
+# Godot 4
+.godot/
+/android/
+*.translation
+
+# Ejecutables del motor (no versionar, 180 MB)
+Godot_*.exe
+
+# Proyectos anidados: su cache tampoco
+**/.godot/
+
+# Ajustes personales de Claude Code
+.claude/settings.local.json
