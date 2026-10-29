@@ -1,0 +1,183 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://levels/LevelManager.gd" id="1_lm"]
+[ext_resource type="PackedScene" path="res://levels/HUD.tscn" id="2_hud"]
+[ext_resource type="PackedScene" path="res://entities/player/Player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://entities/bosses/cadejo/Cadejo.tscn" id="4_cadejo"]
+[ext_resource type="PackedScene" path="res://entities/items/Pickup.tscn" id="5_pickup"]
+[ext_resource type="Script" path="res://components/GameCamera.gd" id="6_camera"]
+[ext_resource type="PackedScene" path="res://entities/level/Door.tscn" id="7_door"]
+[ext_resource type="Script" path="res://levels/BossArena.gd" id="8_arena"]
+
+[sub_resource type="RectangleShape2D" id="Shape_Floor"]
+size = Vector2(1700, 40)
+
+[sub_resource type="RectangleShape2D" id="Shape_WallLeft"]
+size = Vector2(20, 700)
+
+[sub_resource type="RectangleShape2D" id="Shape_WallRight"]
+size = Vector2(20, 700)
+
+[sub_resource type="RectangleShape2D" id="Shape_ArenaPlatformL"]
+size = Vector2(140, 20)
+
+[sub_resource type="RectangleShape2D" id="Shape_ArenaPlatformR"]
+size = Vector2(140, 20)
+
+[sub_resource type="RectangleShape2D" id="Shape_ArenaTrigger"]
+size = Vector2(40, 300)
+
+[node name="BossLevel" type="Node2D"]
+
+[node name="LevelManager" type="Node" parent="."]
+script = ExtResource("1_lm")
+win_condition = 1
+kill_y = 800.0
+completed_message = "¡Has derrotado al Cadejo!
+Pulsa R para reiniciar"
+
+[node name="HUD" parent="." instance=ExtResource("2_hud")]
+
+[node name="CameraBounds" type="ReferenceRect" parent="." groups=["camera_bounds"]]
+offset_left = -20.0
+offset_top = 100.0
+offset_right = 1720.0
+offset_bottom = 700.0
+mouse_filter = 2
+border_color = Color(0.2, 0.9, 1, 1)
+border_width = 3.0
+
+[node name="Background" type="ColorRect" parent="."]
+z_index = -10
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 2100.0
+offset_bottom = 1000.0
+mouse_filter = 2
+color = Color(0.06, 0.05, 0.09, 1)
+metadata/_todo_assets = "Fondo de la guarida del Cadejo"
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="Floor" type="StaticBody2D" parent="World"]
+position = Vector2(850, 620)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="World/Floor"]
+offset_left = -850.0
+offset_top = -20.0
+offset_right = 850.0
+offset_bottom = 20.0
+mouse_filter = 2
+color = Color(0.28, 0.24, 0.3, 1)
+metadata/_todo_assets = "TileMapLayer de la guarida"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Floor"]
+shape = SubResource("Shape_Floor")
+
+[node name="WallLeft" type="StaticBody2D" parent="World"]
+position = Vector2(-10, 300)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="World/WallLeft"]
+offset_left = -10.0
+offset_top = -350.0
+offset_right = 10.0
+offset_bottom = 350.0
+mouse_filter = 2
+color = Color(0.28, 0.24, 0.3, 1)
+metadata/_todo_assets = "TileMapLayer de la guarida"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/WallLeft"]
+shape = SubResource("Shape_WallLeft")
+
+[node name="WallRight" type="StaticBody2D" parent="World"]
+position = Vector2(1710, 300)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="World/WallRight"]
+offset_left = -10.0
+offset_top = -350.0
+offset_right = 10.0
+offset_bottom = 350.0
+mouse_filter = 2
+color = Color(0.28, 0.24, 0.3, 1)
+metadata/_todo_assets = "TileMapLayer de la guarida"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/WallRight"]
+shape = SubResource("Shape_WallRight")
+
+[node name="ArenaPlatformL" type="StaticBody2D" parent="World"]
+position = Vector2(820, 550)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="World/ArenaPlatformL"]
+offset_left = -70.0
+offset_top = -10.0
+offset_right = 70.0
+offset_bottom = 10.0
+mouse_filter = 2
+color = Color(0.28, 0.24, 0.3, 1)
+metadata/_todo_assets = "TileMapLayer de la guarida"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/ArenaPlatformL"]
+shape = SubResource("Shape_ArenaPlatformL")
+one_way_collision = true
+
+[node name="ArenaPlatformR" type="StaticBody2D" parent="World"]
+position = Vector2(1480, 550)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="World/ArenaPlatformR"]
+offset_left = -70.0
+offset_top = -10.0
+offset_right = 70.0
+offset_bottom = 10.0
+mouse_filter = 2
+color = Color(0.28, 0.24, 0.3, 1)
+metadata/_todo_assets = "TileMapLayer de la guarida"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/ArenaPlatformR"]
+shape = SubResource("Shape_ArenaPlatformR")
+one_way_collision = true
+
+[node name="HealthCorridor" parent="." instance=ExtResource("5_pickup")]
+position = Vector2(320, 575)
+type = 0
+amount = 2
+
+[node name="ArenaGate" parent="." instance=ExtResource("7_door")]
+position = Vector2(520, 552)
+start_open = true
+open_on = 3
+close_on = 2
+
+[node name="Cadejo" parent="." instance=ExtResource("4_cadejo")]
+position = Vector2(1250, 568)
+
+[node name="ArenaTrigger" type="Area2D" parent="." node_paths=PackedStringArray("boss")]
+position = Vector2(640, 450)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("8_arena")
+boss = NodePath("../Cadejo")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ArenaTrigger"]
+shape = SubResource("Shape_ArenaTrigger")
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+position = Vector2(100, 560)
+
+[node name="GameCamera" type="Camera2D" parent="Player"]
+limit_smoothed = true
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0
+drag_vertical_enabled = true
+drag_top_margin = 0.25
+drag_bottom_margin = 0.15
+script = ExtResource("6_camera")

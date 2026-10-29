@@ -27,6 +27,17 @@ signal entity_health_critical(entity: Node)
 @warning_ignore("unused_signal")
 signal entity_died(entity: Node)
 
+# --- Jefes ---
+@warning_ignore("unused_signal")
+signal boss_fight_started(boss: Node, display_name: String, current: int, maximum: int)
+@warning_ignore("unused_signal")
+signal boss_health_changed(current: int, maximum: int)
+@warning_ignore("unused_signal")
+signal boss_phase_changed(boss: Node, phase: int)
+## Se emite al terminar la animación de muerte del jefe.
+@warning_ignore("unused_signal")
+signal boss_defeated(boss: Node)
+
 # --- Pickups ---
 @warning_ignore("unused_signal")
 signal collectible_picked(value: int)
@@ -38,3 +49,11 @@ signal collectibles_changed(collected: int, required: int)
 signal level_completed
 @warning_ignore("unused_signal")
 signal level_restart_requested
+## Pide cambiar a otra escena de nivel (p. ej. al cruzar una puerta).
+@warning_ignore("unused_signal")
+signal level_change_requested(scene_path: String)
+
+# --- UI ---
+## Mensaje centrado en el HUD. duration <= 0 = permanente.
+@warning_ignore("unused_signal")
+signal hud_message(text: String, duration: float)

@@ -1,0 +1,106 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/bosses/BossBase.gd" id="1_boss"]
+[ext_resource type="Script" path="res://components/StatsComponent.gd" id="2_stats"]
+[ext_resource type="Script" path="res://components/HitboxComponent.gd" id="3_hitbox"]
+[ext_resource type="Script" path="res://components/HurtboxComponent.gd" id="4_hurtbox"]
+[ext_resource type="Script" path="res://components/animation/CharacterAnimator.gd" id="5_animator"]
+[ext_resource type="Resource" path="res://entities/bosses/cadejo/cadejo_animations.tres" id="6_anims"]
+[ext_resource type="Script" path="res://components/state_machine/StateMachine.gd" id="7_sm"]
+[ext_resource type="Script" path="res://entities/bosses/cadejo/states/DormantState.gd" id="8_dormant"]
+[ext_resource type="Script" path="res://entities/bosses/cadejo/states/ChaseState.gd" id="9_chase"]
+[ext_resource type="Script" path="res://entities/bosses/cadejo/states/ChargeState.gd" id="10_charge"]
+[ext_resource type="Script" path="res://entities/bosses/cadejo/states/RetreatState.gd" id="11_retreat"]
+[ext_resource type="Script" path="res://entities/bosses/cadejo/states/RoarState.gd" id="12_roar"]
+[ext_resource type="Script" path="res://entities/bosses/cadejo/states/BossDeadState.gd" id="13_dead"]
+
+[sub_resource type="RectangleShape2D" id="Shape_body"]
+size = Vector2(56, 64)
+
+[sub_resource type="RectangleShape2D" id="Shape_hitbox"]
+size = Vector2(60, 64)
+
+[node name="Cadejo" type="CharacterBody2D" groups=["bosses"]]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_boss")
+display_name = "El Cadejo"
+phase_messages = Array[String](["¡El Cadejo se enfurece!"])
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Placeholder" type="ColorRect" parent="Visual"]
+offset_left = -28.0
+offset_top = -32.0
+offset_right = 28.0
+offset_bottom = 32.0
+mouse_filter = 2
+color = Color(0.2, 0.15, 0.3, 1)
+
+[node name="Animator" type="AnimatedSprite2D" parent="Visual" node_paths=PackedStringArray("placeholders")]
+position = Vector2(0, -8)
+scale = Vector2(2.5, 2.5)
+script = ExtResource("5_animator")
+animation_set = ExtResource("6_anims")
+one_shot_priorities = Dictionary[StringName, int]({
+&"attack": 2,
+&"death": 3,
+&"hurt": 1,
+&"special": 2
+})
+placeholders = [NodePath("../Placeholder")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("Shape_body")
+
+[node name="Stats" type="Node" parent="."]
+script = ExtResource("2_stats")
+max_health = 24
+base_damage = 1
+
+[node name="Hurtbox" type="Area2D" parent="." node_paths=PackedStringArray("health")]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_hurtbox")
+health = NodePath("../Stats")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("Shape_body")
+
+[node name="Hitbox" type="Area2D" parent="." node_paths=PackedStringArray("stats")]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("3_hitbox")
+stats = NodePath("../Stats")
+continuous = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("Shape_hitbox")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("7_sm")
+initial_state = NodePath("Dormant")
+
+[node name="Dormant" type="Node" parent="StateMachine"]
+script = ExtResource("8_dormant")
+animation = &"idle"
+
+[node name="Chase" type="Node" parent="StateMachine"]
+script = ExtResource("9_chase")
+animation = &"run"
+
+[node name="Charge" type="Node" parent="StateMachine"]
+script = ExtResource("10_charge")
+animation = &"attack"
+
+[node name="Retreat" type="Node" parent="StateMachine"]
+script = ExtResource("11_retreat")
+animation = &"walk"
+
+[node name="Roar" type="Node" parent="StateMachine"]
+script = ExtResource("12_roar")
+animation = &"special"
+
+[node name="Dead" type="Node" parent="StateMachine"]
+script = ExtResource("13_dead")
+animation = &"death"

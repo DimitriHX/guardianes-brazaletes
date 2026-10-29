@@ -30,6 +30,10 @@ extends CharacterBody2D
 ## Segundos mínimos entre disparos (mantener pulsado dispara a este ritmo).
 @export var shoot_cooldown: float = 0.25
 
+@export_group("Retroceso")
+## Fricción horizontal mientras dura un empujón (knockback).
+@export var knockback_friction: float = 900.0
+
 ## Dirección a la que mira el jugador: 1 derecha, -1 izquierda.
 var facing: int = 1
 ## Última animación pedida por un estado (útil para depurar sin sprite).
@@ -38,10 +42,12 @@ var current_animation: StringName = &""
 var _coyote_left: float = 0.0
 var _jump_buffer_left: float = 0.0
 var _shoot_cooldown_left: float = 0.0
+var _knockback_left: float = 0.0
 var _is_dead: bool = false
 
 @onready var _visual: Node2D = $Visual
 @onready var _muzzle: Marker2D = $Visual/Muzzle
+@onready var _animator: CharacterAnimator = $Visual/Animator
 @onready var _stats: StatsComponent = $Stats
 @onready var _state_machine: StateMachine = $StateMachine
 
@@ -49,6 +55,8 @@ var _is_dead: bool = false
 func _ready() -> void:
 	_stats.health_changed.connect(_on_health_changed)
 	_stats.died.connect(_on_health_died)
+	_stats.damaged.connect(_on_damaged)
+	_animator.one_shot_finished.connect(_on_animation_one_shot_finished)
 	for child: Node in _state_machine.get_children():
 		var state: PlayerState = child as PlayerState
 		if state != null:
@@ -65,8 +73,7 @@ func _physics_process(delta: float) -> void:
 
 func _process(delta: float) -> void:
 	_state_machine.update(delta)
-	# Parpadeo durante la invulnerabilidad.
-	# TODO(assets): sustituir por animación/shader de daño del sprite.
+	# Parpadeo durante la invulnerabilidad (i-frames), con o sin sprite.
 	_visual.modulate.a = 0.4 if _stats.is_invulnerable() else 1.0
 
 
@@ -97,6 +104,19 @@ func can_heal() -> bool:
 	return not _is_dead and not _stats.is_full()
 
 
+## Empujón externo (rugido de jefe, explosiones...). Durante `control_lock`
+## segundos el input horizontal no frena ni anula el empujón.
+func apply_knockback(impulse: Vector2, control_lock: float = 0.3) -> void:
+	if _is_dead:
+		return
+	velocity = impulse
+	_knockback_left = control_lock
+
+
+func is_knocked_back() -> bool:
+	return _knockback_left > 0.0
+
+
 # --- Operaciones para los estados ---
 
 func get_state_name() -> StringName:
@@ -119,6 +139,9 @@ func apply_gravity(delta: float) -> void:
 
 
 func apply_horizontal(delta: float, direction: float) -> void:
+	if _knockback_left > 0.0:
+		velocity.x = move_toward(velocity.x, 0.0, knockback_friction * delta)
+		return
 	var control: float = 1.0 if is_on_floor() else air_control
 	if direction != 0.0:
 		velocity.x = move_toward(velocity.x, direction * move_speed, acceleration * control * delta)
@@ -155,13 +178,16 @@ func shoot() -> void:
 	# TODO(assets): sonido de disparo.
 
 
+## Lo llaman los estados al entrar. El CharacterAnimator decide si puede
+## mostrarse ya (prioridades) o tras terminar un ataque/daño en curso.
+## TODO(assets): rellenar entities/player/player_animations.tres con los .piskel.
 func play_animation(anim: StringName) -> void:
 	current_animation = anim
-	# TODO(assets): añadir un AnimatedSprite2D llamado "AnimatedSprite2D" dentro de
-	# Visual con animaciones idle, walk, jump, fall, attack y death. Se usará solo.
-	var sprite: AnimatedSprite2D = _visual.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
-	if sprite != null and sprite.sprite_frames != null and sprite.sprite_frames.has_animation(anim):
-		sprite.play(anim)
+	_animator.play_state(anim)
+
+
+func get_displayed_animation() -> StringName:
+	return _animator.current_animation
 
 
 # --- Privados ---
@@ -178,13 +204,14 @@ func _update_timers(delta: float) -> void:
 		_jump_buffer_left = maxf(_jump_buffer_left - delta, 0.0)
 
 	_shoot_cooldown_left = maxf(_shoot_cooldown_left - delta, 0.0)
+	_knockback_left = maxf(_knockback_left - delta, 0.0)
 
 
 func _set_facing(new_facing: int) -> void:
 	if new_facing == facing:
 		return
 	facing = new_facing
-	# TODO(assets): con AnimatedSprite2D usar flip_h en lugar de escalar el contenedor.
+	# Escalar el contenedor gira a la vez sprite, placeholders y Muzzle.
 	_visual.scale.x = float(facing)
 
 
@@ -192,8 +219,17 @@ func _on_health_changed(current: int, maximum: int) -> void:
 	Events.player_health_changed.emit(current, maximum)
 
 
+func _on_damaged(_amount: int) -> void:
+	if not _is_dead:
+		_animator.play_state(&"hurt")
+
+
 func _on_health_died() -> void:
 	_is_dead = true
 	_state_machine.transition_to(PlayerState.DEAD)
-	# TODO(assets): esperar a que termine la animación "death" antes de notificar.
-	Events.player_died.emit()
+	# Events.player_died se emite al terminar la animación "death".
+
+
+func _on_animation_one_shot_finished(anim: StringName) -> void:
+	if anim == &"death":
+		Events.player_died.emit()

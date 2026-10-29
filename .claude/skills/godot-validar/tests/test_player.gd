@@ -160,7 +160,12 @@ func _run() -> void:
 	_check(hp_events == ["4/5"], "daño + i-frames emiten a Events (%s)" % str(hp_events))
 	await _frames(70)
 	p.call("take_damage", 99)
-	_check(bool(p.call("is_dead")) and died_count == 1, "muerte emite Events.player_died")
+	_check(bool(p.call("is_dead")) and died_count == 0, "player_died espera a la animación de muerte")
+	await _frames(3)
+	_check(died_count == 1, "muerte emite Events.player_died al terminar la animación")
+	p.call("kill")
+	await _frames(3)
+	_check(died_count == 1, "player_died no se repite")
 	var pos_dead: Vector2 = p.position
 	Input.action_press("move_right")
 	Input.action_press("jump")

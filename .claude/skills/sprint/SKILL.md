@@ -27,6 +27,10 @@ con estado `[ ]` en `sprints.md`.
    - Daño: usar `HitboxComponent` (inflige; layer 0, mask = capa del objetivo) y
      `HurtboxComponent` (recibe; layer = capa del dueño, mask 0, `health` → Stats).
      Vida/estadísticas con `StatsComponent`. No reimplementar daño a mano.
+   - Animación: `CharacterAnimator` (AnimatedSprite2D) + un `AnimationSet` .tres que
+     apunta a los .piskel de `assets/`. Los estados llaman a play_animation(); no
+     reproducir animaciones a mano.
+   - Plataformas que deban atravesar jefes/enemigos altos: `one_way_collision = true`.
    - `Area2D` que deban detectar cuerpos: NO poner `monitorable = false`.
      En Godot 4.7 eso impide detectar StaticBody2D (verificado en el Sprint 03).
 3. Escribir los `.tscn` a mano en formato 3 (`[gd_scene format=3]`), sin `uid=`
