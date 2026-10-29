@@ -120,17 +120,19 @@ func _run() -> void:
 	await _frames(120)
 
 	# Disparo
-	var dummy: GDScript = GDScript.new()
-	dummy.source_code = "extends StaticBody2D\nvar hits: int = 0\nfunc take_damage(a: int) -> void:\n\thits += a\n"
-	dummy.reload()
 	await _tap("move_right", 3)
 	await _frames(30)
-	var target: StaticBody2D = _box(4, Vector2(20, 60), Vector2(p.position.x + 200.0, 70), dummy)
-	await _frames(2)
+	var target: CharacterBody2D = (load("res://entities/enemies/EnemyBase.tscn") as PackedScene).instantiate() as CharacterBody2D
+	target.set("move_speed", 0.0)
+	target.position = Vector2(p.position.x + 200.0, 80)
+	root.add_child(target)
+	await _frames(5)
 	await _tap("shoot")
 	_check(get_nodes_in_group("player_projectiles").size() == 1, "un toque de disparo = un proyectil")
 	await _frames(40)
-	_check(int(target.get("hits")) == 1, "el proyectil impacta y daña")
+	var target_hp: int = int(target.get_node("Stats").get("current_health"))
+	_check(target_hp == 1, "el proyectil impacta en el Hurtbox y daña (hp=%d)" % target_hp)
+	_check(get_nodes_in_group("player_projectiles").is_empty(), "el proyectil se consume al impactar")
 	target.queue_free()
 
 	var seen: Dictionary = {}

@@ -1,7 +1,8 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://entities/player/Player.gd" id="1_player"]
-[ext_resource type="Script" path="res://components/HealthComponent.gd" id="2_health"]
+[ext_resource type="Script" path="res://components/StatsComponent.gd" id="2_stats"]
+[ext_resource type="Script" path="res://components/HurtboxComponent.gd" id="11_hurtbox"]
 [ext_resource type="PackedScene" path="res://entities/projectile/Projectile.tscn" id="3_projectile"]
 [ext_resource type="Script" path="res://components/state_machine/StateMachine.gd" id="4_sm"]
 [ext_resource type="Script" path="res://entities/player/states/IdleState.gd" id="5_idle"]
@@ -45,10 +46,20 @@ position = Vector2(18, -4)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_body")
 
-[node name="HealthComponent" type="Node" parent="."]
-script = ExtResource("2_health")
+[node name="Stats" type="Node" parent="."]
+script = ExtResource("2_stats")
 max_health = 5
 invulnerability_time = 1.0
+base_damage = 1
+
+[node name="Hurtbox" type="Area2D" parent="." node_paths=PackedStringArray("health")]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("11_hurtbox")
+health = NodePath("../Stats")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("RectangleShape2D_body")
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
 script = ExtResource("4_sm")

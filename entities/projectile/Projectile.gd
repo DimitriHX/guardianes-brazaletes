@@ -1,23 +1,25 @@
 class_name Projectile
 extends Area2D
-## Proyectil del jugador: avanza en línea recta, daña lo primero que toque
-## (si expone take_damage) y se destruye al chocar con el mundo o al caducar.
-## Capa 4 (PlayerProjectiles); detecta World (1) y Enemies (3).
+## Proyectil del jugador: avanza en línea recta y se destruye al chocar con el
+## mundo (este Area2D, máscara World), al golpear un Hurtbox enemigo (Hitbox
+## hijo, máscara Enemies) o al caducar. Capa 4 (PlayerProjectiles).
 
 @export var speed: float = 650.0
-@export var damage: int = 1
 ## Segundos de vida antes de autodestruirse.
 @export var lifetime: float = 1.2
 
 var direction: Vector2 = Vector2.RIGHT
 
 var _life_left: float = 0.0
-var _has_hit: bool = false
+var _spent: bool = false
+
+@onready var _hitbox: HitboxComponent = $Hitbox
 
 
 func _ready() -> void:
 	_life_left = lifetime
 	body_entered.connect(_on_body_entered)
+	_hitbox.hit_landed.connect(_on_hit_landed)
 
 
 func _physics_process(delta: float) -> void:
@@ -27,18 +29,27 @@ func _physics_process(delta: float) -> void:
 		queue_free()
 
 
-## Llamar antes de añadir al árbol (o justo después) para fijar la dirección.
-func setup(new_direction: Vector2) -> void:
+## Llamar antes de añadir al árbol. `damage` < 0 conserva el daño de la escena.
+func setup(new_direction: Vector2, damage: int = -1) -> void:
 	direction = new_direction.normalized()
 	# Orienta el proyectil (y su futuro sprite) hacia la dirección de vuelo.
 	rotation = direction.angle()
+	if damage >= 0:
+		($Hitbox as HitboxComponent).damage = damage
 
 
-func _on_body_entered(body: Node2D) -> void:
-	if _has_hit:
+func _spend() -> void:
+	if _spent:
 		return
-	_has_hit = true
-	if body.has_method("take_damage"):
-		body.call("take_damage", damage)
+	_spent = true
+	_hitbox.active = false
 	# TODO(assets): instanciar efecto de impacto aquí.
 	queue_free()
+
+
+func _on_body_entered(_body: Node2D) -> void:
+	_spend()
+
+
+func _on_hit_landed(_hurtbox: HurtboxComponent) -> void:
+	_spend()

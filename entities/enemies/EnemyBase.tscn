@@ -1,7 +1,9 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://entities/enemies/EnemyPatrol.gd" id="1_enemy"]
-[ext_resource type="Script" path="res://components/HealthComponent.gd" id="2_health"]
+[ext_resource type="Script" path="res://components/StatsComponent.gd" id="2_stats"]
+[ext_resource type="Script" path="res://components/HitboxComponent.gd" id="3_hitbox"]
+[ext_resource type="Script" path="res://components/HurtboxComponent.gd" id="4_hurtbox"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(28, 28)
@@ -41,13 +43,26 @@ collision_mask = 1
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_body")
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="Stats" type="Node" parent="."]
+script = ExtResource("2_stats")
+max_health = 2
+base_damage = 1
+
+[node name="Hurtbox" type="Area2D" parent="." node_paths=PackedStringArray("health")]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_hurtbox")
+health = NodePath("../Stats")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Hitbox" type="Area2D" parent="." node_paths=PackedStringArray("stats")]
 collision_layer = 0
 collision_mask = 2
+script = ExtResource("3_hitbox")
+stats = NodePath("../Stats")
+continuous = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 shape = SubResource("RectangleShape2D_hitbox")
-
-[node name="HealthComponent" type="Node" parent="."]
-script = ExtResource("2_health")
-max_health = 2

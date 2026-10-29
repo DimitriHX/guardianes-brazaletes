@@ -42,19 +42,19 @@ var _is_dead: bool = false
 
 @onready var _visual: Node2D = $Visual
 @onready var _muzzle: Marker2D = $Visual/Muzzle
-@onready var _health: HealthComponent = $HealthComponent
+@onready var _stats: StatsComponent = $Stats
 @onready var _state_machine: StateMachine = $StateMachine
 
 
 func _ready() -> void:
-	_health.health_changed.connect(_on_health_changed)
-	_health.died.connect(_on_health_died)
+	_stats.health_changed.connect(_on_health_changed)
+	_stats.died.connect(_on_health_died)
 	for child: Node in _state_machine.get_children():
 		var state: PlayerState = child as PlayerState
 		if state != null:
 			state.setup(self)
 	_state_machine.start()
-	Events.player_health_changed.emit(_health.current_health, _health.max_health)
+	Events.player_health_changed.emit(_stats.current_health, _stats.max_health)
 
 
 func _physics_process(delta: float) -> void:
@@ -67,7 +67,7 @@ func _process(delta: float) -> void:
 	_state_machine.update(delta)
 	# Parpadeo durante la invulnerabilidad.
 	# TODO(assets): sustituir por animación/shader de daño del sprite.
-	_visual.modulate.a = 0.4 if _health.is_invulnerable() else 1.0
+	_visual.modulate.a = 0.4 if _stats.is_invulnerable() else 1.0
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -77,15 +77,15 @@ func _unhandled_input(event: InputEvent) -> void:
 # --- Vida ---
 
 func take_damage(amount: int) -> void:
-	_health.take_damage(amount)
+	_stats.take_damage(amount)
 
 
 func heal(amount: int) -> void:
-	_health.heal(amount)
+	_stats.heal(amount)
 
 
 func kill() -> void:
-	_health.kill()
+	_stats.kill()
 
 
 func is_dead() -> bool:
@@ -94,7 +94,7 @@ func is_dead() -> bool:
 
 ## true si una curación tendría efecto (no está muerto ni con la vida al máximo).
 func can_heal() -> bool:
-	return not _is_dead and not _health.is_full()
+	return not _is_dead and not _stats.is_full()
 
 
 # --- Operaciones para los estados ---
@@ -147,7 +147,7 @@ func shoot() -> void:
 		return
 	_shoot_cooldown_left = shoot_cooldown
 	var projectile: Projectile = projectile_scene.instantiate() as Projectile
-	projectile.setup(Vector2(float(facing), 0.0))
+	projectile.setup(Vector2(float(facing), 0.0), _stats.get_damage())
 	# Se añade al nivel (no al jugador) para que no se mueva con él.
 	var container: Node = get_tree().current_scene if get_tree().current_scene != null else get_parent()
 	container.add_child(projectile)

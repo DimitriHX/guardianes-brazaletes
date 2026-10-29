@@ -24,6 +24,9 @@ con estado `[ ]` en `sprints.md`.
    - Acciones de input disponibles: `move_left`, `move_right`, `jump`, `shoot`, `restart`.
      Si hace falta otra, añadirla a `[input]` de `project.godot` sin tocar el resto.
    - Al crear un autoload, registrarlo en `[autoload]` de `project.godot`.
+   - Daño: usar `HitboxComponent` (inflige; layer 0, mask = capa del objetivo) y
+     `HurtboxComponent` (recibe; layer = capa del dueño, mask 0, `health` → Stats).
+     Vida/estadísticas con `StatsComponent`. No reimplementar daño a mano.
    - `Area2D` que deban detectar cuerpos: NO poner `monitorable = false`.
      En Godot 4.7 eso impide detectar StaticBody2D (verificado en el Sprint 03).
 3. Escribir los `.tscn` a mano en formato 3 (`[gd_scene format=3]`), sin `uid=`

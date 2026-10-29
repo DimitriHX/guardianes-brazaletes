@@ -19,7 +19,7 @@ Sigue este orden secuencial para pedirle tareas a Claude Code en la terminal
 | Estado | Sprint | Tarea de Claude Code | Entregable de Código |
 |---|---|---|---|
 | [x] | 07: Máquina de Estados | Clase base `State` (enter/exit/update/physics_update) y `StateMachine`. Migrar `Player.gd` a estados: Idle, Walk, Jump, Fall, Attack (+ Dead). Cada estado decide su animación. | `components/state_machine/State.gd`, `StateMachine.gd`, `entities/player/states/*.gd` |
-| [ ] | 08: Componentización Avanzada | `StatsComponent` (vida máx., daño base, multiplicadores) evolucionando `HealthComponent`. `HitboxComponent` (inflige) y `HurtboxComponent` (recibe). Señales globales de muerte/daño crítico en `Events`. | `components/StatsComponent.gd`, `HitboxComponent.gd`, `HurtboxComponent.gd` |
+| [x] | 08: Componentización Avanzada | `StatsComponent` (vida máx., daño base, multiplicadores) evolucionando `HealthComponent`. `HitboxComponent` (inflige) y `HurtboxComponent` (recibe). Señales globales de muerte/daño crítico en `Events`. | `components/StatsComponent.gd`, `HitboxComponent.gd`, `HurtboxComponent.gd` |
 
 ### Fase 2: Game Feel & Polish
 

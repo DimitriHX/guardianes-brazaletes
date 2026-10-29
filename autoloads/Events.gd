@@ -17,6 +17,16 @@ signal player_died
 @warning_ignore("unused_signal")
 signal enemy_died(enemy: Node)
 
+# --- Combate genérico (emitidas por HealthComponent para cualquier entidad) ---
+## Cada golpe que quita vida. `entity` es el padre del HealthComponent.
+@warning_ignore("unused_signal")
+signal entity_damaged(entity: Node, amount: int)
+## La vida cruza hacia abajo el umbral crítico (critical_health_ratio).
+@warning_ignore("unused_signal")
+signal entity_health_critical(entity: Node)
+@warning_ignore("unused_signal")
+signal entity_died(entity: Node)
+
 # --- Pickups ---
 @warning_ignore("unused_signal")
 signal collectible_picked(value: int)

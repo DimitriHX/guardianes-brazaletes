@@ -1,13 +1,14 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://entities/projectile/Projectile.gd" id="1_projectile"]
+[ext_resource type="Script" path="res://components/HitboxComponent.gd" id="2_hitbox"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_shot"]
 size = Vector2(12, 4)
 
 [node name="Projectile" type="Area2D" groups=["player_projectiles"]]
 collision_layer = 8
-collision_mask = 5
+collision_mask = 1
 script = ExtResource("1_projectile")
 
 [node name="Visual" type="ColorRect" parent="."]
@@ -20,4 +21,12 @@ color = Color(1, 0.85, 0.2, 1)
 metadata/_todo_assets = "Sustituir por Sprite2D/AnimatedSprite2D del proyectil"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_shot")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("2_hitbox")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 shape = SubResource("RectangleShape2D_shot")
