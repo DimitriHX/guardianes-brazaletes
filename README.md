@@ -200,6 +200,8 @@ rectángulo de color y el juego sigue funcionando.
 ### Arte y sonido
 - **Emma** y el orbe de la pulsera: generados con SpriteCook. Los frames de respiración
   (`emma_idle.png`) se derivan del frame quieto moviendo píxeles a mano.
+  La carrera (`emma_run.png`) se animó con PixelLab a partir de un frame de Emma y se
+  limpió por código (estela y píxeles sueltos).
 - **El Cadejo**, la puerta-portal, la reja y los pinchos: generados con PixelLab.
 - Tablones y algunas composiciones (el vórtice del portal): dibujados por código.
 - Escenarios, enemigos, objetos y efectos: paquetes gratuitos de itch.io (ver
