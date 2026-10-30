@@ -2,23 +2,18 @@
 
 [ext_resource type="Script" uid="uid://y5jwp51eocmj" path="res://components/animation/AnimationSet.gd" id="1_set"]
 [ext_resource type="Script" uid="uid://p6bvohx8racr" path="res://components/animation/AnimationEntry.gd" id="2_entry"]
-[ext_resource type="Texture2D" uid="uid://bycbwvg36ettl" path="res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A_Idle.png" id="10_tex"]
-[ext_resource type="Texture2D" uid="uid://yhdhs117dr1l" path="res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A_Walk.png" id="11_tex"]
-[ext_resource type="Texture2D" uid="uid://bqswt2wljkum5" path="res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A_Attack01.png" id="12_tex"]
-[ext_resource type="Texture2D" uid="uid://wannkak3cxa2" path="res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A_Hurt.png" id="13_tex"]
-[ext_resource type="Texture2D" uid="uid://bps2elgp364at" path="res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A_Death.png" id="14_tex"]
 
 [sub_resource type="Resource" id="Entry_idle"]
 script = ExtResource("2_entry")
 animation = &"idle"
-sheet = ExtResource("10_tex")
+sheet_path = "res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A_Idle.png"
 grid_area = Rect2i(0, 0, 600, 100)
 grid_columns = 6
 
 [sub_resource type="Resource" id="Entry_walk"]
 script = ExtResource("2_entry")
 animation = &"walk"
-sheet = ExtResource("11_tex")
+sheet_path = "res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A_Walk.png"
 grid_area = Rect2i(0, 0, 800, 100)
 grid_columns = 8
 
@@ -26,7 +21,7 @@ grid_columns = 8
 script = ExtResource("2_entry")
 animation = &"attack"
 loop = false
-sheet = ExtResource("12_tex")
+sheet_path = "res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A_Attack01.png"
 grid_area = Rect2i(0, 0, 700, 100)
 grid_columns = 7
 
@@ -34,7 +29,7 @@ grid_columns = 7
 script = ExtResource("2_entry")
 animation = &"hurt"
 loop = false
-sheet = ExtResource("13_tex")
+sheet_path = "res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A_Hurt.png"
 grid_area = Rect2i(0, 0, 400, 100)
 grid_columns = 4
 
@@ -42,7 +37,7 @@ grid_columns = 4
 script = ExtResource("2_entry")
 animation = &"death"
 loop = false
-sheet = ExtResource("14_tex")
+sheet_path = "res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Demon_A/Demon_A/Demon_A_Death.png"
 grid_area = Rect2i(0, 0, 400, 100)
 grid_columns = 4
 

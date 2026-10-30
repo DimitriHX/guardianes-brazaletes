@@ -36,9 +36,10 @@ func _ready() -> void:
 		add_to_group("collectibles")
 	_visual.color = COLORS[type]
 	var texture: Texture2D = collectible_texture if type == PickupType.COLLECTIBLE else health_texture
+	var has_art: bool = OptionalAtlasTexture.has_image(texture)
 	_sprite.texture = texture
-	_sprite.visible = texture != null
-	_visual.visible = texture == null
+	_sprite.visible = has_art
+	_visual.visible = not has_art
 	if _light != null:
 		_light.add_to_group("point_lights")
 		if _light.texture == null:

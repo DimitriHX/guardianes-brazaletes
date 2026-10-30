@@ -18,6 +18,13 @@ extends Resource
 
 @export_group("Hoja de sprites")
 @export var sheet: Texture2D
+## Alternativa a `sheet` para hojas de paquetes que no están en el repositorio:
+## se carga por ruta solo si el archivo existe (si no, el animador usa su
+## placeholder). Con ruta, `sheet` no se guarda en el .tres.
+@export_file("*.png", "*.jpg", "*.jpeg", "*.webp") var sheet_path: String = "":
+	set(value):
+		sheet_path = value
+		sheet = load(value) as Texture2D if not value.is_empty() and ResourceLoader.exists(value) else null
 ## Regiones (en píxeles de la hoja) de cada frame, en orden.
 @export var regions: Array[Rect2i] = []
 ## Alternativa a `regions`: área de la hoja dividida en `grid_columns` frames iguales.
@@ -28,6 +35,11 @@ extends Resource
 ## Color típico del fondo de la hoja (se compara su tinte, no su brillo).
 @export var background_key: Color = Color8(6, 12, 16)
 @export_range(0.0, 0.2, 0.005) var background_tolerance: float = 0.03
+
+
+func _validate_property(property: Dictionary) -> void:
+	if property.name == "sheet" and not sheet_path.is_empty():
+		property.usage &= ~PROPERTY_USAGE_STORAGE
 
 
 func uses_sheet() -> bool:
