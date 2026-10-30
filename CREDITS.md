@@ -8,12 +8,11 @@
 
 ## Gráficos de terceros
 Solo se incluyen los archivos que usa el juego, renombrados y reorganizados por función.
-- **GandalfHardcore FREE Platformer Assets** y **GandalfHardcore Hp bar** by GandalfHardcore —
-  https://gandalfhardcore.itch.io/ (léeme del autor en `assets/backgrounds/` y `assets/ui/hp_bar/`).
+- **GandalfHardcore FREE Platformer Assets** by GandalfHardcore —
+  https://gandalfhardcore.itch.io/ (léeme del autor en `assets/backgrounds/`).
   - `assets/backgrounds/{normal,autumn,winter}/` — capas del parallax y castillo de fondo.
   - `assets/tiles/floor_tiles.png` — tiles de suelo y plataformas.
   - `assets/level/torch.png` — antorcha (también la usa el altar de control).
-  - `assets/ui/hp_bar/` — orbe de vida del jugador (marco recortado en `hp_orb_frame.png`).
 - **32rogues** (Seth Boyles) — `assets/items/items.png` (monedas y pociones). Licencia en
   `assets/items/LICENSE_32rogues.txt`.
 - **Tiny RPG Character Asset Pack 02 (Demon_A, Blood Monster_A)** —
@@ -36,6 +35,9 @@ Generado con el MCP de PixelLab (cuenta del proyecto, https://pixellab.ai/termso
 - `assets/pixellab/hazards/spikes.png` — tile de espinas corruptas (HazardSpike).
 - `assets/pixellab/door/arena_gate.png` — reja de hierro de la arena del jefe (ArenaGate).
 - `assets/platforms/bridge_planks.png` — tablones de las plataformas one-way, dibujados por código (propios).
+- `assets/spritecook/emma/emma_run.png` — carrera de Emma: animada con PixelLab a partir
+  de un frame de `emma_sheet.png` y limpiada por código.
+- `assets/ui/health_orb/` — orbe de vida del HUD, dibujado por código (`tools/make_health_orb.py`).
 
 ## Audio
 - `audio/music/` — menu.mp3, levels.mp3, victory.mp3, game_over.ogg (proyecto anterior del equipo).

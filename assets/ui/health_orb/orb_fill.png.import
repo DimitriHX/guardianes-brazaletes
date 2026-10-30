@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c4tftovctyl1l"
-path="res://.godot/imported/hp_orb_frame.png-acb9790a723ae4f3f7976ffce2d4dd2c.ctex"
+uid="uid://bdhpgd7ifmqkg"
+path="res://.godot/imported/orb_fill.png-54307a905bd2ee0352ae977e9370ddce.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/hp_bar/hp_orb_frame.png"
-dest_files=["res://.godot/imported/hp_orb_frame.png-acb9790a723ae4f3f7976ffce2d4dd2c.ctex"]
+source_file="res://assets/ui/health_orb/orb_fill.png"
+dest_files=["res://.godot/imported/orb_fill.png-54307a905bd2ee0352ae977e9370ddce.ctex"]
 
 [params]
 
