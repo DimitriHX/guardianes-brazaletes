@@ -1,8 +1,8 @@
 extends CanvasLayer
 ## HUD de los niveles. Solo escucha a Events; no conoce al jugador, al jefe ni
 ## al LevelManager.
-## - PlayerHealthBar: orbe de vida, recarga del disparo y progreso.
-## - CoinCounter: monedas recogidas / necesarias (oculto si el nivel no tiene).
+## - PlayerHealthBar: orbe de vida.
+## - CoinCounter: icono y número de monedas recogidas (oculto si el nivel no tiene).
 ## - BossPanel: nombre y barra del jefe, solo durante el combate.
 ## - MessagePanel: mensajes sobre un tablón (aparece con un pequeño "pop").
 ## - LevelBanner: nombre del nivel al empezar, se desvanece solo.
@@ -20,7 +20,7 @@ var _coin_tween: Tween
 @onready var _banner: Control = $LevelBanner
 @onready var _banner_label: Label = $LevelBanner/BannerLabel
 @onready var _coin_counter: Control = $CoinCounter
-@onready var _coin_label: Label = $CoinCounter/HBox/CoinLabel
+@onready var _coin_label: Label = $CoinCounter/CoinLabel
 @onready var _boss_panel: Control = $BossPanel
 @onready var _boss_name: Label = $BossPanel/VBox/BossName
 @onready var _boss_bar: PixelBar = $BossPanel/VBox/BossBar
@@ -84,17 +84,16 @@ func _on_level_started(level_name: String) -> void:
 
 func _on_collectibles_changed(collected: int, required: int) -> void:
 	_coin_counter.visible = required > 0
-	_coin_label.text = "%d/%d" % [collected, required]
+	_coin_label.text = str(collected)
 	if collected > _last_collected:
-		_pop_counter()
+		_pop_counter(collected >= required)
 	_last_collected = collected
 
 
 ## Saltito del contador al recoger una moneda (más grande si fue la última).
-func _pop_counter() -> void:
+func _pop_counter(done: bool) -> void:
 	if _coin_tween != null and _coin_tween.is_valid():
 		_coin_tween.kill()
-	var done: bool = _coin_label.text.get_slice("/", 0) == _coin_label.text.get_slice("/", 1)
 	_coin_counter.pivot_offset = _coin_counter.size / 2.0
 	_coin_counter.scale = Vector2(1.45, 1.45) if done else Vector2(1.25, 1.25)
 	_coin_counter.modulate = Color(1.6, 1.4, 0.8)

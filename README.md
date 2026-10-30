@@ -117,7 +117,7 @@ Controlado por una **máquina de estados** propia:
 - **Pantalla de título** con el nombre del juego a la izquierda, con colores que fluyen,
   un destello, flotación y latido (shader `title_shimmer`), y los botones a la derecha
   entrando con una animación.
-- **HUD** con vida, contador de monedas, mensajes y caja de diálogo.
+- **HUD** sencillo: el orbe de vida y el número de monedas recogidas, más mensajes y caja de diálogo.
 - **Menú de pausa** (continuar, reiniciar, volver al menú) y transiciones con fundido
   entre escenas.
 - Música y efectos de sonido gestionados por eventos, con volumen ajustable.

@@ -13,7 +13,7 @@ Solo se incluyen los archivos que usa el juego, renombrados y reorganizados por 
   - `assets/backgrounds/{normal,autumn,winter}/` — capas del parallax y castillo de fondo.
   - `assets/tiles/floor_tiles.png` — tiles de suelo y plataformas.
   - `assets/level/torch.png` — antorcha (también la usa el altar de control).
-  - `assets/ui/hp_bar/` — barra de vida del jugador.
+  - `assets/ui/hp_bar/` — orbe de vida del jugador (marco recortado en `hp_orb_frame.png`).
 - **32rogues** (Seth Boyles) — `assets/items/items.png` (monedas y pociones). Licencia en
   `assets/items/LICENSE_32rogues.txt`.
 - **Tiny RPG Character Asset Pack 02 (Demon_A, Blood Monster_A)** —

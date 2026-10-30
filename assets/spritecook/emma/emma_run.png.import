@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjnak7pwdnmmm"
-path="res://.godot/imported/hp_bar.png-b2ef6568d908430f5532bf2c18aa50e2.ctex"
+uid="uid://7oilr3wimmn6"
+path="res://.godot/imported/emma_run.png-855c0c84b7b49d874c31d70989a5d05f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/hp_bar/hp_bar.png"
-dest_files=["res://.godot/imported/hp_bar.png-b2ef6568d908430f5532bf2c18aa50e2.ctex"]
+source_file="res://assets/spritecook/emma/emma_run.png"
+dest_files=["res://.godot/imported/emma_run.png-855c0c84b7b49d874c31d70989a5d05f.ctex"]
 
 [params]
 

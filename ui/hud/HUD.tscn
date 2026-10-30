@@ -25,36 +25,29 @@ offset_top = 12.0
 offset_right = 132.0
 offset_bottom = 76.0
 
-[node name="CoinCounter" type="MarginContainer" parent="."]
-offset_left = 30.0
+[node name="CoinCounter" type="HBoxContainer" parent="."]
+offset_left = 34.0
 offset_top = 176.0
-offset_right = 160.0
-offset_bottom = 240.0
-script = ExtResource("3_panel")
-texture = ExtResource("5_ui")
-region = Rect2(220, 34, 36, 29)
-patch_margin = 8
-pixel_scale = 2.0
-padding = Vector4i(18, 12, 22, 14)
+offset_right = 174.0
+offset_bottom = 232.0
+mouse_filter = 2
+theme_override_constants/separation = 10
 
-[node name="HBox" type="HBoxContainer" parent="CoinCounter"]
-layout_mode = 2
-theme_override_constants/separation = 6
-
-[node name="CoinIcon" type="TextureRect" parent="CoinCounter/HBox"]
+[node name="CoinIcon" type="TextureRect" parent="CoinCounter"]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
+size_flags_vertical = 4
 texture = SubResource("Atlas_coin")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="CoinLabel" type="Label" parent="CoinCounter/HBox"]
+[node name="CoinLabel" type="Label" parent="CoinCounter"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.93, 0.78, 1)
 theme_override_colors/font_outline_color = Color(0.2, 0.1, 0.06, 1)
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 42
-text = "0/0"
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 64
+text = "0"
 vertical_alignment = 1
 
 [node name="BossPanel" type="MarginContainer" parent="."]
