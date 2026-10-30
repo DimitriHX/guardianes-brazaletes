@@ -11,6 +11,8 @@ extends Node2D
 ## Profundidad: cada celda pasa al shader `terrain_depth` cuántas celdas de
 ## terreno tiene encima; la tierra toma el color de la estación junto a la
 ## superficie y se oscurece hacia abajo.
+## Hijos: GroundDecor (pasto, piedras... sobre la superficie) y PitShade
+## (oscuridad dentro de los fosos).
 
 ## Tamaño de un tile en la hoja (px) y separación vertical entre estaciones
 ## (mismos valores que PlatformSkinner).
@@ -42,6 +44,14 @@ var _size_cells: Vector2i = Vector2i.ZERO
 ## tapan bordes (muros); `size_cells` = tamaño del mapa en celdas.
 func _ready() -> void:
 	material = make_depth_material(season)
+	var pit_shade: PitShade = PitShade.new()
+	pit_shade.name = "PitShade"
+	add_child(pit_shade)
+	pit_shade.setup(self)
+	var decor: GroundDecor = GroundDecor.new()
+	decor.name = "GroundDecor"
+	add_child(decor)
+	decor.setup(self, int(season))
 
 
 ## Material del shader de profundidad con los colores de `season_value`.
@@ -71,6 +81,50 @@ func set_cells(cells: Array[Vector2i], extra_solid: Array[Vector2i], size_cells:
 
 func get_cell_count() -> int:
 	return _cells.size()
+
+
+func get_size_cells() -> Vector2i:
+	return _size_cells
+
+
+func has_cell(cell: Vector2i) -> bool:
+	return _cells.has(cell)
+
+
+## Celdas de terreno con aire justo encima (donde se pisa).
+func get_surface_cells() -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
+	for cell: Vector2i in _cells:
+		if not _is_solid(cell + Vector2i.UP):
+			result.append(cell)
+	return result
+
+
+## Fosos: tramos de columnas sin terreno en la fila del fondo del mapa.
+## Devuelve [x0, x1, y del borde] en el mundo; el borde es el más bajo de los
+## dos lados, donde empieza el hueco a la vista.
+func find_pits() -> Array[Vector3]:
+	var pits: Array[Vector3] = []
+	var bottom: int = _size_cells.y - 1
+	var c: int = 0
+	while c < _size_cells.x:
+		if _is_solid(Vector2i(c, bottom)):
+			c += 1
+			continue
+		var start: int = c
+		while c < _size_cells.x and not _is_solid(Vector2i(c, bottom)):
+			c += 1
+		var lip: int = maxi(_column_top(start - 1), _column_top(c))
+		pits.append(Vector3(float(start) * cell_size, float(c) * cell_size, float(lip) * cell_size))
+	return pits
+
+
+## Primera fila del terreno que sube sin cortes desde el fondo en la columna `col`.
+func _column_top(col: int) -> int:
+	var r: int = _size_cells.y - 1
+	while r > 0 and _is_solid(Vector2i(col, r - 1)):
+		r -= 1
+	return r
 
 
 ## Celdas de terreno seguidas que hay justo encima de `cell` (0 = superficie).

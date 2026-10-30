@@ -8,14 +8,19 @@ extends Control
 ## Navegable con teclado y mando (foco en los botones).
 ## El título late suavemente (escala) mientras su shader hace fluir los colores;
 ## al abrir, el título aparece y los botones entran desde la derecha.
+## Fondo con parallax (shader `menu_parallax`): se mece solo y sigue un poco al
+## ratón; encima, niebla y luciérnagas que se mueven a otras velocidades.
 
 ## Escala máxima del latido del título y segundos por latido.
 const TITLE_PULSE_SCALE: float = 1.04
 const TITLE_PULSE_TIME: float = 1.4
+## Rapidez con que el fondo alcanza la posición del ratón.
+const POINTER_FOLLOW: float = 2.5
 
 @export_file("*.tscn") var start_scene: String = "res://ui/story/StoryCrawl.tscn"
 
 @onready var _title: Label = %Title
+@onready var _background: TextureRect = %Background
 @onready var _main_buttons: VBoxContainer = %MainButtons
 @onready var _start_button: Button = %StartButton
 @onready var _options_button: Button = %OptionsButton
@@ -55,6 +60,16 @@ func _ready() -> void:
 	_title.resized.connect(_center_title_pivot)
 	_center_title_pivot()
 	_play_intro()
+
+
+func _process(delta: float) -> void:
+	# Ratón en -1..1 desde el centro; el fondo lo sigue suavemente.
+	var view: Vector2 = get_viewport_rect().size
+	var target: Vector2 = (get_global_mouse_position() / view) * 2.0 - Vector2.ONE
+	target = target.clamp(-Vector2.ONE, Vector2.ONE)
+	var mat: ShaderMaterial = _background.material as ShaderMaterial
+	var current: Vector2 = mat.get_shader_parameter(&"pointer")
+	mat.set_shader_parameter(&"pointer", current.lerp(target, minf(1.0, POINTER_FOLLOW * delta)))
 
 
 func _center_title_pivot() -> void:

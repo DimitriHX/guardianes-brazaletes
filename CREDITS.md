@@ -38,6 +38,8 @@ Generado con el MCP de PixelLab (cuenta del proyecto, https://pixellab.ai/termso
 - `assets/spritecook/emma/emma_run.png` — carrera de Emma: animada con PixelLab a partir
   de un frame de `emma_sheet.png` y limpiada por código.
 - `assets/ui/health_orb/` — orbe de vida del HUD, dibujado por código (`tools/make_health_orb.py`).
+- `assets/tiles/ground_decor.png` — pasto, flores, piedras y setas del suelo, dibujados por
+  código (`tools/make_ground_decor.py`).
 
 ## Audio
 - `audio/music/` — menu.mp3, levels.mp3, victory.mp3, game_over.ogg (proyecto anterior del equipo).

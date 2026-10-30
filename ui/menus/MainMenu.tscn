@@ -4,6 +4,42 @@
 [ext_resource type="Texture2D" path="res://assets/ui/menu_background.jpg" id="2_bg"]
 [ext_resource type="FontFile" path="res://assets/fonts/alagard.ttf" id="3_title"]
 [ext_resource type="Shader" path="res://shaders/title_shimmer.gdshader" id="4_shimmer"]
+[ext_resource type="Shader" path="res://shaders/menu_parallax.gdshader" id="5_parallax"]
+[ext_resource type="Shader" path="res://shaders/menu_mist.gdshader" id="6_mist"]
+
+[sub_resource type="ShaderMaterial" id="Bg_material"]
+shader = ExtResource("5_parallax")
+shader_parameter/zoom = 1.07
+shader_parameter/drift_amount = Vector2(0.016, 0.006)
+shader_parameter/drift_speed = 0.12
+shader_parameter/pointer = Vector2(0, 0)
+shader_parameter/pointer_amount = 0.012
+
+[sub_resource type="ShaderMaterial" id="Mist_material"]
+shader = ExtResource("6_mist")
+shader_parameter/mist_color = Color(0.78, 0.66, 0.95, 1)
+shader_parameter/strength = 0.22
+shader_parameter/speed = 0.012
+
+[sub_resource type="Gradient" id="Firefly_gradient"]
+offsets = PackedFloat32Array(0, 0.25, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.55, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="Firefly_tex"]
+gradient = SubResource("Firefly_gradient")
+width = 12
+height = 12
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Firefly_colors"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(1, 0.88, 0.45, 1, 1, 0.62, 0.85, 1, 0.65, 0.9, 1, 1)
+
+[sub_resource type="Gradient" id="Firefly_fade"]
+offsets = PackedFloat32Array(0, 0.2, 0.5, 0.8, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.9, 1, 1, 1, 0.35, 1, 1, 1, 0.9, 1, 1, 1, 0)
 
 [sub_resource type="Gradient" id="Title_palette"]
 offsets = PackedFloat32Array(0, 0.25, 0.5, 0.75, 1)
@@ -156,7 +192,9 @@ theme = SubResource("Theme_menu")
 script = ExtResource("1_menu")
 
 [node name="Background" type="TextureRect" parent="."]
+unique_name_in_owner = true
 modulate = Color(0.779, 0.676, 0.914, 1)
+material = SubResource("Bg_material")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -167,6 +205,37 @@ mouse_filter = 2
 texture = ExtResource("2_bg")
 expand_mode = 1
 stretch_mode = 6
+
+[node name="Mist" type="ColorRect" parent="."]
+material = SubResource("Mist_material")
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.38
+anchor_right = 1.0
+anchor_bottom = 0.85
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Fireflies" type="CPUParticles2D" parent="."]
+position = Vector2(960, 640)
+amount = 40
+lifetime = 9.0
+preprocess = 9.0
+texture = SubResource("Firefly_tex")
+emission_shape = 3
+emission_rect_extents = Vector2(1000, 420)
+direction = Vector2(1, -0.3)
+spread = 180.0
+gravity = Vector2(0, -4)
+initial_velocity_min = 6.0
+initial_velocity_max = 22.0
+tangential_accel_min = -8.0
+tangential_accel_max = 8.0
+scale_amount_min = 0.5
+scale_amount_max = 1.3
+color_ramp = SubResource("Firefly_fade")
+color_initial_ramp = SubResource("Firefly_colors")
 
 [node name="Title" type="Label" parent="."]
 unique_name_in_owner = true

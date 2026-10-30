@@ -112,11 +112,17 @@ Controlado por una **máquina de estados** propia:
   profundidad, siempre por detrás de Emma, los enemigos y el terreno (no tapan la acción).
 - **Suelo con profundidad**: la tierra toma el color de la estación junto a la superficie
   y se oscurece hacia abajo (shader `terrain_depth`), también en las plataformas sueltas.
+- **Relieve del suelo**: matas de pasto que se mecen con el viento, flores, piedras y setas
+  sobre la superficie, y piedrecitas y raíces en la tierra, distintas en cada estación
+  (`GroundDecor`, hoja generada por `tools/make_ground_decor.py`).
+- **Fosos oscuros**: dentro de cada hueco el fondo se funde a negro para que se lea como un
+  agujero profundo (`PitShade`).
 - **Emma respira** cuando está quieta: hombros y cabeza bajan un píxel al ritmo de la
   respiración y de vez en cuando parpadea.
 - **Pantalla de título** con el nombre del juego a la izquierda, con colores que fluyen,
   un destello, flotación y latido (shader `title_shimmer`), y los botones a la derecha
-  entrando con una animación.
+  entrando con una animación. El fondo tiene parallax: se mece solo y sigue un poco al
+  ratón (lo cercano se mueve más que el cielo), con niebla y luciérnagas encima.
 - **HUD** sencillo: el orbe de vida y el número de monedas recogidas, más mensajes y caja de diálogo.
 - **Menú de pausa** (continuar, reiniciar, volver al menú) y transiciones con fundido
   entre escenas.
