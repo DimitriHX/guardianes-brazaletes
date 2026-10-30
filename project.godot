@@ -10,7 +10,8 @@ config_version=5
 
 [application]
 
-config/name="Godot Desde Cero"
+config/name="El Brazalete del Guardián"
+config/version="1.0.0"
 run/main_scene="res://ui/menus/SplashScreen.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"

@@ -18,3 +18,6 @@ referencia/
 # Skills de agentes instaladas localmente (no forman parte del juego).
 .agents/
 skills-lock.json
+
+# Ejecutables exportados (se publican en GitHub Releases)
+build/
