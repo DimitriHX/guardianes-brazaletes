@@ -10,6 +10,14 @@
 @dialogue_1 = Aquí habita el Cadejo negro, el que acecha a los viajeros en la noche. | Si lo purificamos, el Cadejo blanco volverá a protegerlos.
 @dialogue_2 = Ya viene... ¡Prepárate, Emma! Sube a los tablones para esquivar sus embestidas.
 
+// Tramos (columnas):
+//   1..33    Pasillo de entrada: curación y reja (G) que se cierra al pasar el disparador (A).
+//   34..94   Arena del Cadejo: suelo continuo (el jefe no puede caer), dos escaleras de
+//            tablones hacia una plataforma alta con curación y una repisa junto al muro.
+//            Al purificarlo aparece el portal (X) que devuelve al título.
+
+//        1         2         3         4         5         6         7         8         9     
+//2345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345
 |..............................................................................................|
 |..............................................................................................|
 |..............................................................................................|

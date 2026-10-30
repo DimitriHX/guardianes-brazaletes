@@ -8,6 +8,7 @@ extends Node
 ## Las plataformas one-way (atravesables desde abajo) se dibujan como tablones de
 ## madera (`bridge_texture`) para que se distingan de las sólidas.
 ## La colisión no cambia: el arte se adapta al tamaño de cada plataforma.
+## Los suelos marcados con el meta `drawn_by_terrain` los dibuja TerrainRenderer.
 
 enum Season { GREEN, AUTUMN, WINTER }
 
@@ -52,10 +53,15 @@ func skin_all() -> void:
 
 
 ## Añade el arte ("TileSkin") a una plataforma: NinePatchRect, o TextureRect de
-## tablones si es one-way. Devuelve null si no tiene forma rectangular.
+## tablones si es one-way. Devuelve null si no tiene forma rectangular o si es
+## suelo dibujado por TerrainRenderer.
 func skin(body: StaticBody2D) -> Control:
 	if body.has_node("TileSkin"):
 		return body.get_node("TileSkin") as Control
+	# Suelo de niveles de texto: lo dibuja TerrainRenderer celda a celda.
+	if body.has_meta(&"drawn_by_terrain"):
+		_hide_placeholder(body)
+		return null
 	var shape_node: CollisionShape2D = _find_rect_shape(body)
 	if shape_node == null:
 		return null

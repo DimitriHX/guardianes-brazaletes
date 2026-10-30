@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://components/animation/CharacterAnimator.gd" id="5_animator"]
 [ext_resource type="Resource" path="res://entities/enemies/blood_monster_animations.tres" id="6_anims"]
 [ext_resource type="PackedScene" path="res://entities/fx/BurstEffect.tscn" id="7_burst"]
+[ext_resource type="Script" path="res://components/SquashStretch.gd" id="gf_squash"]
+[ext_resource type="Script" path="res://components/HitFlash.gd" id="gf_flash"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(24, 22)
@@ -77,3 +79,10 @@ continuous = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 shape = SubResource("RectangleShape2D_hitbox")
+
+[node name="SquashStretch" type="Node" parent="."]
+script = ExtResource("gf_squash")
+hurt_factor = Vector2(1.3, 0.75)
+
+[node name="HitFlash" type="Node" parent="."]
+script = ExtResource("gf_flash")

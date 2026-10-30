@@ -13,6 +13,8 @@
 [ext_resource type="Script" path="res://entities/player/states/FallState.gd" id="8_fall"]
 [ext_resource type="Script" path="res://entities/player/states/AttackState.gd" id="9_attack"]
 [ext_resource type="Script" path="res://entities/player/states/DeadState.gd" id="10_dead"]
+[ext_resource type="Script" path="res://components/SquashStretch.gd" id="gf_squash"]
+[ext_resource type="Script" path="res://components/HitFlash.gd" id="gf_flash"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(24, 40)
@@ -104,3 +106,9 @@ animation = &"attack"
 [node name="Dead" type="Node" parent="StateMachine"]
 script = ExtResource("10_dead")
 animation = &"death"
+
+[node name="SquashStretch" type="Node" parent="."]
+script = ExtResource("gf_squash")
+
+[node name="HitFlash" type="Node" parent="."]
+script = ExtResource("gf_flash")

@@ -1,6 +1,6 @@
 extends Node
 ## Ajustes del jugador (Autoload "GameSettings"): volumen de música y efectos,
-## silencio y pantalla completa. Se guardan en user://settings.cfg y se aplican
+## silencio, pantalla completa e intensidad de la vibración de cámara (accesibilidad). Se guardan en user://settings.cfg y se aplican
 ## a los buses de audio "Music" y "SFX" al arrancar y en cada cambio.
 
 signal changed
@@ -11,6 +11,8 @@ var music_volume: float = 0.8
 var sfx_volume: float = 0.9
 var muted: bool = false
 var fullscreen: bool = false
+## Multiplicador de la sacudida de cámara (0 = sin vibración, 1 = completa).
+var screen_shake: float = 1.0
 
 
 func _ready() -> void:
@@ -38,6 +40,11 @@ func set_fullscreen(value: bool) -> void:
 	_commit()
 
 
+func set_screen_shake(value: float) -> void:
+	screen_shake = clampf(value, 0.0, 1.0)
+	_commit()
+
+
 func apply() -> void:
 	_apply_bus(&"Music", music_volume)
 	_apply_bus(&"SFX", sfx_volume)
@@ -58,6 +65,7 @@ func load_settings() -> void:
 	sfx_volume = float(config.get_value("audio", "sfx_volume", sfx_volume))
 	muted = bool(config.get_value("audio", "muted", muted))
 	fullscreen = bool(config.get_value("video", "fullscreen", fullscreen))
+	screen_shake = clampf(float(config.get_value("video", "screen_shake", screen_shake)), 0.0, 1.0)
 
 
 func save_settings() -> void:
@@ -66,6 +74,7 @@ func save_settings() -> void:
 	config.set_value("audio", "sfx_volume", sfx_volume)
 	config.set_value("audio", "muted", muted)
 	config.set_value("video", "fullscreen", fullscreen)
+	config.set_value("video", "screen_shake", screen_shake)
 	config.save(PATH)
 
 

@@ -2,7 +2,7 @@ class_name MainMenu
 extends Control
 ## Menú principal:
 ## Iniciar juego -> secuencia de historia (StoryCrawl) -> Nivel 1.
-## Opciones -> panel con volumen de música/efectos y pantalla completa
+## Opciones -> panel con volumen de música/efectos, vibración de cámara y pantalla completa
 ## (persistido por GameSettings; la pantalla se elige con dos botones
 ## excluyentes VENTANA / COMPLETA). Salida -> cierra el juego.
 ## Navegable con teclado y mando (foco en los botones).
@@ -18,6 +18,8 @@ extends Control
 @onready var _sfx_slider: HSlider = %SfxSlider
 @onready var _music_value: Label = %MusicValue
 @onready var _sfx_value: Label = %SfxValue
+@onready var _shake_slider: HSlider = %ShakeSlider
+@onready var _shake_value: Label = %ShakeValue
 @onready var _windowed_button: Button = %WindowedButton
 @onready var _fullscreen_button: Button = %FullscreenButton
 @onready var _back_button: Button = %BackButton
@@ -32,11 +34,13 @@ func _ready() -> void:
 	_back_button.pressed.connect(_on_back_pressed)
 	_music_slider.value = GameSettings.music_volume
 	_sfx_slider.value = GameSettings.sfx_volume
+	_shake_slider.value = GameSettings.screen_shake
 	_update_volume_labels()
 	_fullscreen_button.set_pressed_no_signal(GameSettings.fullscreen)
 	_windowed_button.set_pressed_no_signal(not GameSettings.fullscreen)
 	_music_slider.value_changed.connect(_on_music_changed)
 	_sfx_slider.value_changed.connect(_on_sfx_changed)
+	_shake_slider.value_changed.connect(_on_shake_changed)
 	_windowed_button.pressed.connect(_on_screen_mode_pressed.bind(false))
 	_fullscreen_button.pressed.connect(_on_screen_mode_pressed.bind(true))
 	_options_panel.hide()
@@ -84,6 +88,11 @@ func _on_sfx_changed(value: float) -> void:
 	AudioManager.play_sfx(&"ui_select")
 
 
+func _on_shake_changed(value: float) -> void:
+	GameSettings.set_screen_shake(value)
+	_update_volume_labels()
+
+
 func _on_screen_mode_pressed(fullscreen: bool) -> void:
 	AudioManager.play_sfx(&"ui_select")
 	GameSettings.set_fullscreen(fullscreen)
@@ -92,6 +101,7 @@ func _on_screen_mode_pressed(fullscreen: bool) -> void:
 func _update_volume_labels() -> void:
 	_music_value.text = "%d%%" % roundi(_music_slider.value * 100.0)
 	_sfx_value.text = "%d%%" % roundi(_sfx_slider.value * 100.0)
+	_shake_value.text = "%d%%" % roundi(_shake_slider.value * 100.0)
 
 
 func _on_quit_pressed() -> void:

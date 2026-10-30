@@ -34,6 +34,17 @@ extends CharacterBody2D
 ## Fricción horizontal mientras dura un empujón (knockback).
 @export var knockback_friction: float = 900.0
 
+@export_group("Game feel")
+## Deformación del sprite al despegar (más estrecho y alto).
+@export var jump_stretch: Vector2 = Vector2(0.78, 1.22)
+## Deformación máxima al aterrizar desde `max_fall_speed` (más ancho y bajo).
+@export var land_squash: Vector2 = Vector2(1.32, 0.7)
+## Por debajo de esta velocidad de caída no hay aplastamiento.
+@export var land_squash_min_speed: float = 180.0
+## Aterrizajes más rápidos que esto sacuden un poco la cámara.
+@export var hard_landing_speed: float = 700.0
+@export var shoot_recoil: Vector2 = Vector2(0.9, 1.08)
+
 ## Dirección a la que mira el jugador: 1 derecha, -1 izquierda.
 var facing: int = 1
 ## Última animación pedida por un estado (útil para depurar sin sprite).
@@ -51,6 +62,7 @@ var _is_dead: bool = false
 @onready var _stats: StatsComponent = $Stats
 @onready var _state_machine: StateMachine = $StateMachine
 @onready var _bracelet_light: PointLight2D = get_node_or_null("BraceletLight") as PointLight2D
+@onready var _squash: SquashStretch = get_node_or_null("SquashStretch") as SquashStretch
 
 
 func _ready() -> void:
@@ -73,7 +85,11 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	_update_timers(delta)
 	_state_machine.physics_update(delta)
+	var was_on_floor: bool = is_on_floor()
+	var fall_speed: float = velocity.y
 	move_and_slide()
+	if not was_on_floor and is_on_floor() and not _is_dead:
+		_on_landed(fall_speed)
 
 
 func _process(delta: float) -> void:
@@ -179,6 +195,7 @@ func start_jump() -> void:
 	velocity.y = jump_velocity
 	_jump_buffer_left = 0.0
 	_coyote_left = 0.0
+	_pop(jump_stretch)
 	Events.player_jumped.emit()
 
 
@@ -196,6 +213,7 @@ func shoot() -> void:
 	var container: Node = get_tree().current_scene if get_tree().current_scene != null else get_parent()
 	container.add_child(projectile)
 	projectile.global_position = _muzzle.global_position
+	_pop(shoot_recoil, 0.12)
 	Events.player_shot.emit(shoot_cooldown)
 	# TODO(assets): sonido de disparo.
 
@@ -244,6 +262,22 @@ func _on_health_changed(current: int, maximum: int) -> void:
 func _on_damaged(_amount: int) -> void:
 	if not _is_dead:
 		_animator.play_state(&"hurt")
+
+
+func _on_landed(fall_speed: float) -> void:
+	Events.player_landed.emit(fall_speed)
+	if fall_speed < land_squash_min_speed:
+		return
+	# Cuanto más rápida la caída, más se aplasta (interpolando desde el reposo).
+	var weight: float = clampf((fall_speed - land_squash_min_speed) / (max_fall_speed - land_squash_min_speed), 0.0, 1.0)
+	_pop(Vector2.ONE.lerp(land_squash, 0.35 + 0.65 * weight))
+	if fall_speed >= hard_landing_speed:
+		Events.camera_shake_requested.emit(3.0, 0.15)
+
+
+func _pop(factor: Vector2, time: float = -1.0) -> void:
+	if _squash != null:
+		_squash.pop(factor, time)
 
 
 func _on_health_died() -> void:

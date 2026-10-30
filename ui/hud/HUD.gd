@@ -12,6 +12,8 @@ extends CanvasLayer
 @export var banner_time: float = 2.5
 
 var _message_token: int = 0
+var _last_collected: int = 0
+var _coin_tween: Tween
 
 @onready var _message_panel: Control = $MessagePanel
 @onready var _message_label: Label = $MessagePanel/MessageLabel
@@ -83,6 +85,22 @@ func _on_level_started(level_name: String) -> void:
 func _on_collectibles_changed(collected: int, required: int) -> void:
 	_coin_counter.visible = required > 0
 	_coin_label.text = "%d/%d" % [collected, required]
+	if collected > _last_collected:
+		_pop_counter()
+	_last_collected = collected
+
+
+## Saltito del contador al recoger una moneda (más grande si fue la última).
+func _pop_counter() -> void:
+	if _coin_tween != null and _coin_tween.is_valid():
+		_coin_tween.kill()
+	var done: bool = _coin_label.text.get_slice("/", 0) == _coin_label.text.get_slice("/", 1)
+	_coin_counter.pivot_offset = _coin_counter.size / 2.0
+	_coin_counter.scale = Vector2(1.45, 1.45) if done else Vector2(1.25, 1.25)
+	_coin_counter.modulate = Color(1.6, 1.4, 0.8)
+	_coin_tween = create_tween().set_parallel(true)
+	_coin_tween.tween_property(_coin_counter, "scale", Vector2.ONE, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_coin_tween.tween_property(_coin_counter, "modulate", Color.WHITE, 0.3)
 
 
 func _on_player_died() -> void:

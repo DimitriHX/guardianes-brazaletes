@@ -29,22 +29,24 @@ extends Camera2D
 @export var look_ahead_speed: float = 3.0
 @export_group("Límites")
 @export var bounds_group: StringName = &"camera_bounds"
-@export_group("Shake (Sprint 10)")
-@export var player_hurt_shake: float = 6.0
-@export var player_hurt_shake_time: float = 0.22
-@export var enemy_hit_shake: float = 2.5
-@export var enemy_hit_shake_time: float = 0.10
-@export var boss_defeat_shake: float = 8.0
-@export var boss_defeat_shake_time: float = 0.40
-@export var shake_frequency: float = 38.0
+@export_group("Shake (trauma)")
+## Desplazamiento máximo (px del mundo) con trauma 1. El movimiento real es
+## max * trauma² (los golpes pequeños apenas se notan, los grandes pegan fuerte).
+@export var max_shake_offset: Vector2 = Vector2(10.0, 7.0)
+## Trauma que se pierde por segundo: la sacudida siempre termina sola.
+@export var trauma_decay: float = 1.8
+## Velocidad de la oscilación (senos combinados, no ruido aleatorio por frame).
+@export var shake_frequency: float = 26.0
+## Trauma por evento, por niveles de importancia.
+@export var player_hurt_trauma: float = 0.5
+@export var enemy_hit_trauma: float = 0.25
+@export var boss_defeat_trauma: float = 0.9
 
 var _follows_parent: bool = true
 var _look_ahead: float = 0.0
 var _bounds: Rect2 = Rect2()
 var _has_bounds: bool = false
-var _shake_intensity: float = 0.0
-var _shake_duration: float = 0.0
-var _shake_left: float = 0.0
+var _trauma: float = 0.0
 var _shake_time: float = 0.0
 
 
@@ -76,27 +78,38 @@ func _process(delta: float) -> void:
 		global_position = target.global_position + Vector2(_look_ahead, 0.0)
 
 
-## Sacude la cámara usando `offset` (sin alterar `position` ni salirse de límites).
-func shake(intensity: float, duration: float = 0.2) -> void:
-	if intensity <= 0.0 or duration <= 0.0:
+## Suma trauma (0..1). Los golpes se acumulan en vez de reiniciarse.
+func add_trauma(amount: float) -> void:
+	if amount <= 0.0:
 		return
-	_shake_intensity = maxf(_shake_intensity, intensity)
-	_shake_duration = maxf(_shake_left, duration)
-	_shake_left = maxf(_shake_left, duration)
+	_trauma = clampf(_trauma + amount, 0.0, 1.0)
+
+
+## Sacude con una intensidad en px (API de `Events.camera_shake_requested`).
+## Se convierte en el trauma que produce ese desplazamiento máximo; la duración
+## la decide `trauma_decay`, así que `_duration` solo se conserva por compatibilidad.
+func shake(intensity: float, _duration: float = 0.2) -> void:
+	if intensity <= 0.0:
+		return
+	add_trauma(sqrt(clampf(intensity / maxf(max_shake_offset.x, 0.001), 0.0, 1.0)))
 
 
 func stop_shake() -> void:
-	_shake_left = 0.0
-	_shake_intensity = 0.0
+	_trauma = 0.0
 	offset = Vector2.ZERO
 
 
 func is_shaking() -> bool:
-	return _shake_left > 0.0
+	return _trauma > 0.0
 
 
+func get_trauma() -> float:
+	return _trauma
+
+
+## Desplazamiento máximo actual en px (antes del ajuste de accesibilidad).
 func get_shake_intensity() -> float:
-	return _shake_intensity if _shake_left > 0.0 else 0.0
+	return max_shake_offset.x * _trauma * _trauma
 
 
 ## Fija los límites a un rectángulo en coordenadas globales.
@@ -151,29 +164,28 @@ func _snap_to_target() -> void:
 
 
 func _update_shake(delta: float) -> void:
-	if _shake_left <= 0.0:
+	if _trauma <= 0.0:
 		if offset != Vector2.ZERO:
 			offset = Vector2.ZERO
 		return
-	_shake_left = maxf(_shake_left - delta, 0.0)
-	if _shake_left <= 0.0:
-		_shake_intensity = 0.0
+	_trauma = maxf(_trauma - trauma_decay * delta, 0.0)
+	if _trauma <= 0.0:
 		offset = Vector2.ZERO
 		return
 	_shake_time += delta * shake_frequency
-	var decay: float = _shake_left / maxf(_shake_duration, 0.001)
-	var amp: float = _shake_intensity * decay
+	# Ajuste de accesibilidad (Opciones > Vibración de cámara).
+	var amount: float = _trauma * _trauma * GameSettings.screen_shake
 	var wave_x: float = sin(_shake_time * 1.7) * 0.7 + cos(_shake_time * 3.1) * 0.3
 	var wave_y: float = cos(_shake_time * 2.3) * 0.7 + sin(_shake_time * 3.7) * 0.3
-	offset = Vector2(wave_x, wave_y) * amp
+	offset = Vector2(wave_x * max_shake_offset.x, wave_y * max_shake_offset.y) * amount
 
 
 func _on_entity_damaged(entity: Node, amount: int) -> void:
 	if entity != null and entity.is_in_group("player"):
-		shake(player_hurt_shake, player_hurt_shake_time)
+		add_trauma(player_hurt_trauma)
 	else:
-		shake(enemy_hit_shake + float(maxi(amount - 1, 0)) * 0.8, enemy_hit_shake_time)
+		add_trauma(enemy_hit_trauma + float(maxi(amount - 1, 0)) * 0.1)
 
 
 func _on_boss_defeated(_boss: Node) -> void:
-	shake(boss_defeat_shake, boss_defeat_shake_time)
+	add_trauma(boss_defeat_trauma)

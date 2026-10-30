@@ -294,75 +294,66 @@ static func generate_procedural_level_text(
 
 
 static func _build_level_1_text() -> String:
-	# 180 celdas = 3600 px (antes 96). Cinco tramos de suelo separados por fosos;
-	# cada tramo tiene su propia escalera de plataformas (subidas de 3 celdas).
+	# Tutorial (180 celdas = 3600 px). Cada tramo enseña una sola idea en un
+	# sitio seguro y el siguiente la pone a prueba; el altar de control (K)
+	# queda justo antes del único foso ancho.
 	var width_cells: int = 180
 	var height_cells: int = 35
 	var grid: Array[PackedStringArray] = _create_empty_grid(width_cells, height_cells)
 
-	# Muros laterales
-	for r: int in range(0, height_cells):
-		grid[r][0] = "|"
-		grid[r][width_cells - 1] = "|"
-
-	# --- Tramo 1 (cols 1..39): zona de aprendizaje ---
-	_paint_rect(grid, 0, 30, 40, GROUND_DEPTH, "#")
-	_paint_rect(grid, 14, 27, 8, 1, "=")
-	# Foso 1: cols 40..43 (4 celdas = 80 px, salto plano)
-
-	# --- Tramo 2 (cols 44..79): escalera de tres alturas ---
-	_paint_rect(grid, 44, 30, 36, GROUND_DEPTH, "#")
-	_paint_rect(grid, 50, 27, 6, 1, "=")
-	_paint_rect(grid, 58, 24, 6, 1, "=")
-	_paint_rect(grid, 66, 21, 7, 1, "-")
-	# Foso 2: cols 80..89 (10 celdas) con plataforma flotante en medio
-	_paint_rect(grid, 83, 27, 4, 1, "=")
-
-	# --- Tramo 3 (cols 90..129): plataformas en zigzag ---
-	_paint_rect(grid, 90, 30, 40, GROUND_DEPTH, "#")
-	_paint_rect(grid, 104, 27, 7, 1, "-")
-	_paint_rect(grid, 113, 24, 6, 1, "=")
-	_paint_rect(grid, 121, 27, 6, 1, "=")
-	# Foso 3: cols 130..134 (5 celdas = 100 px)
-
-	# --- Tramo 4 (cols 135..178): recta final hacia la puerta ---
-	_paint_rect(grid, 135, 30, 45, GROUND_DEPTH, "#")
-	_paint_rect(grid, 142, 27, 8, 1, "=")
-	_paint_rect(grid, 152, 24, 7, 1, "-")
-
-	# Jugador y diálogos
+	# --- Tramo 1 (cols 1..28) Despertar: suelo llano y un escalón de 2 celdas ---
+	_paint_rect(grid, 0, 30, 29, GROUND_DEPTH, "#")
+	_paint_ground_block(grid, 16, 28, 7)
 	grid[29][5] = "P"
 	grid[22][5] = "1"
-	grid[22][24] = "2"
-	grid[22][165] = "3"
-
-	# 8 monedas de luz (C) y 2 curaciones (H)
-	grid[25][18] = "C"
-	grid[27][42] = "C"
-	grid[19][69] = "C"
-	grid[25][85] = "C"
-	grid[22][115] = "C"
-	grid[27][132] = "C"
-	grid[22][155] = "C"
-	grid[29][171] = "C"
-	grid[29][48] = "H"
-	grid[29][138] = "H"
-
-	# Enemigos: 4 espíritus y 1 demonio
-	grid[29][32] = "E"
-	grid[23][60] = "e"
-	grid[29][100] = "E"
-	grid[29][146] = "e"
-	grid[29][125] = "D"
-
-	# Puerta de salida hacia Nivel 2 (Sendero), altar de control (K) y antorchas (T)
 	grid[29][8] = "T"
-	grid[29][46] = "T"
-	grid[29][92] = "K"
-	grid[29][94] = "T"
-	grid[29][140] = "T"
+	grid[26][19] = "C"
+	# Foso 1 (cols 29..31): 3 celdas, con moneda encima.
+	grid[27][30] = "C"
+
+	# --- Tramo 2 (cols 32..59) Primer espíritu: aprender a disparar ---
+	_paint_rect(grid, 32, 30, 28, GROUND_DEPTH, "#")
+	grid[22][34] = "2"
+	_paint_rect(grid, 38, 27, 6, 1, "=")
+	grid[25][41] = "C"
+	grid[29][47] = "E"
+	_paint_rect(grid, 50, 27, 5, 1, "-")
+
+	# --- Tramo 3 (cols 60..95) La colina: subir en escalones de 3 celdas ---
+	_paint_rect(grid, 60, 30, 36, GROUND_DEPTH, "#")
+	_paint_ground_block(grid, 60, 27, 6)
+	_paint_ground_block(grid, 66, 24, 10)
+	_paint_ground_block(grid, 76, 27, 6)
+	_paint_rect(grid, 68, 21, 6, 1, "-")
+	grid[19][70] = "C"
+	grid[23][67] = "T"
+	grid[23][74] = "H"
+	grid[23][72] = "e"
+	# Descanso antes del foso ancho.
+	grid[29][84] = "T"
+	grid[29][86] = "K"
+
+	# --- Tramo 4 (cols 96..121) Puentes del arroyo: tablones sobre el foso ---
+	_paint_rect(grid, 99, 28, 4, 1, "-")
+	_paint_rect(grid, 106, 27, 4, 1, "-")
+	_paint_rect(grid, 113, 28, 4, 1, "-")
+	grid[24][107] = "C"
+	grid[27][119] = "C"
+
+	# --- Tramo 5 (cols 122..178) Claro del demonio y salida ---
+	_paint_rect(grid, 122, 30, 58, GROUND_DEPTH, "#")
+	grid[29][124] = "T"
+	grid[29][127] = "H"
+	grid[29][140] = "D"
+	_paint_rect(grid, 146, 27, 6, 1, "=")
+	_paint_rect(grid, 154, 24, 5, 1, "-")
+	grid[22][156] = "C"
+	grid[29][160] = "E"
+	grid[22][162] = "3"
+	grid[29][168] = "C"
 	grid[29][173] = "T"
 	grid[29][175] = "X"
+	_paint_border_walls(grid)
 
 	var headers: PackedStringArray = PackedStringArray([
 		"@name = Sueño I: Bosque de los Pinos",
@@ -376,91 +367,88 @@ static func _build_level_1_text() -> String:
 		"@dialogue_2 = Ese espíritu está corrompido. ¡Usa mi poder con J o X para purificarlo!",
 		"@dialogue_3 = El bosque se congela más adelante... Cruza la puerta hacia el Sendero de las Sombras.",
 	])
-	return _serialize_grid(headers, grid)
+	var notes: PackedStringArray = PackedStringArray([
+		"Tramos (columnas):",
+		"  1..28    Despertar: suelo llano y un escalón de 2 celdas para aprender a saltar.",
+		"  29..31   Foso pequeño (3 celdas) con una moneda encima.",
+		"  32..59   Primer espíritu: aprender a disparar; plataforma sólida (=) y tablón (-).",
+		"  60..95   La colina: dos escalones de 3 celdas, cima con curación y ruta alta opcional.",
+		"           Al bajar, antorcha y altar de control (K) antes del foso ancho.",
+		"  96..121  Puentes del arroyo: tablones sobre un foso mortal (huecos de 3 celdas).",
+		"  122..178 Claro del demonio: curación al llegar, demonio, plataformas y la puerta (X).",
+		"Monedas: 8. Saltos: suben 3 celdas como mucho; huecos de 5 celdas o menos.",
+	])
+	return _serialize_grid(headers, grid, notes)
 
 
 static func _build_level_2_text() -> String:
-	# 200 celdas = 4000 px (antes 104). Pinchos bajo las plataformas: el suelo
-	# deja de ser seguro y obliga a usar las rutas elevadas.
+	# Invierno (200 celdas = 4000 px). Mecánicas nuevas: espinas y hielo que se
+	# quiebra (~). Cada una se presenta primero sobre suelo seguro y luego sobre
+	# el vacío; altares de control antes de cada prueba.
 	var width_cells: int = 200
 	var height_cells: int = 35
 	var grid: Array[PackedStringArray] = _create_empty_grid(width_cells, height_cells)
 
-	for r: int in range(0, height_cells):
-		grid[r][0] = "|"
-		grid[r][width_cells - 1] = "|"
-
-	# --- Tramo 1 (cols 1..34) ---
-	_paint_rect(grid, 0, 30, 35, GROUND_DEPTH, "#")
-	_paint_rect(grid, 12, 27, 7, 1, "=")
-	_paint_rect(grid, 21, 24, 6, 1, "=")
-	# Foso 1: cols 35..38 (4 celdas)
-
-	# --- Tramo 2 (cols 39..74): puente sobre pinchos ---
-	_paint_rect(grid, 39, 30, 36, GROUND_DEPTH, "#")
-	_paint_rect(grid, 45, 27, 8, 1, "=")
-	_paint_rect(grid, 47, 29, 4, 1, "^")
-	_paint_rect(grid, 56, 24, 7, 1, "~")
-	# Foso 2: cols 75..84 (10 celdas) con plataforma flotante frágil
-	_paint_rect(grid, 78, 27, 4, 1, "~")
-
-	# --- Tramo 3 (cols 85..124): escalera alta ---
-	_paint_rect(grid, 85, 30, 40, GROUND_DEPTH, "#")
-	_paint_rect(grid, 92, 29, 3, 1, "^")
-	_paint_rect(grid, 97, 27, 6, 1, "=")
-	_paint_rect(grid, 105, 24, 6, 1, "=")
-	_paint_rect(grid, 105, 29, 4, 1, "^")
-	_paint_rect(grid, 113, 21, 6, 1, "-")
-	# Foso 3: cols 125..129 (5 celdas)
-
-	# --- Tramo 4 (cols 130..164): campo de espinas, solo por arriba ---
-	_paint_rect(grid, 130, 30, 35, GROUND_DEPTH, "#")
-	_paint_rect(grid, 136, 27, 6, 1, "=")
-	_paint_rect(grid, 144, 24, 6, 1, "=")
-	_paint_rect(grid, 152, 27, 6, 1, "=")
-	_paint_rect(grid, 143, 29, 8, 1, "^")
-	# Foso 4: cols 165..169 (5 celdas)
-
-	# --- Tramo 5 (cols 170..198): antesala de la guarida ---
-	_paint_rect(grid, 170, 30, 30, GROUND_DEPTH, "#")
-
-	# Jugador y Diálogos
+	# --- Tramo 1 (cols 1..30) Primeras espinas: un parche de 2 celdas ---
+	_paint_rect(grid, 0, 30, 62, GROUND_DEPTH, "#")
 	grid[29][5] = "P"
 	grid[22][5] = "1"
-	grid[22][42] = "2"
-	grid[22][185] = "3"
-
-	# 10 Monedas de luz (C) y 3 Curaciones (H)
-	grid[22][24] = "C"
-	grid[27][37] = "C"
-	grid[24][49] = "C"
-	grid[22][59] = "C"
-	grid[25][80] = "C"
-	grid[25][99] = "C"
-	grid[19][116] = "C"
-	grid[27][127] = "C"
-	grid[22][146] = "C"
-	grid[29][190] = "C"
-	grid[29][42] = "H"
-	grid[29][88] = "H"
-	grid[29][160] = "H"
-
-	# Enemigos (3 espíritus + 3 demonios)
-	grid[29][28] = "E"
-	grid[26][48] = "e"
-	grid[29][68] = "D"
-	grid[23][107] = "e"
-	grid[29][120] = "D"
-	grid[29][178] = "D"
-
-	# Puerta hacia la Guarida del Jefe (Nivel 3), altar de control (K) y antorchas (T)
 	grid[29][8] = "T"
-	grid[29][40] = "T"
+	_paint_rect(grid, 18, 29, 2, 1, "^")
+	grid[26][18] = "C"
+	grid[29][26] = "E"
+
+	# --- Tramo 2 (cols 31..61) Hielo frágil sobre suelo seguro ---
+	grid[22][32] = "2"
+	_paint_rect(grid, 34, 27, 5, 1, "~")
+	grid[25][36] = "C"
+	_paint_ground_block(grid, 44, 27, 6)
+	_paint_rect(grid, 51, 24, 4, 1, "~")
+	grid[22][52] = "C"
+	grid[29][56] = "T"
+	grid[29][58] = "K"
+
+	# --- Tramo 3 (cols 62..83) Abismo de hielo: solo plataformas frágiles ---
+	_paint_rect(grid, 66, 28, 4, 1, "~")
+	_paint_rect(grid, 73, 27, 4, 1, "~")
+	_paint_rect(grid, 80, 28, 3, 1, "~")
+	grid[25][71] = "C"
+
+	# --- Tramo 4 (cols 84..140) Bloques entre espinas ---
+	_paint_rect(grid, 84, 30, 116, GROUND_DEPTH, "#")
 	grid[29][86] = "T"
-	grid[29][90] = "K"
-	grid[29][132] = "T"
+	grid[29][90] = "H"
+	grid[29][96] = "E"
+	_paint_ground_block(grid, 100, 27, 5)
+	grid[25][102] = "C"
+	_paint_rect(grid, 105, 29, 5, 1, "^")
+	_paint_ground_block(grid, 110, 26, 5)
+	_paint_rect(grid, 115, 29, 11, 1, "^")
+	_paint_rect(grid, 118, 23, 5, 1, "=")
+	grid[21][120] = "C"
+	_paint_ground_block(grid, 126, 27, 5)
+	grid[25][129] = "C"
+	grid[29][134] = "D"
+	grid[29][138] = "T"
+	grid[29][140] = "K"
+
+	# --- Tramo 5 (cols 141..166) Escalera alta sobre el campo de espinas ---
+	_paint_rect(grid, 143, 27, 5, 1, "-")
+	_paint_rect(grid, 148, 29, 18, 1, "^")
+	_paint_rect(grid, 150, 24, 5, 1, "-")
+	grid[22][152] = "C"
+	_paint_rect(grid, 157, 21, 7, 1, "=")
+	grid[19][160] = "C"
+
+	# --- Tramo 6 (cols 167..198) Antesala de la guarida ---
+	grid[29][170] = "H"
+	grid[29][174] = "e"
+	grid[29][180] = "D"
+	grid[22][185] = "3"
+	grid[29][190] = "C"
 	grid[29][193] = "T"
 	grid[29][195] = "X"
+	_paint_border_walls(grid)
 
 	var headers: PackedStringArray = PackedStringArray([
 		"@name = Sueño I: Sendero de las Sombras",
@@ -472,10 +460,21 @@ static func _build_level_2_text() -> String:
 		"@kill_y = 800",
 		"@tint = 0.78, 0.84, 0.96, 1.0",
 		"@dialogue_1 = El sueño se vuelve más frío y profundo. Cuidado con las espinas oscuras del suelo.",
-		"@dialogue_2 = Usa las plataformas altas para esquivar las espinas y alcanzar las monedas de luz.",
+		"@dialogue_2 = El hielo de esas plataformas se quiebra si te quedas encima. ¡Salta antes de que caiga!",
 		"@dialogue_3 = Esa puerta lleva a la guarida del Cadejo negro. Ten valor, Emma.",
 	])
-	return _serialize_grid(headers, grid)
+	var notes: PackedStringArray = PackedStringArray([
+		"Tramos (columnas):",
+		"  1..30    Primeras espinas: un parche de 2 celdas que se salta sin riesgo.",
+		"  31..61   Hielo frágil (~) sobre suelo seguro: si se quiebra, Emma cae al suelo.",
+		"           Altar de control (K) antes del abismo.",
+		"  62..83   Abismo de hielo: solo plataformas frágiles sobre el vacío.",
+		"  84..140  Bloques entre espinas, plataforma alta y demonio; altar (K) al final.",
+		"  141..166 Escalera alta (- - =) sobre un campo de espinas que no se puede saltar.",
+		"  167..198 Antesala: curación, último demonio y la puerta (X) a la guarida.",
+		"Monedas: 10. Saltos: suben 3 celdas como mucho; huecos de 5 celdas o menos.",
+	])
+	return _serialize_grid(headers, grid, notes)
 
 
 static func _build_level_3_boss_text() -> String:
@@ -532,7 +531,14 @@ static func _build_level_3_boss_text() -> String:
 		"@dialogue_1 = Aquí habita el Cadejo negro, el que acecha a los viajeros en la noche. | Si lo purificamos, el Cadejo blanco volverá a protegerlos.",
 		"@dialogue_2 = Ya viene... ¡Prepárate, Emma! Sube a los tablones para esquivar sus embestidas.",
 	])
-	return _serialize_grid(headers, grid)
+	var notes: PackedStringArray = PackedStringArray([
+		"Tramos (columnas):",
+		"  1..33    Pasillo de entrada: curación y reja (G) que se cierra al pasar el disparador (A).",
+		"  34..94   Arena del Cadejo: suelo continuo (el jefe no puede caer), dos escaleras de",
+		"           tablones hacia una plataforma alta con curación y una repisa junto al muro.",
+		"           Al purificarlo aparece el portal (X) que devuelve al título.",
+	])
+	return _serialize_grid(headers, grid, notes)
 
 
 # ==============================================================================
@@ -702,6 +708,17 @@ static func parse_text(text: String) -> Dictionary:
 					"surface_y": surface_y,
 				})
 
+	# Celdas de suelo y de muro para el dibujo del terreno (TerrainRenderer).
+	var ground_cells: Array[Vector2i] = []
+	var wall_cells: Array[Vector2i] = []
+	for r: int in height_cells:
+		for c: int in width_cells:
+			var cell_ch: String = _char_at(grid_lines, r, c)
+			if cell_ch == "#":
+				ground_cells.append(Vector2i(c, r))
+			elif cell_ch == "|":
+				wall_cells.append(Vector2i(c, r))
+
 	return {
 		"metadata": metadata,
 		"width_cells": width_cells,
@@ -710,6 +727,8 @@ static func parse_text(text: String) -> Dictionary:
 		"walls": walls,
 		"hazards": hazards,
 		"entities": entities,
+		"ground_cells": ground_cells,
+		"wall_cells": wall_cells,
 	}
 
 
@@ -919,6 +938,20 @@ static func populate_level_node(root: Node2D, text: String) -> void:
 	skinner.set("season", season_idx)
 	root.add_child(skinner)
 
+	# El suelo grueso se dibuja celda a celda (autotile) para que colinas,
+	# escalones y fosos formen un terreno continuo; sus cuerpos solo colisionan.
+	var terrain: TerrainRenderer = TerrainRenderer.new()
+	terrain.name = "Terrain"
+	terrain.tileset = load(TILESET_PATH) as Texture2D
+	terrain.season = season_idx as PlatformSkinner.Season
+	terrain.cell_size = CELL_SIZE
+	terrain.set_cells(
+		parsed["ground_cells"] as Array[Vector2i],
+		parsed["wall_cells"] as Array[Vector2i],
+		Vector2i(width_cells, height_cells)
+	)
+	world.add_child(terrain)
+
 	var falling_scene: PackedScene = load(FALLING_PLATFORM_SCENE_PATH) as PackedScene
 	for p_info: Dictionary in parsed["platforms"] as Array:
 		var p_rect: Rect2 = p_info["rect"] as Rect2
@@ -935,6 +968,8 @@ static func populate_level_node(root: Node2D, text: String) -> void:
 				p_rect,
 				bool(p_info["one_way"])
 			)
+			if p_kind == "ground":
+				body.set_meta(&"drawn_by_terrain", true)
 			world.add_child(body)
 
 	for w_info: Dictionary in parsed["walls"] as Array:
@@ -1148,14 +1183,43 @@ static func _paint_rect(grid: Array[PackedStringArray], x: int, y: int, w: int, 
 			grid[rr][cc] = sym
 
 
-static func _serialize_grid(headers: PackedStringArray, grid: Array[PackedStringArray]) -> String:
+## Escribe cabeceras, notas (comentarios `//`) y la grilla. Encima de la grilla
+## añade una regla de columnas (también comentada: el parser la ignora); sus
+## dos primeros caracteres los ocupa `//`, el resto coincide con las columnas.
+static func _serialize_grid(headers: PackedStringArray, grid: Array[PackedStringArray], notes: PackedStringArray = PackedStringArray()) -> String:
 	var out: PackedStringArray = PackedStringArray()
 	for h_line: String in headers:
 		out.append(h_line)
 	out.append("")
+	for note: String in notes:
+		out.append("// " + note)
+	if not grid.is_empty():
+		if not notes.is_empty():
+			out.append("")
+		var width: int = grid[0].size()
+		var tens: String = ""
+		var units: String = ""
+		for c: int in width:
+			tens += str((c / 10) % 10) if c % 10 == 0 else " "
+			units += str(c % 10)
+		out.append("//" + tens.substr(2))
+		out.append("//" + units.substr(2))
 	for row: PackedStringArray in grid:
 		out.append("".join(row))
 	return "\n".join(out) + "\n"
+
+
+## Muros de borde en la primera y la última columna (de arriba abajo).
+static func _paint_border_walls(grid: Array[PackedStringArray]) -> void:
+	for r: int in grid.size():
+		grid[r][0] = "|"
+		grid[r][grid[r].size() - 1] = "|"
+
+
+## Bloque de terreno elevado: de la fila `top` hasta el fondo del mapa, para que
+## se funda con el suelo (colinas, escalones). TerrainRenderer lo dibuja continuo.
+static func _paint_ground_block(grid: Array[PackedStringArray], x: int, top: int, w: int) -> void:
+	_paint_rect(grid, x, top, w, grid.size() - top, "#")
 
 
 static func _char_at(lines: PackedStringArray, r: int, c: int) -> String:

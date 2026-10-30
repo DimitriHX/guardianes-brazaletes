@@ -14,3 +14,7 @@ Godot_*.exe
 
 # Proyecto de referencia del equipo (solo consulta local).
 referencia/
+
+# Skills de agentes instaladas localmente (no forman parte del juego).
+.agents/
+skills-lock.json

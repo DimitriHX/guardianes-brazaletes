@@ -13,6 +13,8 @@
 [ext_resource type="Script" path="res://entities/bosses/cadejo/states/RetreatState.gd" id="11_retreat"]
 [ext_resource type="Script" path="res://entities/bosses/cadejo/states/RoarState.gd" id="12_roar"]
 [ext_resource type="Script" path="res://entities/bosses/cadejo/states/BossDeadState.gd" id="13_dead"]
+[ext_resource type="Script" path="res://components/SquashStretch.gd" id="gf_squash"]
+[ext_resource type="Script" path="res://components/HitFlash.gd" id="gf_flash"]
 
 [sub_resource type="RectangleShape2D" id="Shape_body"]
 size = Vector2(68, 40)
@@ -109,3 +111,10 @@ animation = &"special"
 [node name="Dead" type="Node" parent="StateMachine"]
 script = ExtResource("13_dead")
 animation = &"death"
+
+[node name="SquashStretch" type="Node" parent="."]
+script = ExtResource("gf_squash")
+hurt_factor = Vector2(1.12, 0.9)
+
+[node name="HitFlash" type="Node" parent="."]
+script = ExtResource("gf_flash")

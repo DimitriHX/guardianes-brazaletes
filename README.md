@@ -37,13 +37,16 @@ Los menús se navegan con teclado, mando o ratón.
 ## Recorrido de la demo
 
 1. **Pantalla de inicio** del estudio, con fundido.
-2. **Menú principal**: Iniciar juego, Opciones (volumen de música y efectos, ventana o
-   pantalla completa; se guardan entre partidas) y Salida.
+2. **Menú principal**: Iniciar juego, Opciones (volumen de música y efectos, intensidad
+   de la vibración de cámara, ventana o pantalla completa; se guardan entre partidas) y Salida.
 3. **Historia**: texto en perspectiva que sube por la pantalla y cuenta la leyenda.
    Se puede saltar.
-4. **Nivel 1 – Bosque de los Pinos**: reúne las monedas de luz para abrir la puerta.
-5. **Nivel 2 – Sendero de las Sombras**: pinchos, plataformas que se derrumban y más
-   enemigos.
+4. **Nivel 1 – Bosque de los Pinos** (tutorial): un escalón para aprender a saltar, un
+   foso pequeño, el primer espíritu, una colina en escalones con ruta alta opcional, un
+   altar de luz y los puentes de tablones sobre el arroyo antes del claro del demonio.
+5. **Nivel 2 – Sendero de las Sombras**: las espinas y el hielo que se quiebra se
+   presentan primero sobre suelo seguro y luego sobre el vacío: abismo de hielo, bloques
+   entre espinas y una escalera alta sobre un campo de espinas, con altares antes de cada reto.
 6. **Nivel 3 – Guarida del Cadejo**: la reja se cierra y empieza el combate contra el jefe.
 7. Al purificar al Cadejo aparece un **portal**; al cruzarlo, Emma "despierta" con un
    fundido lento de vuelta al título.
@@ -65,8 +68,17 @@ Los menús se navegan con teclado, mando o ratón.
 - Sistema de **hitbox/hurtbox**: quien inflige daño y quien lo recibe son componentes
   separados, reutilizables en jugador, enemigos y jefe.
 - Retroceso (knockback) e invulnerabilidad breve al recibir daño.
-- **Impacto**: *hitstop* (el tiempo se congela unas centésimas al golpear), sacudida de
-  cámara y partículas (chispas al recibir daño, polvo al saltar, aterrizar y correr).
+- **Impacto** (*game feel*), varias respuestas pequeñas a la vez en cada golpe:
+  - *hitstop*: el tiempo se congela unas centésimas;
+  - **destello blanco** del sprite golpeado (shader `hit_flash`);
+  - **aplastamiento** del personaje golpeado, que vuelve a su forma con un rebote;
+  - **sacudida de cámara por "trauma"**: los golpes suman, el movimiento crece con el
+    cuadrado del trauma (los pequeños apenas se notan, los grandes pegan) y siempre se
+    apaga sola; su intensidad se ajusta en Opciones (accesibilidad);
+  - partículas: chispas al recibir daño, polvo al saltar, aterrizar y correr.
+- **Estirar y aplastar a Emma**: se estira al despegar, se aplasta al aterrizar (más
+  cuanto más rápido cae; una caída fuerte sacude un poco la cámara) y retrocede al disparar.
+- El contador de monedas da un saltito al recoger una, más grande con la última.
 
 ### Enemigos y obstáculos
 - **Enemigos patrulla** que detectan el borde de las plataformas con *raycasts* y no se caen.
@@ -156,8 +168,18 @@ configura cada nivel. `PlatformGenerator.gd` se encarga de:
 3. **Construir** el nivel en Godot, fusionando las celdas contiguas en rectángulos
    grandes (*greedy meshing*) para usar pocas colisiones.
 
-`TextLevel.gd` carga el `.txt` al iniciar la escena y `PlatformSkinner.gd` le pone el arte
-encima (tierra, tablones, muros). Para cambiar un nivel basta con editar el texto.
+`TextLevel.gd` carga el `.txt` al iniciar la escena. `TerrainRenderer.gd` dibuja el suelo
+celda a celda (*autotile*): cada celda elige su pieza según sus vecinas, así que colinas,
+escalones y fosos forman un terreno continuo, sin costuras. `PlatformSkinner.gd` viste el
+resto (plataformas finas, tablones y muros). Para cambiar un nivel basta con editar el texto.
+
+**Diseño de los niveles.** Cada nivel se divide en tramos con un propósito, siguiendo un
+ciclo de *enseñar → practicar → poner a prueba*: cada peligro aparece primero donde no
+puede matar (espinas de 2 celdas, hielo frágil sobre suelo firme) y después sobre el
+vacío. Hay descansos y altares de luz antes de cada reto, y la dificultad sube en dientes
+de sierra. Todas las medidas salen del salto real (sube 3 celdas como mucho; huecos de 5
+celdas o menos). Cada `.txt` empieza con comentarios (`//`) que describen sus tramos y una
+regla de columnas para ubicarse en la grilla.
 
 ### Animación independiente del arte
 `CharacterAnimator` + `AnimationSet` (`.tres`) separan la lógica de la animación del

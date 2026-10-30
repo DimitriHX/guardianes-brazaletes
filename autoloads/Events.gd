@@ -14,6 +14,9 @@ signal player_health_changed(current: int, maximum: int)
 signal player_died
 @warning_ignore("unused_signal")
 signal player_jumped
+## El jugador toca el suelo tras estar en el aire (velocidad de caída en px/s).
+@warning_ignore("unused_signal")
+signal player_landed(fall_speed: float)
 ## El jugador disparó; `cooldown` = segundos hasta poder volver a disparar.
 @warning_ignore("unused_signal")
 signal player_shot(cooldown: float)
