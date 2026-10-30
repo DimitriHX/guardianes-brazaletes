@@ -338,7 +338,7 @@ static func _build_level_1_text() -> String:
 	_paint_rect(grid, 106, 27, 4, 1, "-")
 	_paint_rect(grid, 113, 28, 4, 1, "-")
 	grid[24][107] = "C"
-	grid[27][119] = "C"
+	grid[28][130] = "C"
 
 	# --- Tramo 5 (cols 122..178) Claro del demonio y salida ---
 	_paint_rect(grid, 122, 30, 58, GROUND_DEPTH, "#")

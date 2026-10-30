@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://3qjxbfnp5vqb" path="res://levels/common/TextLevel.gd" id="1_text"]
 
-[node name="Bosque" type="Node2D"]
+[node name="Bosque" type="Node2D" unique_id=128080202]
 script = ExtResource("1_text")
 level_txt_path = "res://levels/sueno_1/bosque.txt"
-fallback_level_number = 1
