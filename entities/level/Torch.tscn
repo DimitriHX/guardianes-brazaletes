@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://entities/level/Torch.gd" id="1_torch"]
-[ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/Torch.png" id="2_tex"]
+[ext_resource type="Texture2D" path="res://assets/level/torch.png" id="2_tex"]
 
 [node name="Torch" type="Node2D"]
 z_index = -5

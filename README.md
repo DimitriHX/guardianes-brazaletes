@@ -17,10 +17,8 @@ Esta demo contiene el **Sueño I** completo: tres niveles y un combate contra un
 2. Abre `project.godot` desde el gestor de proyectos de Godot.
 3. Pulsa **F5** (Ejecutar proyecto).
 
-> Algunos paquetes de arte y audio de terceros no están en el repositorio porque su
-> licencia no permite redistribuirlos. Consulta [`CREDITS.md`](CREDITS.md) para saber
-> de dónde descargarlos y en qué carpeta colocarlos. Sin ellos el juego funciona, pero
-> sin esas texturas y sin sonido.
+> Todo el arte, las fuentes y el audio que usa el juego están incluidos en el repositorio.
+> Autores y licencias en [`CREDITS.md`](CREDITS.md).
 
 ## Controles
 
@@ -199,6 +197,7 @@ levels/       common/: generador, constructor y gestor de niveles, ambientación
               sueno_1/: escenas y .txt de los tres niveles del Sueño I
 ui/           HUD, menús (inicio, principal, pausa, victoria) e historia
 shaders/      Transición de escena y perspectiva del texto de la historia
-assets/       Arte y fuentes (los paquetes de terceros no redistribuibles no se incluyen)
-audio/        Música y efectos (no incluidos, ver CREDITS.md)
+assets/       Arte y fuentes por función: backgrounds, tiles, enemies, items, fx, level,
+              ui, fonts, pixellab (Cadejo, puertas, pinchos), spritecook (Emma)
+audio/        Música y efectos de sonido
 ```

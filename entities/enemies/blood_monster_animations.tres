@@ -6,14 +6,14 @@
 [sub_resource type="Resource" id="Entry_idle"]
 script = ExtResource("2_entry")
 animation = &"idle"
-sheet_path = "res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Idle.png"
+sheet_path = "res://assets/enemies/blood_monster/idle.png"
 grid_area = Rect2i(0, 0, 600, 100)
 grid_columns = 6
 
 [sub_resource type="Resource" id="Entry_walk"]
 script = ExtResource("2_entry")
 animation = &"walk"
-sheet_path = "res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Walk.png"
+sheet_path = "res://assets/enemies/blood_monster/walk.png"
 grid_area = Rect2i(0, 0, 800, 100)
 grid_columns = 8
 
@@ -21,7 +21,7 @@ grid_columns = 8
 script = ExtResource("2_entry")
 animation = &"attack"
 loop = false
-sheet_path = "res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Attack01.png"
+sheet_path = "res://assets/enemies/blood_monster/attack.png"
 grid_area = Rect2i(0, 0, 800, 100)
 grid_columns = 8
 
@@ -29,7 +29,7 @@ grid_columns = 8
 script = ExtResource("2_entry")
 animation = &"hurt"
 loop = false
-sheet_path = "res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Hurt.png"
+sheet_path = "res://assets/enemies/blood_monster/hurt.png"
 grid_area = Rect2i(0, 0, 400, 100)
 grid_columns = 4
 
@@ -37,7 +37,7 @@ grid_columns = 4
 script = ExtResource("2_entry")
 animation = &"death"
 loop = false
-sheet_path = "res://assets/Tiny RPG Character Asset Pack 02 v1.01-Free Demon_A&Blood Monster_A/Tiny RPG Character Asset Pack 02 -Free Demon_A&Blood Monster_A/Characters(100x100 split)/Blood Monster_A/Blood Monster_A/Blood Monster_A_Death.png"
+sheet_path = "res://assets/enemies/blood_monster/death.png"
 grid_area = Rect2i(0, 0, 400, 100)
 grid_columns = 4
 

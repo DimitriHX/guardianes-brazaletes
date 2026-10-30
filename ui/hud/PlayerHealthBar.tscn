@@ -1,10 +1,10 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://ui/hud/PlayerHealthBar.gd" id="1_bar"]
-[ext_resource type="Texture2D" path="res://assets/GandalfHardcore Hp bar/GandalfHardcore Hp bar/Hp bar.png" id="2_frame"]
-[ext_resource type="Texture2D" path="res://assets/GandalfHardcore Hp bar/GandalfHardcore Hp bar/red bar.png" id="3_red"]
-[ext_resource type="Texture2D" path="res://assets/GandalfHardcore Hp bar/GandalfHardcore Hp bar/yellow bar.png" id="4_yellow"]
-[ext_resource type="Texture2D" path="res://assets/GandalfHardcore Hp bar/GandalfHardcore Hp bar/Blue bar.png" id="5_blue"]
+[ext_resource type="Texture2D" path="res://assets/ui/hp_bar/hp_bar.png" id="2_frame"]
+[ext_resource type="Texture2D" path="res://assets/ui/hp_bar/red_bar.png" id="3_red"]
+[ext_resource type="Texture2D" path="res://assets/ui/hp_bar/yellow_bar.png" id="4_yellow"]
+[ext_resource type="Texture2D" path="res://assets/ui/hp_bar/blue_bar.png" id="5_blue"]
 
 [node name="PlayerHealthBar" type="Control"]
 custom_minimum_size = Vector2(116, 64)

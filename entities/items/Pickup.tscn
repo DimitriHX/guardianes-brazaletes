@@ -6,12 +6,12 @@
 
 [sub_resource type="AtlasTexture" id="Atlas_coin"]
 script = ExtResource("opt_atlas")
-source_path = "res://assets/32rogues-0.5.0/32rogues/items.png"
+source_path = "res://assets/items/items.png"
 region = Rect2(42, 779, 13, 14)
 
 [sub_resource type="AtlasTexture" id="Atlas_potion"]
 script = ExtResource("opt_atlas")
-source_path = "res://assets/32rogues-0.5.0/32rogues/items.png"
+source_path = "res://assets/items/items.png"
 region = Rect2(41, 617, 13, 17)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pickup"]

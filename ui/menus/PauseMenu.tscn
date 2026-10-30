@@ -2,17 +2,17 @@
 
 [ext_resource type="Script" path="res://ui/menus/PauseMenu.gd" id="1_menu"]
 [ext_resource type="Script" path="res://ui/widgets/PixelPanel.gd" id="2_panel"]
-[ext_resource type="Texture2D" path="res://assets/MediavelFree.png/MediavelFree.png" id="3_ui"]
+[ext_resource type="Texture2D" path="res://assets/ui/medieval_ui.png" id="3_ui"]
 [ext_resource type="Script" path="res://components/OptionalAtlasTexture.gd" id="opt_atlas"]
 
 [sub_resource type="AtlasTexture" id="Icon_play"]
 script = ExtResource("opt_atlas")
-source_path = "res://assets/MediavelFree.png/MediavelFree.png"
+source_path = "res://assets/ui/medieval_ui.png"
 region = Rect2(80, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="Icon_restart"]
 script = ExtResource("opt_atlas")
-source_path = "res://assets/MediavelFree.png/MediavelFree.png"
+source_path = "res://assets/ui/medieval_ui.png"
 region = Rect2(208, 80, 16, 16)
 
 [sub_resource type="StyleBoxFlat" id="Style_button"]

@@ -61,32 +61,32 @@ const AMBIENCE_SCENE_PATH: String = "res://levels/common/LevelAmbience.tscn"
 const TORCH_SCENE_PATH: String = "res://entities/level/Torch.tscn"
 const FALLING_PLATFORM_SCENE_PATH: String = "res://entities/level/FallingPlatform.tscn"
 const CHECKPOINT_SCENE_PATH: String = "res://entities/level/Checkpoint.tscn"
-const TILESET_PATH: String = "res://assets/GandalfHardcore FREE Platformer Assets/Floor Tiles1.png"
+const TILESET_PATH: String = "res://assets/tiles/floor_tiles.png"
 
 const BG_PATHS: Dictionary = {
 	0: [
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Normal BG/GandalfHardcore Background layers_layer 5.png",
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Normal BG/GandalfHardcore Background layers_layer 4.png",
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Normal BG/Background Castle .png",
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Normal BG/GandalfHardcore Background layers_layer 3.png",
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Normal BG/GandalfHardcore Background layers_layer 2.png",
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Normal BG/GandalfHardcore Background layers_layer 1.png",
+		"res://assets/backgrounds/normal/layer_5.png",
+		"res://assets/backgrounds/normal/layer_4.png",
+		"res://assets/backgrounds/normal/castle.png",
+		"res://assets/backgrounds/normal/layer_3.png",
+		"res://assets/backgrounds/normal/layer_2.png",
+		"res://assets/backgrounds/normal/layer_1.png",
 	],
 	1: [
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Autumn BG/GandalfHardcore Background layers_layer 5.png",
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Autumn BG/GandalfHardcore Background layers_layer 4.png",
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Autumn BG/Background Castle Autumn.png",
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Autumn BG/GandalfHardcore Background layers_layer 3.png",
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Autumn BG/GandalfHardcore Background layers_layer 2.png",
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Autumn BG/GandalfHardcore Background layers_layer 1.png",
+		"res://assets/backgrounds/autumn/layer_5.png",
+		"res://assets/backgrounds/autumn/layer_4.png",
+		"res://assets/backgrounds/autumn/castle.png",
+		"res://assets/backgrounds/autumn/layer_3.png",
+		"res://assets/backgrounds/autumn/layer_2.png",
+		"res://assets/backgrounds/autumn/layer_1.png",
 	],
 	2: [
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Winter BG/GandalfHardcore Background layers_layer 5.png",
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Winter BG/GandalfHardcore Background layers_layer 4.png",
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Winter BG/Background Castle  Winter.png",
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Winter BG/GandalfHardcore Background layers_layer 3.png",
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Winter BG/GandalfHardcore Background layers_layer 2.png",
-		"res://assets/GandalfHardcore FREE Platformer Assets/GandalfHardcore Background layers/Winter BG/GandalfHardcore Background layers_layer 1.png",
+		"res://assets/backgrounds/winter/layer_5.png",
+		"res://assets/backgrounds/winter/layer_4.png",
+		"res://assets/backgrounds/winter/castle.png",
+		"res://assets/backgrounds/winter/layer_3.png",
+		"res://assets/backgrounds/winter/layer_2.png",
+		"res://assets/backgrounds/winter/layer_1.png",
 	],
 }
 

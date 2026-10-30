@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://entities/level/Checkpoint.gd" id="1_ckpt"]
-[ext_resource type="Texture2D" path="res://assets/GandalfHardcore FREE Platformer Assets/Torch.png" id="2_tex"]
+[ext_resource type="Texture2D" path="res://assets/level/torch.png" id="2_tex"]
 [ext_resource type="PackedScene" path="res://entities/fx/SparkleEffect.tscn" id="3_fx"]
 
 [sub_resource type="RectangleShape2D" id="Shape_ckpt"]

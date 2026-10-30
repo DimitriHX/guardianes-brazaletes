@@ -7,7 +7,7 @@
 script = ExtResource("2_entry")
 animation = &"play"
 loop = false
-sheet_path = "res://assets/Effect and FX Pixel All Free/Free/Part 1/03.png"
+sheet_path = "res://assets/fx/burst.png"
 grid_area = Rect2i(0, 0, 832, 64)
 grid_columns = 13
 
