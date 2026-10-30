@@ -108,6 +108,15 @@ Controlado por una **máquina de estados** propia:
   vacío fuera del nivel y mantiene el mismo encuadre a 720p y a 1080p.
 - **Ambientación** por nivel: fondos con parallax de varias capas, tono de color propio,
   antorchas con luz dinámica y brillo suave (*glow*).
+- **Clima**: hojas que caen en el Bosque y nieve en el Sendero, en dos capas de distinta
+  profundidad, siempre por detrás de Emma, los enemigos y el terreno (no tapan la acción).
+- **Suelo con profundidad**: la tierra toma el color de la estación junto a la superficie
+  y se oscurece hacia abajo (shader `terrain_depth`), también en las plataformas sueltas.
+- **Emma respira** cuando está quieta: hombros y cabeza bajan un píxel al ritmo de la
+  respiración y de vez en cuando parpadea.
+- **Pantalla de título** con el nombre del juego a la izquierda, con colores que fluyen,
+  un destello, flotación y latido (shader `title_shimmer`), y los botones a la derecha
+  entrando con una animación.
 - **HUD** con vida, contador de monedas, mensajes y caja de diálogo.
 - **Menú de pausa** (continuar, reiniciar, volver al menú) y transiciones con fundido
   entre escenas.
@@ -189,7 +198,8 @@ ejemplo, el momento exacto del golpe). Si falta el arte, el personaje se dibuja 
 rectángulo de color y el juego sigue funcionando.
 
 ### Arte y sonido
-- **Emma** y el orbe de la pulsera: generados con SpriteCook.
+- **Emma** y el orbe de la pulsera: generados con SpriteCook. Los frames de respiración
+  (`emma_idle.png`) se derivan del frame quieto moviendo píxeles a mano.
 - **El Cadejo**, la puerta-portal, la reja y los pinchos: generados con PixelLab.
 - Tablones y algunas composiciones (el vórtice del portal): dibujados por código.
 - Escenarios, enemigos, objetos y efectos: paquetes gratuitos de itch.io (ver

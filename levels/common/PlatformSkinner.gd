@@ -36,6 +36,8 @@ const PILLAR_REGION: Rect2 = Rect2(32, 0, 32, 64)
 @export var bridge_region: Rect2 = Rect2()
 @export var bridge_scale: float = 1.25
 
+var _depth_material: ShaderMaterial
+
 
 func _ready() -> void:
 	if platforms_root == null or tileset == null:
@@ -92,6 +94,8 @@ func skin(body: StaticBody2D) -> Control:
 		patch.patch_margin_bottom = TILE
 	region.position.y += float(season) * SEASON_STRIDE
 	patch.region_rect = region
+	# Misma profundidad de color que el terreno (TerrainRenderer).
+	patch.material = _get_depth_material()
 
 	# Las plataformas finas tienen una colisión más delgada que la celda
 	# (para poder pasar por debajo): el arte ocupa la celda entera desde arriba.
@@ -125,6 +129,12 @@ func _skin_bridge(body: StaticBody2D, shape_node: CollisionShape2D, size: Vector
 	_hide_placeholder(body)
 	body.add_child(rect)
 	return rect
+
+
+func _get_depth_material() -> ShaderMaterial:
+	if _depth_material == null:
+		_depth_material = TerrainRenderer.make_depth_material(season, true)
+	return _depth_material
 
 
 func _hide_placeholder(body: StaticBody2D) -> void:

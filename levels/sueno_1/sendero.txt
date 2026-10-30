@@ -1,5 +1,6 @@
 @name = Sueño I: Sendero de las Sombras
 @season = WINTER
+@weather = SNOW
 @win_condition = COLLECTIBLES
 @pause_on_complete = false
 @completed_message = ¡El sello de la guarida se ha roto!

@@ -3,13 +3,14 @@
 [ext_resource type="Script" uid="uid://y5jwp51eocmj" path="res://components/animation/AnimationSet.gd" id="1_set"]
 [ext_resource type="Script" uid="uid://p6bvohx8racr" path="res://components/animation/AnimationEntry.gd" id="2_entry"]
 [ext_resource type="Texture2D" uid="uid://d37be1tcaab4n" path="res://assets/spritecook/emma/emma_sheet.png" id="3_sheet"]
+[ext_resource type="Texture2D" path="res://assets/spritecook/emma/emma_idle.png" id="4_idle"]
 
 [sub_resource type="Resource" id="Entry_idle"]
 script = ExtResource("2_entry")
 animation = &"idle"
-fps_override = 2.0
-sheet = ExtResource("3_sheet")
-regions = Array[Rect2i]([Rect2i(0, 0, 64, 64), Rect2i(64, 0, 64, 64)])
+fps_override = 8.0
+sheet = ExtResource("4_idle")
+regions = Array[Rect2i]([Rect2i(0, 0, 64, 64), Rect2i(0, 0, 64, 64), Rect2i(0, 0, 64, 64), Rect2i(64, 0, 64, 64), Rect2i(128, 0, 64, 64), Rect2i(128, 0, 64, 64), Rect2i(128, 0, 64, 64), Rect2i(64, 0, 64, 64), Rect2i(0, 0, 64, 64), Rect2i(192, 0, 64, 64), Rect2i(0, 0, 64, 64), Rect2i(64, 0, 64, 64), Rect2i(128, 0, 64, 64), Rect2i(128, 0, 64, 64), Rect2i(128, 0, 64, 64), Rect2i(64, 0, 64, 64)])
 
 [sub_resource type="Resource" id="Entry_walk"]
 script = ExtResource("2_entry")

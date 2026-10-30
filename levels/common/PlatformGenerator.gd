@@ -358,6 +358,7 @@ static func _build_level_1_text() -> String:
 	var headers: PackedStringArray = PackedStringArray([
 		"@name = Sueño I: Bosque de los Pinos",
 		"@season = GREEN",
+		"@weather = LEAVES",
 		"@win_condition = COLLECTIBLES",
 		"@pause_on_complete = false",
 		"@completed_message = ¡La luz abrió la puerta!",
@@ -453,6 +454,7 @@ static func _build_level_2_text() -> String:
 	var headers: PackedStringArray = PackedStringArray([
 		"@name = Sueño I: Sendero de las Sombras",
 		"@season = WINTER",
+		"@weather = SNOW",
 		"@win_condition = COLLECTIBLES",
 		"@pause_on_complete = false",
 		"@completed_message = ¡El sello de la guarida se ha roto!",
@@ -925,6 +927,14 @@ static func populate_level_node(root: Node2D, text: String) -> void:
 			custom_ambient = _parse_color(String(meta["ambient"]))
 		ambience.call("set_season", season_idx, custom_ambient)
 		root.add_child(ambience)
+
+	# 4c. Clima (hojas o nieve detrás de la acción), opcional con @weather.
+	var weather_kind: WeatherEffect.Kind = WeatherEffect.kind_from_string(String(meta.get("weather", "")))
+	if weather_kind != WeatherEffect.Kind.NONE:
+		var weather: WeatherEffect = WeatherEffect.new()
+		weather.name = "Weather"
+		weather.kind = weather_kind
+		root.add_child(weather)
 
 	# 5. World (Plataformas y Muros) + PlatformSkinner
 	var world: Node2D = Node2D.new()

@@ -1,5 +1,6 @@
 @name = Sueño I: Bosque de los Pinos
 @season = GREEN
+@weather = LEAVES
 @win_condition = COLLECTIBLES
 @pause_on_complete = false
 @completed_message = ¡La luz abrió la puerta!

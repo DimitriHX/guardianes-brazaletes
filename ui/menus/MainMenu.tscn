@@ -3,6 +3,24 @@
 [ext_resource type="Script" path="res://ui/menus/MainMenu.gd" id="1_menu"]
 [ext_resource type="Texture2D" path="res://assets/ui/menu_background.jpg" id="2_bg"]
 [ext_resource type="FontFile" path="res://assets/fonts/alagard.ttf" id="3_title"]
+[ext_resource type="Shader" path="res://shaders/title_shimmer.gdshader" id="4_shimmer"]
+
+[sub_resource type="Gradient" id="Title_palette"]
+offsets = PackedFloat32Array(0, 0.25, 0.5, 0.75, 1)
+colors = PackedColorArray(1, 0.84, 0.29, 1, 1, 0.47, 0.68, 1, 0.72, 0.52, 1, 1, 0.45, 0.86, 1, 1, 1, 0.84, 0.29, 1)
+
+[sub_resource type="GradientTexture1D" id="Title_palette_tex"]
+gradient = SubResource("Title_palette")
+
+[sub_resource type="ShaderMaterial" id="Title_material"]
+shader = ExtResource("4_shimmer")
+shader_parameter/palette = SubResource("Title_palette_tex")
+shader_parameter/flow_speed = 0.12
+shader_parameter/flow_scale = 1100.0
+shader_parameter/float_amplitude = 8.0
+shader_parameter/float_speed = 1.6
+shader_parameter/shine_period = 4.5
+shader_parameter/shine_width = 90.0
 
 [sub_resource type="StyleBoxFlat" id="Btn_normal"]
 bg_color = Color(1, 1, 1, 1)
@@ -151,39 +169,46 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="Title" type="Label" parent="."]
+unique_name_in_owner = true
+material = SubResource("Title_material")
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.08
-anchor_right = 0.5
-anchor_bottom = 0.08
-offset_left = -600.0
-offset_right = 600.0
-offset_bottom = 300.0
+anchor_left = 0.03
+anchor_top = 0.4
+anchor_right = 0.6
+anchor_bottom = 0.4
+offset_top = -190.0
+offset_bottom = 190.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(0.184, 0.098, 0.349, 1)
-theme_override_colors/font_outline_color = Color(0.914, 0.849, 0.978, 1)
-theme_override_constants/outline_size = 20
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.12, 0.05, 0.24, 1)
+theme_override_colors/font_shadow_color = Color(0.05, 0.02, 0.1, 0.6)
+theme_override_constants/outline_size = 24
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 10
+theme_override_constants/shadow_outline_size = 28
 theme_override_constants/line_spacing = -60
 theme_override_fonts/font = ExtResource("3_title")
-theme_override_font_sizes/font_size = 120
+theme_override_font_sizes/font_size = 136
 text = "EL BRAZALETE
 DEL GUARDIÁN"
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="MainButtons" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -280.0
-offset_top = 40.0
-offset_right = 280.0
-offset_bottom = 340.0
-grow_horizontal = 2
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.55
+anchor_right = 1.0
+anchor_bottom = 0.55
+offset_left = -720.0
+offset_top = -160.0
+offset_right = -160.0
+offset_bottom = 160.0
+grow_horizontal = 0
 grow_vertical = 2
 theme_override_constants/separation = 18
 
@@ -209,16 +234,16 @@ text = "SALIDA"
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
+anchors_preset = 6
+anchor_left = 1.0
 anchor_top = 0.5
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -340.0
-offset_top = -100.0
-offset_right = 340.0
-offset_bottom = 470.0
-grow_horizontal = 2
+offset_left = -820.0
+offset_top = -290.0
+offset_right = -140.0
+offset_bottom = 280.0
+grow_horizontal = 0
 grow_vertical = 2
 
 [node name="VBox" type="VBoxContainer" parent="OptionsPanel"]
